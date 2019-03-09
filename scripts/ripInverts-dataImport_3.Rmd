@@ -1,0 +1,255 @@
+---
+title: "Riparian Invertebrates: Data Import 3"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+```
+
+Updating the data following initial data exploration.  
+
+Here's my summary of the problem events: 
+
+> Wye_2014_1 (likely excavation recoded as hand_search, but see also additional pitfall??), 
+
+> Beamish_2013 (turns out there is also a river Breamish, need to add new event 'breamish'), 
+
+> Dove_2013 - (a. hand search was described as "30 minute timed sample" which I coded as "unknown", need to check and recode.  b. JW needs to add replication info, as currently all hand searches recorded as one replicate), 
+
+> Also: Monnow_2015, Till_2013, Wooler / Woolder.  
+
+
+Here's text from an email from JW: 
+
+> I went back to my primary data and have come back with this. It certainly includes one extra site (the Trent) and I have made an effort to count the replicates correctly (no smoothing). They are as follows:
+
+> Standard = 4 hand searches, 4 digs (excavations), 1 pitfall set of 10
+
+> Sites:
+
+> •	Trent  - a very awful site with no pitfalls
+•	Dove Tweed Till grazed Wooler water Breamish  - standard
+•	Till ungrazed (no pitfalls)
+•	Wye 2014 (2 sets of pitfalls instead of 1)
+•	Monnow (5 hand searches instead of 4)
+
+> I would suggest that this dataset is used in place of the data we are currently using on these sites. I am sure you will find anomalies but I would hope that the overall species lists are not that different. There may be typos with the species so feel free to come back to me to check what they should be, or make changes if it looks very close to a spelling already.
+
+
+> << File: 2018 riparian update for CK.XLS >> 
+
+> I would suggest this data, and the work by Henshall is the best (and most up to date ) data to properly investigate. All the old stuff is..well….to old and I cobbled it together for comparative purposes.
+
+##Import existing data
+
+Import previously prepared field data.  Here are 10 random rows from the data: 
+```{r}
+field_data <- read_csv("../data/field_data_selected.csv")
+field_data <-  filter(field_data, !is.na(event)) #get rid of event = NA
+sample_n(field_data, size = 10) #%>% kable()
+```
+
+Subset for analysis
+```{r}
+event_code_selected <- c("Wye_2014_5", "Beamish_2013", "Dove_2013", "Lugg_2014_2", "Monnow_2015", "FromeMoreton_2017", "FromeRushton_2017", "FromeWoodsford_2017", "Till_2013", "Wooler_2013", "Wye_2014_1", "Lugg_2014_1", "Lugg_2014_3", "Lugg_2014_4", "Wye_2014_4", "Wye_2014_6", "Wye_2014_7", "Wye_2014_3")
+
+field_data <- field_data %>% 
+  filter(event_code %in% event_code_selected) %>% droplevels() 
+
+field_data %>% count(event_code)
+```
+
+```{r}
+effort_data <- read_csv("../data/effort.csv") 
+```
+
+```{r}
+field_data %>% names()
+```
+
+
+##Import new data
+
+Import new version of data supplied by Jon Webb
+
+```{r}
+raw <- read.csv("../data/2018 riparian update corrected.csv")
+raw
+```
+
+```{r}
+newdata <- raw
+
+newdata %>% group_by(Site, Sample, sample_type) %>% 
+  count(dup.spp = duplicated(Species)) %>% 
+  spread(key = dup.spp, value = n, sep= "=") %>% 
+  arrange(-`dup.spp=FALSE`) #%>% 
+  #write_csv("../data/2018_riparian_update_summary.csv")
+```
+great, no duplicates
+
+
+```{r}
+newdata
+```
+
+
+
+##Assign event code to new data
+
+Need to work out which fits to which: 
+
+
+```{r}
+newdata %>% count(Site, Date)
+```
+
+```{r}
+field_data %>% count(river, event_code) %>% arrange(river)
+```
+
+Select events by Henshall but excluding Wye 2014 1 (because we've got new data for that).
+```{r}
+#effort_data %>% filter(author == "Henshall et al") %>% pull(event_code)
+henshall_events <- c("Wye_2014_5",   "Lugg_2014_2", "Lugg_2014_1", "Lugg_2014_3", "Lugg_2014_4", "Wye_2014_4", "Wye_2014_6", "Wye_2014_7", "Wye_2014_3")
+henshall_events
+```
+
+```{r}
+# newdata %>% pull(Date) %>% unique()
+newdata <- newdata %>% 
+  mutate(event_code = recode_factor(Site,
+    Breamish = "Breamish_2013",
+    `River Monnow` = "Monnow_2015",
+    `River Till` = "Till_2013_lower",
+    `River Trent` = "Trent",
+    `River Tweed` = "Tweed_2013",
+    `River Wye` = "Wye_2014_1",
+    `Rove Dove` = "Dove_2013",
+    `Upper Till` = "Till_2013_upper",
+    `Wooler Water` = "Wooler_2013")) %>% 
+  mutate(river = recode_factor(Site,
+    Breamish = "Breamish",
+    `River Monnow` = "Monnow",
+    `River Till` = "Till",
+    `River Trent` = "Trent",
+    `River Tweed` = "Tweed",
+    `River Wye` = "Wye",
+    `Rove Dove` = "Dove",
+    `Upper Till` = "Till",
+    `Wooler Water` = "Wooler Water")) %>% 
+  mutate(date = recode_factor(Date,
+    "02 to 06/06/2015" = "02/06/2015",
+    "6/11/2013 - 20/11/2013" = "06/11/2013", 
+    "6/10/2013 to 11 June 2013" = "6/10/2013",
+    "6/12/2013 to 26 June 2013" = "6/12/2013")) %>% 
+  mutate(sample_type = recode_factor(sample_type, 
+     `hand search` = "hand_search")) %>% 
+  droplevels()
+# newdata %>% pull(date) %>% unique()
+```
+
+```{r}
+newdata_join <- select(newdata, spp_name = Species, river, event_code, date, sample_type, location = Sample) 
+newdata_join
+```
+
+
+```{r}
+#field_data %>% names()
+field_data_join <- select(field_data, spp_name, river, event_code, date, sample_type, location) %>% 
+  filter(event_code %in% henshall_events) %>% 
+  droplevels()
+field_data_join
+```
+
+
+```{r}
+field_data_extract <- 
+  #bind together
+  bind_rows(field_data_join, newdata_join)%>% 
+  mutate_all(.funs = as.factor) %>% 
+  #add replicate field
+  mutate(smpshort = str_replace_all(
+    sample_type, c(
+      "hand_search" = "HS", "pitfall" = "PF", "excavation" = "EX"))) %>% 
+  mutate(locshort = str_remove_all(location, "[ ,.]")) %>%
+  mutate(replicate = paste(event_code, smpshort, locshort, sep = "-")) 
+```
+
+```{r}
+summary(field_data_extract) 
+field_data_extract %>% group_by(river, event_code, sample_type) %>% 
+  count(replicate)
+```
+
+```{r}
+levels(field_data_extract$event_code)
+```
+
+
+
+```{r}
+write_csv(field_data_extract, "../data/field_data_extract.csv")
+```
+
+##Sort out effort data
+
+
+```{r}
+field_data_extract %>%  
+  group_by(event_code, sample_type) %>% 
+  summarise(n_repl = length(unique(replicate))) %>% 
+  spread(key = sample_type, value = n_repl) 
+```
+
+```{r}
+newdata_join  %>% group_by(event_code, sample_type) %>% 
+  group_by(event_code, sample_type) %>% 
+  summarise(n_repl = length(unique(location))) %>% 
+  spread(key = sample_type, value = n_repl)
+```
+
+
+```{r}
+field_data_extract %>%  
+  group_by(event_code, sample_type, location) %>% 
+  filter(event_code == "Wye_2014_1") %>% count()#pull(location) %>% unique() 
+```
+
+
+```{r}
+newcodes <- unique(newdata_join$event_code)
+
+effort_data %>% filter(event_code %in% newcodes)
+```
+
+
+```{r}
+
+
+#add new effort data
+new_effort <- data.frame(
+  event_code = as.character(c("Breamish_2013", "Till_2013_lower", "Till_2013_upper", 
+                              "Trent", "Tweed_2013",  "Wye_2014_1", "Dove_2013", 
+                              "Wooler_2013", "Monnow_2015")),  
+  author = as.character(rep("Webb & Mott", 9)), 
+  effort_P = as.numeric(c(1, 1, 1, 0, 0, 1, 2, 1, 1)), 
+  effort_T = as.numeric(c(8, 8, 4, 7, 4, 8, 4, 8, 4)))
+  
+    #Henshall effort data
+old_effort <-  effort_data %>% 
+  filter(event_code %in% henshall_events) %>% 
+  select(event_code, author, effort_P, effort_T) 
+  
+effort_data_extract <- rbind(old_effort, new_effort)
+
+effort_data_extract %>% arrange(event_code)
+
+```
+
+
+```{r}
+write_csv(effort_data_extract, "../data/effort_data_extract.csv")
+```

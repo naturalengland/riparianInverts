@@ -1,0 +1,499 @@
+---
+title: 'Riparian Invertebrates: Investigate Methods - v.2'
+output:
+  html_document: default
+  html_notebook: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+
+```{r, message=FALSE, warning=FALSE}
+# packages
+library(knitr)
+library(tidyverse)
+library(readxl)
+library(forcats)
+library(vegan)
+```
+
+##Field data
+Import previously prepared field data.  This comprises a series of sampling events collated by Jon Webb. 
+
+Here are 10 random rows from the data: 
+```{r, out.width=200}
+field_data <- read_csv("../data/field_data_extract.csv")
+sample_n(field_data, size = 10) #%>% kable()
+```
+
+Each species record is a row.  Columns are species name (`spp_name` and columns identifying the survey event.  
+
+The data is nested as follows: 
+
+* `river`
+* `event_code`
+* `sample_type` 
+* `location` 
+* `spp_name` (= observation)   
+
+
+###Replication
+For this data we have conceptualised a replicate as being a single sampling occasion, e.g. a set of pitfall traps (from being set to being retrieved), a timed hand search or a timed excavation.  A replicate is equivalent to an 'effort', discussed further below.  In some cases JW constructed replicates retrospectively, i.e. combined a number of observations that were taken at a particular time and place.  
+
+`event_code`, `sample_type` and `location` have therefore been combined into a single field `replicate`.  So the each record can be uniquely identified by replicate and observation: 
+
+* `replicate` 
+* `spp_name` 
+
+This is a post-hoc stratification of the sample and may not represent the actual sampling methodology in many cases and may introduce bias. 
+
+
+```{r}
+field_data %>%  group_by(event_code, sample_type) %>% 
+  group_by(event_code, sample_type) %>% 
+  summarise(n_repl = length(unique(location))) %>% 
+  group_by(sample_type) %>% 
+  summarise(sum(n_repl))
+```
+
+
+```{r echo=FALSE, rows.print=20, out.width=50}
+field_data %>%  group_by(event_code, sample_type) %>% 
+  group_by(event_code, sample_type) %>% 
+  summarise(n_repl = length(unique(location))) %>% 
+  spread(key = sample_type, value = n_repl, fill = " ") %>% 
+  kable(caption = "Breakdown of field data by sample type", format="pandoc")
+```
+
+
+```{r}
+# graphdata <- field_data %>% group_by(replicate = repl_dateloc, sample_type) %>% 
+#   summarise(n = length(spp_name)) %>% mutate(repl_type = "repl_dateloc")
+# 
+# graphdata <- field_data %>% group_by(replicate = repl_date, sample_type) %>% 
+#   summarise(n = length(spp_name)) %>% mutate(repl_type = "repl_date") %>% 
+#   bind_rows(graphdata)
+
+graphdata <- field_data %>% group_by(replicate, sample_type) %>% 
+  summarise(n = length(spp_name))  
+# %>% bind_rows(graphdata)
+
+ggplot(graphdata, aes(x = n)) +
+  geom_histogram(aes(fill = sample_type), position = "dodge", bins = 50)+
+  scale_x_log10() +
+  labs(title = "Count of replicates by species richness", 
+       subtitle = "by sample type", 
+       x = "species richness (log 10 scale)", y = "count of replicates")
+
+```
+
+
+
+###Sampling effort data
+
+Sampling effort data is available from a study of the reported methodologies for each survey and have been compiled for analysis.  An extract of the data is shown below.  `effort_P` represents the number of pitfall trap samples.  Note it does not represent the number of actual traps, rather a set of traps (quantity given in `n_pitfall` if known), set out for a period of time, e.g. 2 weeks, counts as 1 'effort'.  `effort_T` represents the number of timed samples, both a timed hand search and a timed excavation count as 1 'effort'.   `effort_combined` is simply the sum of `effort_P` and `effort_T`.  The other columns are not currently being used for analysis (and I'm afraid the time period columns have been mangled in transition from excel to R - its possible to fix that, but wasn't a priority).
+
+```{r}
+effort_data <- read_csv("../data/effort_data_extract.csv") 
+effort_data%>% 
+  kable(caption = "Reported effort", format="pandoc")
+```
+
+The effort counts are in fact the same thing as the number of replicates of each sample type.  Unfortunately, they don't correspond well with the inferred replicates discussed above.  
+
+```{r}
+ efforttemp <- effort_data %>% select(event_code, effort_P, effort_T) %>% 
+  mutate(repl_type = "method") 
+
+effort_analysis <- field_data %>% 
+  select(event_code, sample_type, replicate) %>% 
+  group_by(event_code, sample_type) %>% 
+  summarise(n = length(unique(replicate))) %>% 
+  spread(key = sample_type, value = n, fill = 0) %>% 
+  mutate(effort_T = excavation+hand_search, effort_P = pitfall) %>% 
+   select(event_code, effort_P, effort_T) %>% 
+  mutate(repl_type = "data")
+
+effort_analysis <- effort_analysis%>% 
+   bind_rows(efforttemp) %>% 
+   mutate(effort_comb = effort_P + effort_T) %>% 
+   gather(key = sample_type, value = n, effort_P, effort_T, effort_comb)
+
+ rm(efforttemp)
+```
+
+Here is the difference between the reported method and the replicates found in the data: 
+```{r}
+#head(effort_analysis)
+effort_diff <- effort_analysis %>% 
+  spread(key = repl_type, value = n, fill = 0) %>% 
+  mutate(diff = data-method) %>% 
+  arrange(-abs(diff))
+
+effort_diff %>% select(event_code, sample_type, diff) %>% spread(key = sample_type, value = diff) %>% 
+  select(event_code, effort_P, effort_T)%>% 
+  kable(caption = "Reported effort subtracted from actual effort", format="pandoc")
+```
+
+
+```{r}
+ggplot(effort_diff,# %>% filter(sample_type == "effort_P"), 
+       aes(y = event_code, x = diff)) + 
+  geom_point(aes()) +
+ scale_x_continuous(breaks = c(-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5), minor_breaks = NULL) +
+  labs(title = "Replication levels compared to method",
+       subtitle = "reported effort subtracted from actual effort",
+       y = "Events", x = "difference between number of replicates") +
+    facet_wrap(~sample_type, ncol = 3) 
+  
+```
+
+
+##Create frequency matrix
+This matrix calculates the frequency each species occurs in each replicate.  
+ - because it's by 'replicate' each species should only occur once, so in this case the frequency matrix is the same as an occurrence matrix.
+```{r}
+#convert to a frequency matrix
+field_data_freq <- field_data %>% 
+  #calculate frequencies
+  group_by(river, replicate, event_code, location, sample_type, spp_name) %>% 
+  summarise(n = length(spp_name)) %>% 
+  #abbreviate species names
+  mutate(spp_name = vegan::make.cepnames(spp_name)) %>% 
+  #spread to a matrix
+  spread(key = spp_name, value = n, fill = 0) %>%
+  data.frame() %>%
+  arrange(river) 
+
+#field_data_freq
+sample_n(field_data_freq, size = 10)[,1:5] %>% 
+  kable(caption = "Sample of frequency matrix: only one species column shown", format="pandoc")
+```
+
+
+##Species accumulation curves
+In this section I'll start looking at species accumulation curves, with an emphasis on methodological differences.  Initially I'll be comparing different ways of subdividing the data (mainly by sample type and/or replicate).  
+
+```{r}
+event_code_selected <- unique(field_data$event_code)
+# event_code_selected <- c("Wye_2014_5", "Beamish_2013", "Dove_2013", "Lugg_2014_2", "Monnow_2015", "FromeMoreton_2017", "FromeRushton_2017", "FromeWoodsford_2017", "Till_2013", "Wooler_2013", "Wye_2014_1", "Lugg_2014_1", "Lugg_2014_3", "Lugg_2014_4", "Wye_2014_4", "Wye_2014_6", "Wye_2014_7", "Wye_2014_3")
+```
+The following events have been selected for analysis: `r paste(event_code_selected)`
+
+###Grand total accumulation
+This doesn't really tell us a lot, except that combining all sampling methods and all surveys doesn't reach an asymptote.  Because this covers a number of rivers and surveys, I'm not sure we need to read much into this.  
+```{r}
+#species accumulation curve by resampling events
+selected_data <- field_data_freq %>%  
+  select(-c(river:sample_type))
+
+spec_accum_selected <- specaccum(comm = selected_data)
+
+plot(spec_accum_selected, ci.type = "polygon", ci.col = "grey", ci.lty = "dotted", 
+     main = "Species accumulation curve: grand total")
+abline(h = max(spec_accum_selected$richness), col = "black")
+abline(h = max(spec_accum_selected$richness)*0.95, col = "red")
+abline(h = max(spec_accum_selected$richness)*0.9, col = "red", lty = "dotted")
+```
+
+
+###Sample type accumulation
+Here we'll look at species accumulation curves by sample type.  
+
+```{r}
+param_sampletype <- c("excavation", "hand_search", "pitfall")
+param_eventcode <- event_code_selected
+
+#create empty data frame
+spec_accum_bysampletype <- data_frame(sample_type = as.character(), event_code = as.character(),
+  n_sites = as.integer(), n_spp = as.double(), sd = as.double())
+
+for(sampletype in param_sampletype){
+    
+    tempdata <- field_data_freq %>%
+      filter(sample_type == sampletype) %>%  
+      select(-c(river:sample_type))
+    
+    tempdata <- if(nrow(tempdata)>1){
+      
+      tempdata <- specaccum(tempdata)
+      
+      tempdata <- data.frame(
+        sample_type = sampletype,
+        n_sites = tempdata$sites,
+        n_spp = tempdata$richness,
+        sd = tempdata$sd) 
+      
+      spec_accum_bysampletype <- rbind(spec_accum_bysampletype, tempdata)}
+  }
+
+spec_accum_bysampletype <- spec_accum_bysampletype %>% 
+  mutate(event_code = "all_events", river = "all_rivers") %>% 
+  select(river, event_code, sample_type, everything())
+```
+
+
+```{r}
+graphdata <- spec_accum_bysampletype
+colours <- c("hand_search" = "royalblue", "excavation" = "green", "pitfall" = "red")
+
+ggplot(graphdata, aes(x = n_sites, y = n_spp, colour = sample_type))+
+    geom_path(aes(y = n_spp-sd), alpha = 0.5) +
+    geom_path(aes(y = n_spp+sd), alpha = 0.5) +
+    geom_linerange(aes(ymin = n_spp-sd, ymax = n_spp+sd)) +
+    geom_line(size = 1) +
+    scale_color_manual(values = colours)+
+    labs(title = "Species accumulation curve by sample type",
+         subtitle = "all events",
+         x = "number of replicates", y = "number of species",
+         NULL) +
+    NULL 
+```
+
+
+###Accumulation by event
+```{r}
+param_sampletype <- c("excavation", "hand_search", "pitfall")
+param_rivers <- unique(field_data_freq$river)
+param_eventcode <- event_code_selected
+
+#create empty data frame
+spec_accum_temp <- data_frame(
+  sample_type = as.character(), 
+  #river = as.character(), 
+  event_code = as.character(),
+  n_sites = as.integer(), n_spp = as.double(), sd = as.double())
+spec_accum_byevent <- spec_accum_temp
+# #iterate through rivers
+# for(selectedriver in param_rivers){
+#iterate through events
+for(selectedevent in param_eventcode){
+  #iterate through samples
+  for(sampletype in param_sampletype){
+    
+    tempdata <- field_data_freq %>%
+      filter(sample_type == sampletype & 
+               event_code == selectedevent) %>%  
+      select(-c(river:sample_type))
+    
+    tempdata <- if(nrow(tempdata)>1){
+      
+      tempdata <- specaccum(tempdata)
+      
+      tempdata <- data.frame(
+        sample_type = sampletype,
+        event_code = selectedevent,
+        n_sites = tempdata$sites,
+        n_spp = tempdata$richness,
+        sd = tempdata$sd) 
+      
+      spec_accum_temp <- rbind(spec_accum_temp, tempdata)}
+  }
+  spec_accum_byevent <-  if(nrow(spec_accum_temp)>0){rbind(spec_accum_byevent, spec_accum_temp)}
+}
+
+spec_accum_byevent <-  spec_accum_byevent %>% 
+  mutate(river = recode_factor(event_code, 
+                                Wye_2014_6 = "Wye",
+                               Lugg_2014_3 = "Lugg",
+                               Lugg_2014_1 = "Lugg", 
+                               Lugg_2014_2 = "Lugg", 
+                               Lugg_2014_4 = "Lugg", 
+                               Wye_2014_3 = "Wye",
+                               Wye_2014_7 = "Wye", 
+                               Wye_2014_4 = "Wye", 
+                               Wye_2014_5 = "Wye", 
+                               Breamish_2013 = "Breamish", Monnow_2015 = "Monnow", Till_2013_lower = "Till", Trent = "Trent", Tweed_2013 = "Tweed", Wye_2014_1 = "Wye", Dove_2013 = "Dove", Till_2013_upper = "Till",  Wooler_2013 = "Wooler")) %>%
+  select(river, event_code, sample_type, everything())
+```
+
+
+```{r}
+graphdata <- spec_accum_byevent 
+colours <- c("hand_search" = "royalblue", "excavation" = "green", "pitfall" = "red")
+  
+ggplot(graphdata, aes(x = n_sites, y = n_spp, colour = sample_type))+
+  geom_line(size = 1) +
+  scale_color_manual(values = colours)+
+  scale_x_continuous(breaks = 1:max(graphdata$n_sites))+
+  facet_wrap(~event_code)+
+  NULL 
+```
+
+```{r}
+graphdata <- spec_accum_byevent 
+
+ggplot(graphdata, aes(x = n_sites, y = n_spp))+
+  geom_line(size = 1, aes(colour = event_code), alpha = 0.5) +
+ # geom_smooth()+
+  facet_wrap(~sample_type, ncol = 1)+
+  NULL 
+```
+
+
+```{r}
+maxmin <- spec_accum_byevent %>% group_by(event_code, sample_type) %>%
+  summarise(max_spp = max(n_spp), min_spp = min(n_spp))
+
+graphdata <- spec_accum_byevent %>% full_join(maxmin)
+
+ggplot(graphdata, aes(x = n_sites,
+                      y = ((n_spp/max_spp)-(min_spp/max_spp)),
+                      colour = event_code))+
+  geom_point()+
+  geom_line(size = 1, alpha = 0.5) +
+  facet_wrap(~sample_type, ncol = 1)+
+  NULL
+```
+
+
+###Accumulation combining pitfall and handsearch
+
+```{r echo=FALSE}
+#Look for examples where hand search and pitfall were done at the same event and location
+sampletype_combos <- field_data %>%  
+  group_by(event_code, location, sample_type) %>% 
+  summarise(n_repl = length(unique(sample_type))) %>% 
+  spread(key = sample_type, value = n_repl, fill = 0) %>% 
+  mutate(HSPF = sum(hand_search, pitfall), 
+         HSEX = sum(hand_search, excavation)) %>% 
+  arrange(-HSPF, -HSEX)
+
+#extract locations with handsearch and pitfall
+HSPF_locs <- sampletype_combos %>%
+  filter(HSPF == 2) %>% 
+  mutate(eventloc = paste(event_code, location, sep = "-")) %>% 
+  pull(eventloc)
+
+#convert to a frequency matrix
+HSPF_freq <- field_data %>%
+  mutate(eventloc = paste(event_code, location, sep = "-")) %>% 
+  filter(eventloc %in% HSPF_locs) %>% 
+  #calculate frequencies
+  group_by(river, eventloc, event_code, location, spp_name) %>% 
+  summarise(n = length(spp_name)) %>% 
+  #abbreviate species names
+  mutate(spp_name = vegan::make.cepnames(spp_name)) %>% 
+  #spread to a matrix
+  spread(key = spp_name, value = n, fill = 0) %>%
+  data.frame() %>%
+  arrange(river) 
+```
+
+I looked at the data to find examples where hand search and pitfall were done at the same event and location.  There were 30: `r print(HSPF_locs)`.  They were all on the Wye and the Lugg rivers.  
+
+
+```{r}
+selected_data <- HSPF_freq %>% select(-c(river:location))
+
+spec_accum_HSPF_all <- specaccum(comm = selected_data)
+
+# plot(spec_accum_HSPF_all, ci.type = "polygon", ci.col = "grey", ci.lty = "dotted", 
+#      main = "Species accumulation curve: grand total")
+spec_accum_HSPF_all <- data.frame(
+      river = "Wye & Lugg",
+      event_code = "HSPF_events",
+      sample_type = "HS & PF",
+      n_sites = spec_accum_HSPF_all$sites,
+      n_spp = spec_accum_HSPF_all$richness,
+      sd = spec_accum_HSPF_all$sd) 
+```
+
+```{r}
+graphdata <- spec_accum_HSPF_all
+colours <- c("hand_search" = "royalblue", "excavation" = "green", "pitfall" = "red")
+
+ggplot(graphdata, aes(x = n_sites, y = n_spp))+
+    geom_path(aes(y = n_spp-sd), alpha = 0.5) +
+    geom_path(aes(y = n_spp+sd), alpha = 0.5) +
+    geom_linerange(aes(ymin = n_spp-sd, ymax = n_spp+sd)) +
+    geom_line(size = 1) +
+    labs(title = "Species accumulation curve combining handsearch and pitfall",
+         subtitle = "",
+         x = "number of replicates", y = "number of species",
+         NULL) +
+    NULL 
+```
+
+
+```{r}
+param_rivers <- unique(HSPF_freq$river)
+
+#create empty data frame
+spec_accum_temp <- data_frame(
+  river = as.character(),
+  n_sites = as.integer(), n_spp = as.double(), sd = as.double())
+spec_accum_HSPF_byriver <- spec_accum_temp
+
+#iterate through events
+for(selectedriver in param_rivers){
+  tempdata <- HSPF_freq  %>%
+    filter(river == selectedriver) %>%
+    select(-c(river:location))
+  
+  tempdata <- if(nrow(tempdata)>1){
+    
+    tempdata <- specaccum(tempdata)
+    
+    tempdata <- data.frame(
+      river = selectedriver,
+      n_sites = tempdata$sites,
+      n_spp = tempdata$richness,
+      sd = tempdata$sd) 
+    
+    spec_accum_HSPF_byriver <-  if(nrow(tempdata)>0){rbind(spec_accum_HSPF_byriver, tempdata)}
+  }
+}
+
+spec_accum_HSPF_byriver <- spec_accum_HSPF_byriver %>% 
+  mutate(event_code = "HSPF_events", sample_type = "HS & PF") %>% 
+  select(river, event_code, sample_type, everything())
+```
+
+
+```{r}
+graphdata <- bind_rows(spec_accum_HSPF_byriver, spec_accum_HSPF_all) 
+colours <- c("Wye" = "lightgreen", "Lugg" = "darkgreen", "Wye & Lugg" = "orange")
+
+ggplot(graphdata, aes(x = n_sites, y = n_spp))+
+  geom_line(size = 1, aes(colour = river)) +
+  scale_colour_manual(values = colours) +
+#  facet_wrap(~sample_type) +
+      labs(title = "Species accumulation curve combining handsearch and pitfall",
+         subtitle = "comparing split by river and rivers combined",
+         x = "number of replicates", y = "number of species",
+         NULL) +
+  NULL 
+```
+
+
+###All together
+
+```{r}
+
+graphdata <- bind_rows(spec_accum_HSPF_all, spec_accum_bysampletype) 
+colours <- c("hand_search" = "royalblue", "excavation" = "green", 
+             "pitfall" = "red", "HS & PF" = "purple")
+
+
+ggplot(graphdata, aes(x = n_sites, y = n_spp))+
+  geom_line(size = 1, aes(colour = sample_type, linetype = river)) +
+  scale_colour_manual(values = colours)+
+#  facet_wrap(~sample_type) +
+      labs(title = "Species accumulation curve by method",
+         subtitle = "combined handsearch and pitfall versus other separate methods",
+         x = "number of replicates", y = "number of species",
+         NULL) +
+  NULL 
+```
+
+
+
+
+
+
+
+
+
+

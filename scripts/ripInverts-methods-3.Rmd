@@ -1,0 +1,246 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(vegan)
+```
+
+
+```{r}
+field_data %>% group_by(river, event_code, sample_type ) %>% 
+  unique() %>% arrange(river, event_code)
+
+```
+
+
+```{r}
+selected_data <- field_data_freq %>%  
+  select(-c(river:sample_type))
+
+selected_env <- field_data_freq %>%  
+  select(c(river:sample_type))
+unique(selected_env$river)
+
+adon1 <- vegan::adonis2(selected_data ~ river + sample_type + event_code, data = selected_env, permutations = 120, method = "jaccard", by = "terms") 
+adon1
+```
+
+```{r}
+simp1 <- simper(comm = selected_data, group = selected_env$event_code)
+simpsum <- summary(simp1)
+
+```
+
+```{r}
+simper2 <- simper(comm = selected_data, group = selected_env$sample_type)
+#summary(simper2, ordered = T, digits = 2)
+#str(simper2)
+```
+
+
+### Overlap of species
+
+```{r}
+field_data_freq <- field_data %>% 
+  select(spp_name, sample_type) %>%
+  mutate(presabs = 1) %>%
+  group_by(spp_name, sample_type) %>% 
+  summarise(freq = sum(presabs))
+field_data_freq %>% spread(key = sample_type, value = freq, fill = 0)
+```
+
+
+```{r}
+ggplot(field_data_freq, aes(x = freq, fill = sample_type))+
+  geom_histogram(position = position_dodge())
+```
+
+
+Pitfall only
+```{r}
+samptypes <- field_data_freq %>% 
+  select(-freq) %>% 
+  mutate(smptp = str_replace_all(sample_type, c("hand_search" = "h", "pitfall" = "p", "excavation" = "e" ))) %>% 
+  # ungroup() %>% 
+  # group_by(spp_name) %>%
+  spread(key = sample_type, value = smptp, fill = "") %>% 
+  mutate(sample_types = paste0(excavation, hand_search, pitfall)) %>% 
+  select(spp_name, sample_types)
+  
+field_data_freq_types <- field_data_freq %>% 
+  spread(key = sample_type, value = freq, fill = 0) %>% 
+  full_join(samptypes)
+
+field_data_freq_types
+```
+
+```{r}
+table(field_data_freq_types$sample_types) %>% knitr::kable()
+```
+
+
+```{r}
+ggplot(field_data_freq_types, aes(sample_types)) +
+  geom_bar(aes(fill = sample_types))
+```
+
+
+```{r}
+graphdata <- field_data_freq_types %>% 
+  gather(key = sample_type, value = freq, excavation, hand_search, pitfall) %>% 
+  filter(freq != 0) %>% 
+  filter(sample_types %in% c("h", "hp", "p"))
+
+labeller()
+
+st_names <- c(h = "handsearch only", p = "pitfall only", hp = "handsearch and pitfall")
+
+  
+ggplot(graphdata, aes(x = freq, fill = sample_type))+
+  geom_histogram(position = position_stack(), binwidth = 1) +
+  facet_wrap(~sample_types,ncol = 1, labeller = labeller(sample_types = st_names)) +
+  labs(title = "Frequency of species in different sample types", 
+       caption = str_wrap("Note this is the frequency with which species occur in different sample types, not the frequency of teh species within a particular sample.", width = 80, ))
+```
+
+
+##Pitfall Handsearch overlap in every event
+
+```{r}
+field_data_freq_events <- field_data %>% 
+  select(event_code, spp_name, sample_type) %>%
+  mutate(presabs = 1) %>%
+  group_by(event_code, spp_name, sample_type) %>% 
+  summarise(freq = sum(presabs))
+field_data_freq_events %>% spread(key = sample_type, value = freq, fill = 0)
+```
+
+
+```{r fig.height=8}
+ggplot(field_data_freq_events, aes(x = freq, fill = sample_type))+
+  geom_histogram(position = position_dodge()) +
+  facet_wrap(~event_code, ncol = 3)
+```
+
+
+Pitfall only
+```{r}
+samptypes <- field_data_freq_events %>% 
+  select(-freq) %>% 
+  mutate(smptp = str_replace_all(sample_type, c("hand_search" = "h", "pitfall" = "p", "excavation" = "e" ))) %>% 
+  # ungroup() %>% 
+  # group_by(spp_name) %>%
+  spread(key = sample_type, value = smptp, fill = "") %>% 
+  mutate(sample_types = paste0(excavation, hand_search, pitfall)) %>% 
+  select(event_code, spp_name, sample_types)
+  
+field_data_freq_events_types <- field_data_freq_events %>% 
+  spread(key = sample_type, value = freq, fill = 0) %>% 
+  full_join(samptypes)
+
+field_data_freq_events_types
+```
+
+```{r}
+table(field_data_freq_events_types$sample_types) %>% knitr::kable()
+```
+
+
+```{r}
+ggplot(field_data_freq_events_types, aes(sample_types)) +
+  geom_bar(aes(fill = event_code))
+```
+
+
+```{r}
+selectedevent <- "Wye_2014_1"
+
+graphdata <- field_data_freq_events_types %>% 
+  gather(key = sample_type, value = freq, excavation, hand_search, pitfall) %>% 
+  filter(freq != 0) %>% 
+  filter(sample_types %in% c("h", "hp", "p")) %>% 
+  filter(event_code == selectedevent)
+
+st_names <- c(h = "handsearch only", p = "pitfall only", hp = "handsearch and pitfall")
+
+  
+ggplot(graphdata, aes(x = freq, fill = sample_type))+
+  geom_histogram(position = position_stack(), binwidth = 1) +
+  facet_wrap(~sample_types,ncol = 1, labeller = labeller(sample_types = st_names)) +
+  labs(title = paste0("Frequency of species in different sample types at ", selectedevent), 
+       caption = str_wrap("Note this is the frequency with which species occur in different sample types, not the frequency of the species within a particular sample.", width = 80))
+```
+
+
+
+```{r}
+selectedevent <- "Wye_2014_1"
+
+graphdata <- field_data_freq_events_types %>% 
+  #gather(key = sample_type, value = freq, excavation, hand_search, pitfall) %>% 
+  #filter(freq != 0) %>% 
+  filter(sample_types %in% c("h", "hp", "p")) %>% 
+  filter(event_code == selectedevent)
+graphdata
+
+
+ggplot(graphdata, aes(x = sample_types)) +
+  geom_histogram(stat = "count")
+```
+
+
+```{r}
+length(unique(graphdata$spp_name))
+```
+
+##Which species are caught by which methods
+
+```{r}
+
+field_data_freq_types %>%
+  group_by(sample_types) %>% 
+  count(sample_types)
+
+
+field_data_freq_events_types %>% 
+  filter(sample_types %in% c("p", "hp", "h")) %>% 
+  group_by(sample_types) %>% 
+  count(spp_name) %>% 
+  ggplot(aes(x = n))+
+  geom_histogram(aes(fill = sample_types)) 
+  
+
+
+field_data_freq_events_types %>% 
+  filter(sample_types %in% c("p", "hp", "h")) %>% 
+  mutate(value = 1) %>% 
+  select(spp_name, sample_types, value) %>% 
+  spread(key = sample_types, value = value)
+
+
+
+```
+
+
+
+```{r}
+field_data %>% filter(event_code == "Wye_2014_1") 
+
+
+```
+
+
+
+```{r}
+field_data %>% 
+  filter(str_detect(event_code, "Wye"))
+```
+
+
+```{r}
+
+```
+

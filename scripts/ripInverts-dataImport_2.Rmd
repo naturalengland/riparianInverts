@@ -1,0 +1,763 @@
+---
+title: "Riparian Invertebrates: Data Import 2"
+output: html_notebook
+---
+
+##Packages
+```{r}
+# packages
+library(tidyverse)
+library(readxl)
+library(forcats)
+```
+
+##Import data 
+```{r}
+#importing all as text to begin with
+sel_values <- read_excel("../data/Riparian Data August 2018.xlsx", sheet = 2, col_types = "text")
+
+# ers_data2 <- read_excel("../data/Riparian Data August 2018.xlsx", sheet = 4, col_types = "text")
+
+ers_data2 <- read_csv("../data/Riparian Data August 2018 - sample data records.csv")
+
+effort_data <- read_excel("../data/Riparian Data August 2018.xlsx", sheet = 5, col_types = "text") 
+```
+
+```{r}
+names(ers_data2)
+```
+
+
+
+```{r}
+skimr::skim(sel_values)
+#skimr::skim(ers_data2)
+skimr::skim(effort_data)
+```
+
+#Selected values
+This is really a dataset of derrived values from the field data.  
+
+```{r}
+#clean variable names
+names(sel_values) <- c("event", "effort", "n_wetland", "n_runWater", "sqi_runWater", "sqs_runWater", "n_marsh", "sqi_marsh", "sqs_marsh")
+sel_values
+```
+
+```{r}
+#write_csv(sel_values, "../data/indices.csv")
+```
+
+
+
+
+#Full sSample data
+
+#### Get a handle on numeric data
+
+Try to find all the numeric values
+```{r}
+#new column, convert abundance to numeric. 
+ers_data2$abund_num <- as.numeric(ers_data2$Abundance_Data)
+skimr::skim(ers_data2$abund_num)
+#all data containing a non-numeric is now NA, all numeric is numeric
+plot(ers_data2$abund_num)
+hist(ers_data2$abund_num, breaks = 100)
+hist(ers_data2$abund_num, breaks = 1000, xlim = c(0,100))
+```
+
+
+```{r}
+#split numeric and character abundance values: 
+#create numeric column
+abund_num <- ers_data2 %>% 
+  select(abund_num) %>%  
+  filter(is.na(abund_num) == FALSE) 
+abund_num <- abund_num$abund_num
+
+n_distinct(abund_num)
+length(abund_num)
+```
+
+```{r}
+ers_hist <- hist(abund_num, breaks = 100, plot = FALSE)
+knitr::kable(tibble(ers_hist$breaks[-1], ers_hist$counts))
+```
+The vast majority of abundance values aer below 20.  
+
+#### Get a handle on non-numeric data
+
+```{r}
+#create a character abundance column
+ers_data2 <- add_column(ers_data2, abund_char = ers_data2$Abundance_Data) 
+  
+ers_data2$abund_char <- replace(ers_data2$abund_char, 
+                               is.na(ers_data2$abund_num)==FALSE, 
+                               NA)
+  
+  
+```
+
+
+
+
+```{r}
+n_distinct(ers_data2$abund_char)
+length(ers_data2$abund_char[which(is.na(ers_data2$abund_char)==FALSE)])
+```
+552 observations; 17 unique abundance values
+
+
+```{r}
+ers_char <- data.frame(table(ers_data2$abund_char))
+ers_char <- arrange(ers_char, -Freq)
+knitr::kable(ers_char)
+```
+
+##what about sample types
+```{r}
+knitr::kable(
+  ers_data2 %>%
+    count(Sample_Type) %>%
+    arrange(-n)
+)
+```
+
+```{r}
+unique(ers_data2$Sample_Type)
+```
+
+
+```{r}
+table(tolower(ers_data2$Sample_Type))
+
+```
+
+
+Clean up sample type coding
+```{r}
+ers_data2 <- ers_data2 %>% 
+  mutate(Sample_Type_old = Sample_Type, 
+         Sample_Type = recode_factor(tolower(ers_data2$Sample_Type),
+             `20 minute dig` = "excavation",
+             `20 minute timed search` = "hand_search",
+             `30 minute timed sample` = "unknown",
+             aquatic = "aquatic",
+             `casual record` = "ad-hoc",
+             excavation = "excavation",
+             `field observation` = "ad-hoc",
+             `hand collection` = "hand_search",
+             `hand search` = "hand_search",
+             `hand search (25min)` = "hand_search",
+             `hand searching` = "hand_search",
+              handsearch = "hand_search",
+             `handsearch/excavation` = "excavation",
+             netting = "sweep",
+             pitfall = "pitfall",
+             `pitfall trap` = "pitfall",
+             pitfalls = "pitfall",
+             quadrat = "hand_search",
+             splashing = "splashing",
+             sweep = "sweep",
+             `timed dig` = "excavation",
+             `timed hand collection` = "hand_search",
+             `timed hand search` = "hand_search",
+             `water trap` = "water_trap"
+             ))
+
+table(tolower(ers_data2$Sample_Type))
+
+```
+
+
+
+```{r}
+table(tolower(ers_data2$Sample_Type_old))
+```
+
+
+
+does data type relate to sample type
+```{r}
+sample_data_types <-
+  ers_data2 %>%
+    group_by(Sample_Type) %>%
+    count("abund_character" = is.na(abund_char)==FALSE, 
+        "abund_number" = is.na(abund_num)==FALSE) %>% 
+    filter(abund_character == TRUE | abund_number == TRUE) 
+
+sample_data_types$abund_character[which(sample_data_types$abund_character==TRUE)] <- 
+  sample_data_types$n[which(sample_data_types$abund_character==TRUE)]
+  
+sample_data_types$abund_number[which(sample_data_types$abund_number==TRUE)] <- 
+  sample_data_types$n[which(sample_data_types$abund_number==TRUE)]
+  
+#sample_data_types$n <- NULL
+
+knitr::kable(sample_data_types)
+```
+
+
+##Fix sample timing
+```{r}
+table(ers_data2$Sample_Type_old, ers_data2$Sample_Duration)
+
+```
+
+```{r}
+ers_data2$Sample_Duration[which(ers_data2$Sample_Type_old %in% c("20 minute dig", "20 minute timed search"))] <- "20 min"
+
+ers_data2$Sample_Duration[which(ers_data2$Sample_Type_old %in% c("30 minute timed sample"))] <- "30 min"
+
+ers_data2 <- ers_data2 %>% 
+  mutate(Sample_Duration = recode_factor(Sample_Duration,
+                                         `80-100`  = "80-100 min",
+                                         `80-100 minutes` = "80-100 min"))
+
+
+
+
+table(ers_data2$Sample_Type_old, ers_data2$Sample_Duration)
+```
+
+
+## Look at surveys
+
+
+```{r}
+
+names(ers_data2)
+
+table(ers_data2$`NE Full Sample Name`)
+```
+
+
+#Sort out events
+
+Note, I've renamed some of the columns for clarity: col A = 'Event',  Col C = number of pitfall replicates (P), col D = number of timed  search/excavation replicates(T), Col G = number of pitfalls per replicate.  
+
+
+
+
+```{r}
+ers_data2$event <- ers_data2$`NE Full Sample Name`
+
+ers_events <- data.frame(source = "ers", event = unique(ers_data2$event))
+sel_events <- data.frame(source = "sel", event = unique(sel_values$event))
+
+events <- rbind(ers_events, sel_events)
+
+events %>% spread(key = source, value = source) %>% 
+  mutate(event = as.character(event)) %>% 
+  arrange(event)
+
+```
+
+
+```{r}
+#Match event names to those in 'selected values'
+ers_data2 <- ers_data2 %>% 
+  mutate(event = recode_factor(event,
+                               "Camel tributary" = "Camel Tributary",
+                               "Creedy Yeo 1999" = "Creedy yeo 1999",
+                               "Eden Read POSSIBLE 2000" = "Eden Read (Possible) 2000",
+                               "Eggleston Burn POSSIBLE" = "Eggleston Burn (possible)",
+                               "Gauntless POSSIBLE" = "Gauntless (Possible)",
+                               "Severn1 2002" = "Severn 1 2002",
+                               "Severn1a 2002" = "Severn 1a 2002",
+                               "Severn2 2002" = "Severn 2 2002",
+                               "Severn2 2003" = "Severn 2003", 
+                               "Severn2a 2002" = "Severn 2a 2002",
+                               "Severn3 2003" = "Severn 3 2002",
+                               "South Tyne POSSIBLE" = "South Tyne (Possible)",
+                               "Teme 1998 POSSIBLE" = "Teme 1998 (Possible)",
+                               "Towy1 2003" = "Towy 1 2003",
+                               "Towy3 2003" = "Towy 3 2003",
+                               "Towy6 2002" = "Towy 6 2003",
+                               "Towy1998" = "Towy 1998",
+                               "Tywi1998" = "Tywi 1998",
+                               "Usk1998" = "Usk 1998", 
+                               "Waer POSSIBLE" = "Wear (Possible)",
+                               "Wear2005" = "Wear 2005",
+                               "Wollder Water 2013" = "Woolder Water 2013",
+                               "Wye 2014" = "Wye 1 2014",
+                               "Wye 2014 3" = "Wye 3 2014",
+                               "Wye 2014 4" = "Wye 4 2014",
+                               "Wye 2014 5" = "wye 2014 5",
+                               "Wye 2014 6" = "Wye 6 2014",
+                               "Wye 2014 7" = "Wye 7 2014",
+                               "Wye1998" = "Wye 1998"
+                               ))
+
+
+```
+
+
+
+```{r}
+ers_events <- data.frame(source = "ers", event = unique(ers_data2$event))
+sel_events <- data.frame(source = "sel", event = unique(sel_values$event))
+
+events <- rbind(ers_events, sel_events)
+
+events %>% spread(key = source, value = source) %>% 
+  mutate(event = as.character(event)) %>% 
+  arrange(event)
+```
+
+```{r}
+#create event codes lookup
+events_code <- events %>% spread(key = source, value = source) %>% 
+  mutate(event = as.character(event)) %>% 
+  arrange(event)
+
+
+events_code$event_code <- c(
+  "Ashop_1997", "Allen_poss", "Allen_1987_poss", 
+  "Alport_1999", "Beamish_2013", "Camel_1999",
+   "Camel_2003", "CamelTrib", "Carey_2003_1", 
+  "CreedyYeo_1999", "DaneEast", "DaneWest", 
+  "Dove_2013", "EdenRead_2000_poss", "Eggleston_poss", 
+  "Erme_1999", "Exe_1999", "Fal", 
+  "Fal_2002", "Fowey_2003_1", "Fowey_2003_2", 
+  "Gauntless_poss", "Harwood_poss_1", "Harwood_poss_2", 
+  "Lugg_2014_1",  "Lugg_2014_2", "Lugg_2014_3", 
+  "Lugg_2014_4", "Lynher_2003_1", "Lynher_2002", 
+  "Mawddach_2003", "Monnow_2013", "Monnow_2015", 
+  "Otter_1999", "Ottery_2003", "Plym_2003",
+  "Plym_2002", "Rheidol_2004_1", "Rheidol_2004_2", 
+  "Rheidol_2004_3", "FromeMoreton_2017", "FromeRushton_2017", 
+  "FromeWoodsford_2017", "Tame_2000", "Severn_2002_1", 
+  "Severn_2002_1a", "Severn_2002_2", "Severn_2003", 
+  "Severn_2002_2a", "Severn_2002_3", "SevernLlandinam_1999",
+  "SouthTyne_poss", "Tamar_2002", "Taw_1999", 
+  "Tees_2008_1", "Tees_2008_2", "TeignBovey_1998_T",
+  "TeignBovey_1998_B", "TeignBoveyConfluence", "Teign_1999", 
+  "Teme_1998_poss", "Thrushel_1999", "Till_2005", 
+  "Till_2013", "Torridge_1999", "Towy_2003_1", 
+  "Towy_1998", "Towy_2003_2",  "Towy_2003_3", 
+  "Towy_2002_4", "Towy_2002_5", "Towy_2003_6", 
+  "Tywi_1998", "Usk_1998", "Wear_poss", 
+  "Wear_2005", "Woolder_2013", "Wooler_2013", 
+  "Wye_2014_1", "Wye_1998", "Wye_2014_5",
+  "Wye_2014_3", "Wye_2014_4", "Wye_2014_6", 
+  "Wye_2014_7", "Yarty_1999", "Yealm_2003", "unknown"
+)
+events_code
+```
+
+
+```{r}
+#check duplication
+events %>% spread(key = source, value = source) %>% 
+  mutate(event = as.character(event)) %>% 
+#  arrange(event) %>% 
+  select(event) %>% duplicated()
+```
+
+```{r}
+#bind codes back into ers_data2
+ers_data2 <- left_join(
+  ers_data2, 
+  select(events_code, event, event_code), 
+  by = "event") %>% 
+  mutate(event = as.factor(event)) %>% 
+  mutate(event_code = as.factor(event_code))
+```
+
+```{r}
+#bring codes back into sel_events
+sel_values <- sel_values %>% 
+  left_join(
+  select(events_code, event, event_code), 
+  by = "event") %>% 
+  mutate(event = as.factor(event)) %>% 
+  mutate(event_code = as.factor(event_code))
+
+sel_values
+```
+
+##Sort out date field
+```{r}
+# unique(ers_data2$Date)
+# date validation rules: 
+# - if span of dates, choose start date
+# - if just a year, set to NA
+# - if range of years, set to NA
+# - NA, keep as NA
+
+ers_data2 <- ers_data2 %>% 
+  mutate(date_orig = Date) %>% 
+  mutate(Date = str_replace_all(
+    Date, 
+    c(
+    "1997" = NA,
+    "1987" = NA,
+    "12/06/2003- 23/06/2003" = "12/06/2003",
+    "1998"  = NA,
+    "NA" = NA,
+    "11/06/2013 for two weeks" = "11/06/2013",
+    "30/04/2003- 15/05/2003" = "30/04/2003",
+    "26/04/2002- 09/05/2002" = "26/04/2002",
+    "17/05/2003- 04/06/2003" = "17/05/2003",
+    "13/06/2003- 23/06/2003" = "13/06/2003",
+    "30/06/2002- 14/07/2002" = "30/06/2002",
+    "19/09/2001- 03/10/2001" = "19/09/2001",
+    "25/04/2002- 09/05/2002" = "25/04/2002",
+    "1990 - 1996" = NA,
+    "02 to 06/06/2015" = "02/06/2015",
+    "18/09/2001- 03/10/2001" = "18/09/2001",
+    "24/04/2002- 09/05/2002" = "24/04/2002",
+    "13/06/2002- 14/07/2002" = "13/06/2002"))) %>% 
+  droplevels()
+
+unique(ers_data2$Date)
+```
+
+```{r}
+ers_data2 <- ers_data2 %>% 
+  mutate(year_orig = Year) %>% 
+  mutate(Year = replace(Year, is.na(Year), str_sub(Date, -4, -1))) %>%
+  mutate(Year = replace(Year, is.na(Year), str_sub(Date, -4, -1)))  #weirdly I need too repeat this to get all the NAs
+
+ers_data2 %>% filter(is.na(Year)) %>% select(Year, year_orig, Date)
+```
+
+## replication
+```{r}
+#create location replicates column
+ers_data2 <- ers_data2 %>%
+  mutate(smpshort = str_replace_all(
+    Sample_Type, c(
+      "hand_search" = "HS", "pitfall" = "PF", "excavation" = "EX", 
+      "ad-hoc" = "AH", "sweep" = "SW", "aquatic" =  "AQ", 
+      "unknown" = "UK", "water_trap" = "WT", "splashing" = "SP"))) %>% 
+  mutate(locshort = str_remove_all(Location_Name, "[ ,.]")) %>% 
+  mutate(repl_loc = paste(event_code, smpshort, locshort, sep = "-")) 
+
+ers_data2 %>% group_by(event_code, Sample_Type, Location_Name) %>% 
+  summarise(n.loc = length(unique(repl_loc))) %>% 
+  arrange(-n.loc) 
+
+ers_data2 %>% group_by(event_code, Sample_Type) %>% 
+  summarise(n.loc = length(unique(repl_loc))) %>% 
+  arrange(-n.loc) 
+```
+
+```{r}
+#create date replicate column
+ers_data2 <- ers_data2 %>%
+  mutate(dateshort = str_remove_all(Date, "/")) %>%
+  mutate(repl_date = paste(event_code, smpshort, dateshort, sep = "-"))
+
+head(unique(ers_data2$repl_date))
+
+ers_data2 %>%   group_by(event, Sample_Type, repl_date) %>% count() %>% arrange(repl_date, Sample_Type)
+
+ers_data2 %>% group_by(event, Sample_Type) %>% summarise(n.date = length(unique(repl_date))) %>% 
+  arrange(-n.date) 
+```
+
+
+```{r}
+#create date-location replicates column
+ers_data2 <- ers_data2 %>% 
+  mutate(repl_dateloc = paste(event, smpshort, dateshort, locshort, sep = "-"))  
+
+head(unique(ers_data2$repl_dateloc))
+  
+ers_data2 %>% group_by(event, Sample_Type, Date, Location_Name) %>% count() %>% arrange(-n)
+
+ers_data2 %>% group_by(event, Sample_Type) %>% summarise(n.dateloc = length(unique(repl_dateloc))) %>% 
+  arrange(-n.dateloc) 
+```
+
+```{r}
+length(unique(ers_data2$repl_date))
+length(unique(ers_data2$repl_loc))
+length(unique(ers_data2$repl_dateloc))
+```
+
+
+## Calculate species richness in ers
+
+```{r}
+ers_data2 %>% group_by(event_code, Sample_Type) %>% count(Species_name) %>% 
+  arrange(-n)
+
+```
+
+```{r}
+ers_data2 %>% group_by(event_code) %>% count(Sample_Type)  
+```
+
+```{r}
+table(ers_data2$Sample_Type)
+```
+
+
+
+##Look at effort data
+
+```{r}
+effort_data
+```
+
+This data has metrics for effort: 
+
+* effort_P = number of 2 week pitfall durations
+* effort_T = number of timed searches or excavations
+* effort_combined = sum of effort_P and effort_T
+
+```{r}
+#rename columns: 
+#names(effort_data)
+effort_data <- rename(effort_data, 
+                      author = Author,
+                      effort_P = `number of 2 week pitfall durations (P)`,
+                      effort_T = `number of timed  searches/excavations (T)`,
+                      effort_combined = `EFFORT = C+D`,
+                      effort_type = `EFFORT TYPE`,
+                      n_pitfall = `pitfall number`,
+                      n_records = `total number of records`,
+                      n_excavations = `Number of Excavation (not used as not all workers listed it as separate from searching)`
+)
+```
+
+
+
+
+```{r}
+effort_events <- data.frame(source = "eff", event = unique(effort_data$event))
+sel_events <- data.frame(source = "sel", event = unique(sel_values$event))
+
+events <- rbind(effort_events, sel_events)
+
+events %>% spread(key = source, value = source) %>% 
+  mutate(event = as.character(event)) %>% 
+  arrange(event)
+
+```
+
+
+
+```{r}
+#Match event names to those in 'selected values'
+effort_data <- effort_data %>% 
+  mutate(event = recode_factor(
+    event,
+    "Camel tributary" = "Camel Tributary",
+    "Creedy Yeo 1999" = "Creedy yeo 1999",
+    "Eden Read POSSIBLE 2000" = "Eden Read (Possible) 2000",
+    "Eggleston Burn POSSIBLE" = "Eggleston Burn (possible)",
+    "Gauntless POSSIBLE" = "Gauntless (Possible)",
+    "Harwood POSSIBLE" = "Harwood (Possible)",
+    "Severn1 2002" = "Severn 1 2002",
+    "Severn1a 2002" = "Severn 1a 2002",
+    "Severn2 2002" = "Severn 2 2002",
+    "Severn2 2003" = "Severn 2003", 
+    "Severn2a 2002" = "Severn 2a 2002",
+    "Severn3 2003" = "Severn 3 2002",
+    "South Tyne POSSIBLE" = "South Tyne (Possible)",
+    "Teme 1998 POSSIBLE" = "Teme 1998 (Possible)",
+    "Towy1 2003" = "Towy 1 2003",
+    "Towy3 2003" = "Towy 3 2003",
+    "Towy6 2002" = "Towy 6 2003",
+    "Towy1998" = "Towy 1998",
+    "Tywi1998" = "Tywi 1998",
+    "Usk1998" = "Usk 1998", 
+    "Waer POSSIBLE" = "Wear (Possible)",
+    "Wear2005" = "Wear 2005",
+    "Wollder Water 2013" = "Woolder Water 2013",
+    "Wye 2014" = "Wye 1 2014",
+    "Wye 2014 3" = "Wye 3 2014",
+    "Wye 2014 4" = "Wye 4 2014",
+    "Wye 2014 5" = "wye 2014 5",
+    "Wye 2014 6" = "Wye 6 2014",
+    "Wye 2014 7" = "Wye 7 2014",
+    "Wye1998" = "Wye 1998",
+    "Yealm 1 2003" = "Yealm 2003",
+    "Teign & Bovey A 1998" = "Teign & Bovey 1998 T" #assume T stands for Teign, B for Bovey as per other tables
+  ))
+
+```
+
+
+```{r}
+effort_events <- data.frame(source = "eff", event = unique(effort_data$event))
+sel_events <- data.frame(source = "sel", event = unique(sel_values$event))
+
+events <- rbind(effort_events, sel_events)
+
+events %>% spread(key = source, value = source) %>% 
+  mutate(event = as.character(event)) %>% 
+  arrange(event)
+
+```
+
+```{r}
+#bind codes back into events
+effort_data <- effort_data %>% 
+  left_join(select(events_code, event, event_code),
+  by = "event") %>%
+  mutate(event = as.factor(event)) %>%
+  mutate(event_code = as.factor(event_code)) %>%
+  select(event, event_code, everything())
+
+effort_data
+```
+
+
+```{r}
+effort_data %>% count(effort_type)
+```
+
+```{r}
+effort_data
+```
+
+##Select field data
+```{r}
+field_data <- ers_data2 %>% 
+  select(spp_name = Species_name, 
+         abund_num,
+         abund_char,          
+         river = `Sample River`,
+         event = event, 
+         event_code = event_code,
+         date = Date,
+         year = Year, 
+         sample_type = Sample_Type,
+         location = Location_Name,
+         repl_dateloc = repl_dateloc,
+         repl_date = repl_date,
+         repl_loc = repl_loc,
+         sadler_bell = "Sadler & Bell method?",
+         search_pitfall = "Handsearch & Pitfall",
+         search_excavation = "Handserach & excavation",
+         sample_duration = "Sample_Duration"
+         )
+
+field_data %>% 
+  #group_by(event, sample_type) %>% 
+  count(sadler_bell)
+  
+field_data %>% 
+  #group_by(event, sample_type) %>% 
+  count(sample_type, sadler_bell) %>% 
+  arrange(-n)
+
+field_data %>% 
+  count(sample_type)
+
+```
+
+
+
+
+
+```{r}
+#select field data
+field_data_selected <- filter(field_data, sample_type %in% c("excavation", "hand_search", "pitfall")) %>% droplevels()
+
+field_data_selected
+```
+
+```{r}
+field_data_selected %>%
+  summarise(n.events = n_distinct(event_code), n.rep_loc = n_distinct(repl_loc),
+            n.rep_date = n_distinct(repl_date), n.rep_dateloc = n_distinct(repl_dateloc))
+```
+
+
+```{r}
+#species richness 
+field_data_selected %>% 
+  mutate(sample_type = recode(sample_type, 
+                              "excavation" = "timed", 
+                              "hand_search" = "timed")) %>% 
+  group_by(event, sample_type) %>% 
+  summarise(n_spp = n_distinct(spp_name),
+            n_rec = length(spp_name))
+```
+
+```{r}
+effort_data
+```
+
+
+#split by river
+
+```{r}
+unique(field_data_selected$river) %>% sort()
+```
+
+
+#look at rivers
+
+```{r}
+field_data_selected %>% 
+  group_by(event_code, river) %>% 
+  count(event_code) %>% 
+  arrange(n)
+```
+
+```{r}
+field_data_selected %>% 
+  select(river, event_code) %>% 
+  unique() %>% 
+  count(river) %>% 
+  arrange(-n)
+  
+```
+
+
+
+
+```{r}
+river_indices <- sel_values %>% 
+  left_join(unique(select(field_data_selected, event_code, river))) %>% 
+  select(river, event_code, everything()) %>% 
+  arrange(river)
+river_indices
+```
+
+
+```{r}
+river_indices %>%
+  filter(river %in% c("Severn", "Towy", "Wye")) %>% 
+  droplevels() %>% 
+  count(river, effort) %>% 
+  arrange(river)
+
+graphdata <- river_indices %>%
+  filter(river %in% c("Severn", "Towy", "Wye")) %>% 
+  droplevels() %>% 
+  mutate(effort = as.integer(effort))
+
+ggplot(graphdata, aes(x = effort, fill = river)) +
+  geom_dotplot(position = "dodge", binwidth = 1, dotsize = 0.5, origin = 0)+
+  scale_x_continuous(breaks = seq(1:12))+
+    scale_y_continuous()
+
+
+ggplot(graphdata, aes(x = effort)) +
+  geom_histogram(binwidth = 0.5) +
+  scale_x_continuous(breaks = seq(1:12)) +
+  facet_wrap(~river, ncol = 1, strip.position = "right") +
+  theme(panel.grid.minor = element_blank())
+```
+
+
+
+
+#Export data
+```{r}
+# write_csv(effort_data, "../data/effort.csv")
+# write_csv(field_data_selected, "../data/field_data_selected.csv")
+# write_csv(sel_values, "../data/field_data_indices.csv")
+# write_csv(river_indices, "../data/river_indices.csv")
+```
+
+
+

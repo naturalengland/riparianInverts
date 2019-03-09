@@ -1,0 +1,279 @@
+---
+title: "Riparian Invertebrates: Accumulation curves"
+output: html_notebook
+---
+
+##Packages
+```{r}
+# packages
+library(tidyverse)
+library(readxl)
+library(forcats)
+```
+
+##Import data
+```{r}
+effort_data <- read_csv("../data/effort.csv") 
+field_data <- read_csv("../data/field_data_selected.csv")
+field_data <-  field_data %>% 
+  #get rid of event = NA
+  filter(!is.na(event))
+
+indices <- read_csv("../data/indices.csv")
+river_indices <- read_csv("../data/river_indices.csv")
+```
+
+## Plot
+
+```{r}
+ggplot(indices %>%  
+         gather(key = index, value = score, n_wetland:sqs_marsh, na.rm = T), 
+       aes(x = effort, y = score))+
+  geom_point() +
+  geom_smooth(method = "lm")+
+  scale_x_continuous(breaks = seq(1:12)) +  
+  facet_wrap(~index)
+```
+
+
+```{r}
+ggplot(river_indices %>%  
+         gather(key = index, value = score, n_wetland:sqs_marsh, na.rm = T) %>% 
+         filter(river %in% c("Severn", "Towy", "Wye")) %>%
+         filter(index %in% c("sqi_marsh", "sqi_runWater")) %>% 
+         droplevels(), 
+       aes(x = effort, y = score))+
+  geom_point() +
+  geom_smooth(method = "lm")+
+  scale_x_continuous(breaks = seq(1:12)) +  
+  theme(panel.grid.minor = element_blank()) +
+  facet_grid(river~index)
+```
+
+
+```{r}
+ggplot(river_indices %>%  
+         gather(key = index, value = score, n_wetland:sqs_marsh, na.rm = T) %>% 
+         filter(river %in% c("Severn", "Towy", "Wye")) %>%
+         filter(index %in% c("sqi_marsh", "sqi_runWater")) %>% 
+         droplevels(), 
+       aes(x = effort, y = score))+
+  geom_point(position = position_jitter(width = 0.5, height = 20)) +
+  #geom_point(position = "jitter")+
+  geom_smooth(method = "lm")+
+  scale_x_continuous(breaks = seq(1:12)) +  
+  theme(panel.grid = element_blank()) +
+  facet_grid(river~index)
+```
+
+
+```{r}
+library(vegan)
+
+rarecurve()
+```
+
+
+
+
+```{r}
+table(field_data$abund_char)
+table(field_data$abund_num)
+table(field_data$abund_char, field_data$sample_type)
+```
+
+```{r}
+field_data %>% 
+  filter(event == "Monnow 2015") %>% 
+  count(spp_name) %>% 
+  arrange(-n)
+```
+
+
+Lets convert this to a frequency matrix
+```{r}
+field_data_freq <- field_data %>% 
+  #get rid of event = NA
+  filter(!is.na(event)) %>% 
+  #calculate frequencies
+  group_by(river, event, spp_name) %>% 
+  summarise(n = length(spp_name)) %>% 
+  #abbreviate species names
+  mutate(spp_name = vegan::make.cepnames(spp_name)) %>% 
+  #spread to a matrix
+  spread(key = spp_name, value = n, fill = 0) %>%
+  data.frame() %>%
+  arrange(river) 
+
+field_data_freq
+
+
+field_data_pitfall <- field_data %>% 
+  #get rid of event = NA
+  filter(!is.na(event)) %>% 
+  #select by sample type 
+  filter(sample_type == "pitfall") %>% 
+  #calculate frequencies
+  group_by(river, event, spp_name) %>% 
+  summarise(n = length(spp_name)) %>% 
+  #abbreviate species names
+  mutate(spp_name = vegan::make.cepnames(spp_name)) %>% 
+  #spread to a matrix
+  spread(key = spp_name, value = n, fill = 0) %>%
+  data.frame() %>%
+  arrange(river) 
+
+
+field_data_search <- field_data %>% 
+  #get rid of event = NA
+  filter(!is.na(event)) %>% 
+  #select by sample type 
+  filter(sample_type != "pitfall") %>% 
+  #calculate frequencies
+  group_by(river, event, spp_name) %>% 
+  summarise(n = length(spp_name)) %>% 
+  #abbreviate species names
+  mutate(spp_name = vegan::make.cepnames(spp_name)) %>% 
+  #spread to a matrix
+  spread(key = spp_name, value = n, fill = 0) %>%
+  data.frame() %>%
+  arrange(river) 
+
+
+```
+
+species accumulation curve for all surveys
+```{r}
+spec_accum <- vegan::specaccum(comm = field_data_freq)
+
+plot(spec_accum)
+```
+
+species accumulation curve sy sampple type
+```{r}
+spec_accum_pit <- vegan::specaccum(comm = select(field_data_pitfall, -c(river, event)))
+spec_accum_search <- specaccum(comm = select(field_data_search, -c(river, event)))
+
+plot(spec_accum)
+plot(spec_accum_search, col = "green", add = TRUE)
+plot(spec_accum_pit, col = "red", add = TRUE)
+
+```
+
+
+
+species accumulation curve for selected surveys
+```{r}
+library(vegan)
+
+#list of surveys on selected river
+events_severn <- unique(field_data$event[which(field_data$river == "Severn")])
+#species accumulation curve by resampling events
+spec_accum_severn <- specaccum(comm = field_data_freq[events_severn,])
+plot(spec_accum_severn, ci.type = "polygon", ci.col = "grey", ci.lty = "dotted", 
+     main = "Species accumulation curve: Severn")
+abline(h = max(spec_accum_severn$richness), col = "black")
+abline(h = max(spec_accum_severn$richness)*0.95, col = "red")
+abline(h = max(spec_accum_severn$richness)*0.9, col = "red", lty = "dotted")
+
+#list of surveys on selected river
+events_towy <- unique(field_data$event[which(field_data$river == "Towy")])
+#species accumulation curve by resampling events
+spec_accum_towy <- specaccum(comm = field_data_freq[events_towy,])
+plot(spec_accum_towy, ci.type = "polygon", ci.col = "grey", ci.lty = "dotted", 
+     main = "Species accumulation curve: Towy")
+abline(h = max(spec_accum_towy$richness), col = "black")
+abline(h = max(spec_accum_towy$richness)*0.95, col = "red")
+abline(h = max(spec_accum_towy$richness)*0.9, col = "red", lty = "dotted")
+
+#list of surveys on selected river
+events_wye <- unique(field_data$event[which(field_data$river == "Wye")])
+#species accumulation curve by resampling events
+spec_accum_wye <- specaccum(comm = field_data_freq[events_wye,])
+plot(spec_accum_wye, ci.type = "polygon", ci.col = "grey", ci.lty = "dotted", 
+     main = "Species accumulation curve: Wye")
+abline(h = max(spec_accum_wye$richness), col = "black")
+abline(h = max(spec_accum_wye$richness)*0.95, col = "red")
+abline(h = max(spec_accum_wye$richness)*0.9, col = "red", lty = "dotted")
+
+
+plot(spec_accum_wye, col = "green")
+plot(spec_accum_severn, add = T, col = "blue")
+plot(spec_accum_towy, add = T, col = "orange")
+
+# op <- par()
+# par(mfrow = c(1,3))
+# plot(spec_accum)
+# plot(spec_accum_severn, col = "red", add = T)
+#par(op)
+```
+
+Try plotting specaccum object in ggplot
+```{r}
+graphdata <- data.frame(n_sites = spec_accum$sites,
+                        n_spp = spec_accum$richness,
+                        sd = spec_accum$sd)
+
+ggplot(graphdata, aes(x = n_sites, y = n_spp))+
+  geom_point() +
+  geom_errorbar(aes(ymin = n_spp-sd, ymax = n_spp+sd))
+
+ggplot(graphdata, aes(x = n_sites, y = n_spp))+
+  geom_point() +
+  geom_path(aes(y = n_spp-sd)) +
+  geom_path(aes(y = n_spp+sd))
+
+plot(spec_accum)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Example below using rarefaction function in package vegan.  It doesn't make sense because it is intended for individual based sampling rather than sample based sampling.  
+```{r}
+S <- specnumber(field_data_freq) # observed number of species
+raremax <- min(rowSums(field_data_freq))
+Srare <- rarefy(field_data_freq, raremax)
+plot(S, Srare, xlab = "Observed No. of Species", ylab = "Rarefied No. of Species")
+abline(0, 1)
+rarecurve(field_data_freq, step = 20, sample = raremax, col = "blue", cex = 0.6)
+```
+
+
+better to use package iNext but this isn't avail for R version 3.3.2
+```{r}
+#install.packages("iNEXT")
+#need version 3.4!!!
+```
+
+
+
+
+Frequency matrix for selected rivers
+```{r}
+field_data_freq <- field_data %>% 
+  #get rid of event = NA
+  filter(!is.na(event)) %>% 
+  #calculate frequencies
+  group_by(event, spp_name) %>% 
+  summarise(n = length(spp_name)) %>% 
+  #abbreviate species names
+  mutate(spp_name = vegan::make.cepnames(spp_name)) %>% 
+  #spread to a matrix
+  spread(key = spp_name, value = n, fill = 0) %>%
+  data.frame() %>% 
+  column_to_rownames(var = "event")
+
+field_data_freq
+
+```

@@ -1,0 +1,160 @@
+---
+title: "Riparian Invertebrates: Accumulation curves: similarity"
+output: html_notebook
+---
+
+##Packages
+```{r, message=FALSE, warning=FALSE}
+# packages
+library(tidyverse)
+library(readxl)
+library(forcats)
+library(vegan)
+```
+
+##Import data
+```{r}
+#effort_data <- read_csv("../data/effort.csv") 
+field_data <- read_csv("../data/field_data_selected.csv")
+field_data <-  field_data %>% 
+  #get rid of event = NA
+  filter(!is.na(event))
+
+indices <- read_csv("../data/indices.csv")
+river_indices <- read_csv("../data/river_indices.csv")
+```
+
+
+
+
+Lets convert this to a frequency matrix
+```{r}
+field_data_freq <- field_data %>% 
+  #get rid of event = NA
+  filter(!is.na(event)) %>% 
+  #calculate frequencies
+  group_by(river, event, sample_type, spp_name) %>% 
+  summarise(n = length(spp_name)) %>% 
+  #abbreviate species names
+  mutate(spp_name = vegan::make.cepnames(spp_name)) %>% 
+  #spread to a matrix
+  spread(key = spp_name, value = n, fill = 0) %>%
+  data.frame() %>%
+  arrange(river) 
+
+field_data_freq
+```
+
+```{r}
+#calculate similarity index
+field_data_dist <- vegdist(x = select(field_data_freq, -c(river, event, sample_type)),
+                           method = "jaccard", binary = T, na.rm = T)
+
+str(field_data_dist)
+
+dist_matrix <- as.matrix(field_data_dist)
+
+#vegdist()
+heatmap(dist_matrix)
+
+specaccum_temp <- specaccum(comm = dist_matrix, permutations = 10)
+
+plot(specaccum_temp) #makes no sense
+```
+
+
+```{r}
+#look at clustering
+
+field_data_clust <- hclust(d = field_data_dist, method = "aver")
+plot(field_data_clust)
+rect.hclust(tree = field_data_clust, h = 0.95)
+
+library(ggdendro)
+
+ggdendrogram(field_data_clust, rotate = T)
+
+#see http://www.sthda.com/english/wiki/beautiful-dendrogram-visualizations-in-r-5-must-known-methods-unsupervised-machine-learning#ggdendro-package-ggplot2-and-dendrogram for more graphing options
+```
+
+
+
+
+
+
+```{r}
+#vegan::simper()
+```
+
+
+
+
+
+
+
+
+
+```{r}
+param_river <- c("Severn", "Wye", "Towy")  #unique(field_data$river)
+  
+
+#create empty data frame
+spec_accum_all <- data_frame(
+  river = as.character(), 
+  n_sites = as.integer(),
+  n_spp = as.double(),
+  sd = as.double())
+
+#iterate through parameters
+for(river_i in param_river){
+
+  tempdata <- field_data_freq %>%
+    filter(river == river_i) %>% 
+    select(-c(river, event, sample_type)) %>% 
+    specaccum() 
+  
+  tempdata <- data.frame(
+      river = river_i,
+      n_sites = tempdata$sites,
+      n_spp = tempdata$richness,
+      sd = tempdata$sd) 
+  
+  spec_accum_all <- rbind(spec_accum_all, tempdata)
+  
+  rm(tempdata)
+}
+
+
+ggplot(spec_accum_all, aes(x = n_sites, y = n_spp, colour = river))+
+  #geom_path(aes(y = n_spp-sd), alpha = 0.5) +
+  #geom_path(aes(y = n_spp+sd), alpha = 0.5) +
+  #geom_linerange(aes(ymin = n_spp-sd, ymax = n_spp+sd)) +
+  geom_path(size = 1) +
+  labs(title = "Species accumulation curve by river",
+       subtitle = paste0(param_river, collapse = ", "), #"all rivers",
+       caption = "", 
+       #colour = "", 
+       #fill = "", 
+       #x = "", 
+       #y = "",
+       NULL) +
+  #theme(legend.position = "none") +
+  NULL
+#ggsave("../outputs/specaccum_by_river_SvWyTo.png")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

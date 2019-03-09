@@ -54,8 +54,10 @@ length(abund_num)
 ```
 260 unique numeric values.  8555 records with numeric abundance values
 
+
+Letzs zoom in: 
 ```{r}
-hist(abund_num, breaks = 10000, xlim = c(0,500))
+hist(abund_num, breaks = 10000, xlim = c(0,100))
 ```
 
 
@@ -106,7 +108,7 @@ knitr::kable(
 
 
 ```{r}
-wordcloud2::wordcloud2(table(ers_data$Sample_Type), size = 0.5)
+wordcloud2::wordcloud2(table(ers_data$Sample_Type))
 ```
 
 does data type relate to sample type

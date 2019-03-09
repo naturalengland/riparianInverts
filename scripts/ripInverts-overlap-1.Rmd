@@ -1,0 +1,28 @@
+---
+title: "Species method overlap"
+output: html_notebook
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+
+```{r, message=FALSE, warning=FALSE}
+# packages
+library(knitr)
+library(tidyverse)
+library(readxl)
+library(forcats)
+library(vegan)
+```
+
+##Field data
+Import previously prepared field data.  This comprises a series of sampling events collated by Jon Webb. 
+
+Here are 10 random rows from the data: 
+```{r, out.width=200}
+field_data <- read_csv("../data/field_data_extract.csv")
+sample_n(field_data, size = 10) #%>% kable()
+```
+
+Each species record is a row.  Columns are species name (`spp_name` and columns identifying the survey event.  
