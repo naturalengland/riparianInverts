@@ -1,0 +1,97 @@
+---
+title: "ripInverts - paper content"
+output: html_notebook
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+
+```{r}
+library(tidyverse)
+library(vegan)
+
+#Import data
+field_data <- read_csv("../data/field_data_extract.csv")
+
+# Prepare data
+
+#remove excavations
+field_data <- field_data %>% 
+  filter(sample_type %in% c("pitfall", "hand_search"))
+
+
+#convert to a frequency matrix
+field_data_freq <- field_data %>% 
+  select(spp_name, sample_type) %>%
+  mutate(presabs = 1) %>%
+  group_by(spp_name, sample_type) %>% 
+  summarise(freq = sum(presabs)) %>% 
+  ungroup()
+
+#sample types
+samptypes <- field_data_freq %>% 
+  select(-freq) %>% 
+  mutate(smptp = str_replace_all(sample_type, c("hand_search" = "h", "pitfall" = "p"))) %>% 
+  # ungroup() %>% 
+  # group_by(spp_name) %>%
+  spread(key = sample_type, value = smptp, fill = "") %>% 
+  mutate(sample_types = paste0(hand_search, pitfall)) %>% 
+  select(spp_name, sample_types)
+  
+field_data_freq_types <- field_data_freq %>% 
+  spread(key = sample_type, value = freq, fill = 0) %>% 
+  full_join(samptypes)
+
+#extract genus data
+genus_types <- field_data_freq_types %>% 
+  separate(col = spp_name, into = c("genus", NA), remove = T) %>% 
+  select(-c(hand_search, pitfall)) %>%
+  group_by(genus, sample_types) %>% 
+  summarise(freq = length(genus)) %>% 
+  spread(key = sample_types, value = freq, fill = 0) %>% 
+  mutate(n_spp = h+hp+p) %>% 
+  mutate(handsearch = h) %>% 
+  mutate(pitfall = p) %>% 
+  mutate(handsearch_pitfall = hp) %>% 
+  select(genus, handsearch, pitfall, handsearch_pitfall, n_spp) %>% 
+  arrange(-n_spp)
+```
+
+ 
+
+
+
+
+
+```{r}
+genus_levels <- genus_types$genus[order(-genus_types$n_spp)]
+
+graphdata <- genus_types %>%
+  ungroup() %>% 
+  filter(n_spp > 4) %>% 
+  arrange(-n_spp) %>%
+  mutate(genus = factor(genus, levels = rev(genus))) %>% 
+  select(-n_spp) %>% 
+  gather(key = sample_types, 
+         value = n_spp, handsearch, pitfall, handsearch_pitfall) %>% 
+  droplevels()
+
+n_genus <- length(unique(graphdata$genus))
+
+ggplot(graphdata, aes(y = n_spp, x = genus, fill = sample_types)) +
+  geom_col() +
+  coord_flip() +
+  labs(title = "Capture methods by genus", 
+       caption = paste0("Method of capture for the ", n_genus, " most fequently captured genera."),
+      y = "Number of species", x = "")
+```
+
+
+
+
+
+
+
+
+
