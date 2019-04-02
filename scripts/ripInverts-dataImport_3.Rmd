@@ -50,6 +50,7 @@ field_data <-  filter(field_data, !is.na(event)) #get rid of event = NA
 sample_n(field_data, size = 10) #%>% kable()
 ```
 
+
 Subset for analysis
 ```{r}
 event_code_selected <- c("Wye_2014_5", "Beamish_2013", "Dove_2013", "Lugg_2014_2", "Monnow_2015", "FromeMoreton_2017", "FromeRushton_2017", "FromeWoodsford_2017", "Till_2013", "Wooler_2013", "Wye_2014_1", "Lugg_2014_1", "Lugg_2014_3", "Lugg_2014_4", "Wye_2014_4", "Wye_2014_6", "Wye_2014_7", "Wye_2014_3")
@@ -190,9 +191,113 @@ levels(field_data_extract$event_code)
 
 
 
+
+##Clean species names
+
 ```{r}
-write_csv(field_data_extract, "../data/field_data_extract.csv")
+#import correct species names from Jon's 
+pantheon_data <- readxl::read_xlsx("../data/Species and Event data pivot table March with summary.xlsx", sheet = 2)
 ```
+
+
+```{r}
+#make lookup
+panth_spp <- as.character(unique(pantheon_data$species))
+
+old_spp <- as.character(unique(field_data_extract$spp_name))
+
+overlap_spp <- panth_spp[which(panth_spp %in% old_spp)]
+
+table(old_spp %in% panth_spp)
+
+
+spp_lookup <- data.frame(old_spp = overlap_spp,
+                         new_spp = overlap_spp, stringsAsFactors = F) 
+
+panth_spp_to_match <- panth_spp[-which(panth_spp %in% overlap_spp)] 
+panth_spp_to_match <- panth_spp_to_match[order(panth_spp_to_match)]
+panth_spp_to_match <- tibble(new_spp = panth_spp_to_match)#, 
+#                                 match = panth_spp_to_match, 
+ #                                stringsAsFactors = F)
+
+old_spp_to_match <- old_spp[-which(old_spp %in% overlap_spp)]
+old_spp_to_match <- old_spp_to_match[order(old_spp_to_match)]
+old_spp_to_match <- tibble(old_spp = old_spp_to_match)#, 
+#                               #match = old_spp_to_match, 
+ #                              stringsAsFactors = F)
+
+library(fuzzyjoin)
+
+old_spp_to_match %>%
+  stringdist_left_join(panth_spp_to_match, by = c(old_spp = "new_spp"), method = "lv")
+
+
+spp_lookup[which(spp_lookup$old_spp %in% panth_spp), "new_spp"] <-
+  panth_spp[which(spp_lookup$old_spp %in% panth_spp)]
+
+
+spp_lookup[which(spp_lookup$old_spp %in% panth_spp),]
+```
+
+Did manual matching of unmatched species via my own pantheon search, then checked non-matches with Jon.  JW advised on non-matches and flagged a number of spp as non-wetland: these should be excluded.  I now need to combine the matched lists, compare Jon's list to my list, extract any not on Jon's list and check with Jon whether any of them are non-wetland.  
+
+
+```{r}
+spp_matched <- read_csv("../data/speciesmatch.csv")
+spp_matched
+```
+
+
+
+```{r}
+old_spp[!(old_spp %in% spp_matched$old_name)]
+spp_matched[!(spp_matched$old_name %in% old_spp),]
+```
+
+
+```{r}
+spp_matched[!(spp_matched$match %in% panth_spp),]
+
+#send to jon to check 
+#write_csv(spp_matched[!(spp_matched$match %in% panth_spp),], "../data/further_checking.csv")
+
+#checked by JW 25/5/19, reimport
+
+spp_corrections <- read.csv("../data/further_checking_checked.csv") %>% 
+  select(names(spp_matched), include)
+
+```
+
+```{r}
+#replace
+
+spp_matched_corrected <- spp_matched[(spp_matched$match %in% panth_spp),] %>%
+  mutate(include = factor(x = "y", levels = c("y","n"))) %>% 
+  rbind(spp_corrections)
+
+unique(spp_matched_corrected$match)
+```
+
+
+```{r}
+#correct the names in the original data
+tempnames <- names(field_data_extract)
+
+field_data_extract <- field_data_extract %>% 
+  mutate(old_name = spp_name) %>% 
+  left_join(spp_matched_corrected, by = "old_name") %>% 
+  mutate(spp_name = match) %>%
+  filter(include == "y") %>% 
+  select(tempnames)
+
+```
+
+
+
+```{r}
+#write_csv(field_data_extract, "../data/field_data_extract.csv")
+```
+
 
 ##Sort out effort data
 
@@ -251,5 +356,8 @@ effort_data_extract %>% arrange(event_code)
 
 
 ```{r}
-write_csv(effort_data_extract, "../data/effort_data_extract.csv")
+#write_csv(effort_data_extract, "../data/effort_data_extract.csv")
 ```
+
+
+

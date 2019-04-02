@@ -150,12 +150,12 @@ ggplot(effort_diff,# %>% filter(sample_type == "effort_P"),
 ```
 
 
-##Create frequency matrix
+##Create species matrix
 This matrix calculates the frequency each species occurs in each replicate.  
  - because it's by 'replicate' each species should only occur once, so in this case the frequency matrix is the same as an occurrence matrix.
 ```{r}
 #convert to a frequency matrix
-field_data_freq <- field_data %>% 
+field_data_mat <- field_data %>% 
   #calculate frequencies
   group_by(river, replicate, event_code, location, sample_type, spp_name) %>% 
   summarise(n = length(spp_name)) %>% 
@@ -166,9 +166,9 @@ field_data_freq <- field_data %>%
   data.frame() %>%
   arrange(river) 
 
-#field_data_freq
-sample_n(field_data_freq, size = 10)[,1:5] %>% 
-  kable(caption = "Sample of frequency matrix: only one species column shown", format="pandoc")
+#field_data_mat
+sample_n(field_data_mat, size = 10)[,1:5] %>% 
+  knitr::kable(caption = "Sample of frequency matrix: only one species column shown", format="pandoc")
 ```
 
 
@@ -185,7 +185,7 @@ The following events have been selected for analysis: `r paste(event_code_select
 This doesn't really tell us a lot, except that combining all sampling methods and all surveys doesn't reach an asymptote.  Because this covers a number of rivers and surveys, I'm not sure we need to read much into this.  
 ```{r}
 #species accumulation curve by resampling events
-selected_data <- field_data_freq %>%  
+selected_data <- field_data_mat %>%  
   select(-c(river:sample_type))
 
 spec_accum_selected <- specaccum(comm = selected_data)
@@ -211,7 +211,7 @@ spec_accum_bysampletype <- data_frame(sample_type = as.character(), event_code =
 
 for(sampletype in param_sampletype){
     
-    tempdata <- field_data_freq %>%
+    tempdata <- field_data_mat %>%
       filter(sample_type == sampletype) %>%  
       select(-c(river:sample_type))
     
@@ -255,7 +255,7 @@ ggplot(graphdata, aes(x = n_sites, y = n_spp, colour = sample_type))+
 ###Accumulation by event
 ```{r}
 param_sampletype <- c("excavation", "hand_search", "pitfall")
-param_rivers <- unique(field_data_freq$river)
+param_rivers <- unique(field_data_mat$river)
 param_eventcode <- event_code_selected
 
 #create empty data frame
@@ -272,7 +272,7 @@ for(selectedevent in param_eventcode){
   #iterate through samples
   for(sampletype in param_sampletype){
     
-    tempdata <- field_data_freq %>%
+    tempdata <- field_data_mat %>%
       filter(sample_type == sampletype & 
                event_code == selectedevent) %>%  
       select(-c(river:sample_type))

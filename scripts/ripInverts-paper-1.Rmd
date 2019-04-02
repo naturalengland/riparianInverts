@@ -8,68 +8,74 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 ```
 
 ```{r}
-library(tidyverse)
-library(vegan)
-
-#Import data
-field_data <- read_csv("../data/field_data_extract.csv")
-
-# Prepare data
-
-#remove excavations
-field_data <- field_data %>% 
-  filter(sample_type %in% c("pitfall", "hand_search"))
-
-
-#convert to a frequency matrix
-field_data_freq <- field_data %>% 
-  select(spp_name, sample_type) %>%
-  mutate(presabs = 1) %>%
-  group_by(spp_name, sample_type) %>% 
-  summarise(freq = sum(presabs)) %>% 
-  ungroup()
-
-#sample types
-samptypes <- field_data_freq %>% 
-  select(-freq) %>% 
-  mutate(smptp = str_replace_all(sample_type, c("hand_search" = "h", "pitfall" = "p"))) %>% 
-  # ungroup() %>% 
-  # group_by(spp_name) %>%
-  spread(key = sample_type, value = smptp, fill = "") %>% 
-  mutate(sample_types = paste0(hand_search, pitfall)) %>% 
-  select(spp_name, sample_types)
-  
-field_data_freq_types <- field_data_freq %>% 
-  spread(key = sample_type, value = freq, fill = 0) %>% 
-  full_join(samptypes)
-
-#extract genus data
-genus_types <- field_data_freq_types %>% 
-  separate(col = spp_name, into = c("genus", NA), remove = T) %>% 
-  select(-c(hand_search, pitfall)) %>%
-  group_by(genus, sample_types) %>% 
-  summarise(freq = length(genus)) %>% 
-  spread(key = sample_types, value = freq, fill = 0) %>% 
-  mutate(n_spp = h+hp+p) %>% 
-  mutate(handsearch = h) %>% 
-  mutate(pitfall = p) %>% 
-  mutate(handsearch_pitfall = hp) %>% 
-  select(genus, handsearch, pitfall, handsearch_pitfall, n_spp) %>% 
-  arrange(-n_spp)
+source("../scripts/ripInverts-paper-code_1.R", chdir = T)
 ```
 
+## 3	Methods
+
+### 3.2	Comparison between pit falling and timed hand searches.
+
+
+We explored effect of sampling type on the the composition of the communities we recorded.  The similarity of the presence/absence data between each two replicates was quantified using the Jaccard index.  Permutational Multivariate Analysis of Variance (PERMANOVA) was carried out on the resulting similarity matrix to establish the contribution of event, river and sample type to the variance of similarity.  All this was carried out in one step using the R function vegan::adonis2.  
+
+
+## 4	Results and Conclusions
+
+### 4.2	Comparison between pit falling and timed hand searches.
  
+Accross all sampling events, `r sum(samp_types_spp_sum)` species were found.  Of these, `r samp_types_spp_sum["h"]` species were found by handsearch only, `r samp_types_spp_sum["p"]` by pitfall only and `r samp_types_spp_sum["hp"]` by both handsearch and pitfall methods (see fig x).    
 
+```{r fig.width=5}
+graphdata <- field_data_freq_types %>% filter(wetland_spp %in% c(TRUE,FALSE))
+labels <-  c(`0` = "not wetland species", `1` = "wetland species")
 
+ggplot(graphdata, aes(sample_types)) +
+  geom_bar(aes(fill = sample_types)) +
+  theme(legend.position = "none") +
+  labs(title = "Distribution of species \nby capture type", 
+       x = "sample type", y = "n species")
+```
+Of these, `r field_data_freq_types %>% filter(wetland_spp == TRUE) %>%  count(wetland_spp) %>% pull(n)` are wetland species, and `r field_data_freq_types %>% filter(wetland_spp != TRUE) %>%  count(wetland_spp) %>% pull(n)` are not.  Wetland species were caught by pitfall in significantly lower proportions to non-wetland species (Pearson's Chi-squared test, X-squared = `r chitest_wetland_props$statistic`, df =  `r chitest_wetland_props$parameter`, p = `r Hmisc::format.pval(chitest_wetland_props$p.value)`)
 
 
 
 ```{r}
+ggplot(graphdata, aes(sample_types)) +
+  geom_bar(aes(fill = sample_types, alpha = wetland_spp), position = position_stack()) +
+#  theme(legend.position = "none") +
+  scale_alpha_discrete(range = c(0.6, 0.9))+
+  labs(title = "Distribution of species \nby capture type and species trait", 
+       x = "sample type", y = "n species")
+
+# ggplot(graphdata, aes(x = sample_types)) +
+#   geom_bar(aes(fill = sample_types, alpha = wetland_spp), position = position_stack(), stat = "prop") +
+# #  theme(legend.position = "none") +
+#   scale_alpha_discrete(range = c(0.6, 0.9))+
+#   labs(title = "Distribution of species \nby capture type and species trait", 
+#        x = "sample type", y = "n species")
+```
+
+
+```{r}
+library(apastats)
+data("sleep")
+sleep$extra
+```
+
+```{r}
+#create formatted outputs for dissimilarity 
+adon1_results <- paste0(adon1$Df, " Df, F = ", round(adon1$F, 2), ", p = ", round(adon1$`Pr(>F)`, 4))
+names(adon1_results) <- row.names(adon1) 
+```
+After controlling for river and event, sample type makes a significant contribution to the dissimilarity between samples (`r adon1_results["sample_type"]`)
+
+```{r}
 genus_levels <- genus_types$genus[order(-genus_types$n_spp)]
+min_n_spp <- 4
 
 graphdata <- genus_types %>%
   ungroup() %>% 
-  filter(n_spp > 4) %>% 
+  filter(n_spp > min_n_spp) %>% 
   arrange(-n_spp) %>%
   mutate(genus = factor(genus, levels = rev(genus))) %>% 
   select(-n_spp) %>% 
@@ -87,8 +93,40 @@ ggplot(graphdata, aes(y = n_spp, x = genus, fill = sample_types)) +
       y = "Number of species", x = "")
 ```
 
+```{r}
+genus_types %>%
+  ungroup() %>% 
+  filter(n_spp < min_n_spp) %>% 
+  arrange(-n_spp) %>%
+  mutate(genus = factor(genus, levels = rev(genus))) %>% 
+  select(-n_spp) %>% 
+  gather(key = sample_types, 
+         value = n_spp, handsearch, pitfall, handsearch_pitfall) %>% 
+  filter(n_spp > 0) %>% 
+  count(sample_types)
+```
 
 
+```{r}
+genus_levels <- genus_types$genus[order(-genus_types$n_spp)]
+min_n_spp <- 0
+
+graphdata <- genus_types %>%
+  ungroup() %>% 
+  filter(n_spp > min_n_spp) %>% 
+  arrange(-n_spp) %>%
+  mutate(genus = factor(genus, levels = rev(genus))) %>% 
+  select(-n_spp) %>% 
+  gather(key = sample_types, 
+         value = n_spp, handsearch, pitfall, handsearch_pitfall) %>% 
+  filter(n_spp > 0) %>% 
+  droplevels()
+
+n_genus <- length(unique(graphdata$genus))
+
+ggplot(graphdata, aes(x = n_spp, fill = sample_types)) +
+  geom_histogram() 
+```
 
 
 

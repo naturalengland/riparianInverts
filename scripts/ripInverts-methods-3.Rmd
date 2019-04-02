@@ -34,15 +34,36 @@ field_data %>% group_by(river, event_code, sample_type ) %>%
 
 
 ```{r}
-selected_data <- field_data_freq %>%  
+#create species matrix
+field_data_mat <- field_data %>% 
+  #calculate frequencies
+  group_by(river, replicate, event_code, location, sample_type, spp_name) %>% 
+  summarise(n = length(spp_name)) %>% 
+  #abbreviate species names
+  mutate(spp_name = vegan::make.cepnames(spp_name)) %>% 
+  #spread to a matrix
+  spread(key = spp_name, value = n, fill = 0) %>%
+  data.frame() %>%  arrange(river)
+
+selected_data <- field_data_mat %>%  
   select(-c(river:sample_type))
 
-selected_env <- field_data_freq %>%  
+selected_env <- field_data_mat %>%  
   select(c(river:sample_type))
 unique(selected_env$river)
 
-adon1 <- vegan::adonis2(selected_data ~ river + sample_type + event_code, data = selected_env, permutations = 120, method = "jaccard", by = "terms") 
+adon1 <- vegan::adonis2(selected_data ~ river + event_code + sample_type, 
+                        data = selected_env, 
+                        permutations = 120, method = "jaccard", by = "terms") 
 adon1
+
+adon2 <- adonis(selected_data ~ river + event_code + sample_type, 
+                        data = selected_env, 
+                        permutations = 120, method = "jaccard", by = "terms") 
+adon2$coefficients
+
+temp <- vegdist(selected_data, method = "jaccard",)
+summary(temp)
 ```
 
 ```{r}
