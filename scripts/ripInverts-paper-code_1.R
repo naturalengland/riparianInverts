@@ -3,7 +3,7 @@ library(tidyverse)
 library(vegan)
 
 #Import data----
-field_data <- read_csv("../data/field_data_extract.csv")
+field_data <- read_csv("../data/field_data_extract_Apr2019.csv")
 
 pantheon_data <- readxl::read_xlsx("../data/Species and Event data pivot table March with summary.xlsx", sheet = 2)
 

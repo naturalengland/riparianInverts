@@ -56,11 +56,6 @@ ggplot(graphdata, aes(sample_types)) +
 ```
 
 
-```{r}
-library(apastats)
-data("sleep")
-sleep$extra
-```
 
 ```{r}
 #create formatted outputs for dissimilarity 

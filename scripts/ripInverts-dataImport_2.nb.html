@@ -180,22 +180,10 @@ $(document).ready(function () {
 <h2>Packages</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBwYWNrYWdlc1xubGlicmFyeSh0aWR5dmVyc2UpXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBwYWNrYWdlc1xubGlicmFyeSh0aWR5dmVyc2UpXG5saWJyYXJ5KHJlYWR4bClcbmxpYnJhcnkoZm9yY2F0cylcbmBgYCJ9 -->
 <pre class="r"><code># packages
-library(tidyverse)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXHUwMDFiWzMwbS0tIFx1MDAxYlsxbUF0dGFjaGluZyBwYWNrYWdlc1x1MDAxYlsyMm0gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tIHRpZHl2ZXJzZSAxLjIuMSAtLVx1MDAxYlszOW1cblx1MDAxYlszMG1cdTAwMWJbMzJtdlx1MDAxYlszMG0gXHUwMDFiWzM0bWdncGxvdDJcdTAwMWJbMzBtIDMuMS4wICAgICBcdTAwMWJbMzJtdlx1MDAxYlszMG0gXHUwMDFiWzM0bXB1cnJyICBcdTAwMWJbMzBtIDAuMi41XG5cdTAwMWJbMzJtdlx1MDAxYlszMG0gXHUwMDFiWzM0bXRpYmJsZSBcdTAwMWJbMzBtIDIuMC4xICAgICBcdTAwMWJbMzJtdlx1MDAxYlszMG0gXHUwMDFiWzM0bWRwbHlyICBcdTAwMWJbMzBtIDAuNy44XG5cdTAwMWJbMzJtdlx1MDAxYlszMG0gXHUwMDFiWzM0bXRpZHlyICBcdTAwMWJbMzBtIDAuOC4yICAgICBcdTAwMWJbMzJtdlx1MDAxYlszMG0gXHUwMDFiWzM0bXN0cmluZ3JcdTAwMWJbMzBtIDEuMy4xXG5cdTAwMWJbMzJtdlx1MDAxYlszMG0gXHUwMDFiWzM0bXJlYWRyICBcdTAwMWJbMzBtIDEuMy4xICAgICBcdTAwMWJbMzJtdlx1MDAxYlszMG0gXHUwMDFiWzM0bWZvcmNhdHNcdTAwMWJbMzBtIDAuMy4wXHUwMDFiWzM5bVxuXHUwMDFiWzMwbS0tIFx1MDAxYlsxbUNvbmZsaWN0c1x1MDAxYlsyMm0gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tIHRpZHl2ZXJzZV9jb25mbGljdHMoKSAtLVxuXHUwMDFiWzMxbXhcdTAwMWJbMzBtIFx1MDAxYlszNG1kcGx5clx1MDAxYlszMG06Olx1MDAxYlszMm1maWx0ZXIoKVx1MDAxYlszMG0gbWFza3MgXHUwMDFiWzM0bXN0YXRzXHUwMDFiWzMwbTo6ZmlsdGVyKClcblx1MDAxYlszMW14XHUwMDFiWzMwbSBcdTAwMWJbMzRtZHBseXJcdTAwMWJbMzBtOjpcdTAwMWJbMzJtbGFnKClcdTAwMWJbMzBtICAgIG1hc2tzIFx1MDAxYlszNG1zdGF0c1x1MDAxYlszMG06OmxhZygpXHUwMDFiWzM5bVxuIn0= -->
-<pre><code>[30m-- [1mAttaching packages[22m --------------------------------------- tidyverse 1.2.1 --[39m
-[30m[32mv[30m [34mggplot2[30m 3.1.0     [32mv[30m [34mpurrr  [30m 0.2.5
-[32mv[30m [34mtibble [30m 2.0.1     [32mv[30m [34mdplyr  [30m 0.7.8
-[32mv[30m [34mtidyr  [30m 0.8.2     [32mv[30m [34mstringr[30m 1.3.1
-[32mv[30m [34mreadr  [30m 1.3.1     [32mv[30m [34mforcats[30m 0.3.0[39m
-[30m-- [1mConflicts[22m ------------------------------------------ tidyverse_conflicts() --
-[31mx[30m [34mdplyr[30m::[32mfilter()[30m masks [34mstats[30m::filter()
-[31mx[30m [34mdplyr[30m::[32mlag()[30m    masks [34mstats[30m::lag()[39m</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShyZWFkeGwpXG5saWJyYXJ5KGZvcmNhdHMpXG5gYGAifQ== -->
-<pre class="r"><code>library(readxl)
+library(tidyverse)
+library(readxl)
 library(forcats)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
@@ -205,15 +193,30 @@ library(forcats)</code></pre>
 <h2>Import data</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2ltcG9ydGluZyBhbGwgYXMgdGV4dCB0byBiZWdpbiB3aXRoXG5zZWxfdmFsdWVzIDwtIHJlYWRfZXhjZWwoXCIuLi9kYXRhL1JpcGFyaWFuIERhdGEgQXVndXN0IDIwMTgueGxzeFwiLCBzaGVldCA9IDIsIGNvbF90eXBlcyA9IFwidGV4dFwiKVxuXG4jIGVyc19kYXRhMiA8LSByZWFkX2V4Y2VsKFwiLi4vZGF0YS9SaXBhcmlhbiBEYXRhIEF1Z3VzdCAyMDE4Lnhsc3hcIiwgc2hlZXQgPSA0LCBjb2xfdHlwZXMgPSBcInRleHRcIilcblxuZXJzX2RhdGEyIDwtIHJlYWRfY3N2KFwiLi4vZGF0YS9SaXBhcmlhbiBEYXRhIEF1Z3VzdCAyMDE4IC0gc2FtcGxlIGRhdGEgcmVjb3Jkcy5jc3ZcIilcblxuZWZmb3J0X2RhdGEgPC0gcmVhZF9leGNlbChcIi4uL2RhdGEvUmlwYXJpYW4gRGF0YSBBdWd1c3QgMjAxOC54bHN4XCIsIHNoZWV0ID0gNSwgY29sX3R5cGVzID0gXCJ0ZXh0XCIpIFxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2ltcG9ydGluZyBhbGwgYXMgdGV4dCB0byBiZWdpbiB3aXRoXG5zZWxfdmFsdWVzIDwtIHJlYWRfZXhjZWwoXCIuLi9kYXRhL1JpcGFyaWFuIERhdGEgQXVndXN0IDIwMTgueGxzeFwiLCBzaGVldCA9IDIsIGNvbF90eXBlcyA9IFwidGV4dFwiKVxuIyBlcnNfZGF0YTIgPC0gcmVhZF9leGNlbChcIi4uL2RhdGEvUmlwYXJpYW4gRGF0YSBBdWd1c3QgMjAxOC54bHN4XCIsIHNoZWV0ID0gNCwgY29sX3R5cGVzID0gXCJ0ZXh0XCIpXG5lcnNfZGF0YTIgPC0gcmVhZF9jc3YoXCIuLi9kYXRhL1JpcGFyaWFuIERhdGEgQXVndXN0IDIwMTggLSBzYW1wbGUgZGF0YSByZWNvcmRzLmNzdlwiKVxuYGBgIn0= -->
 <pre class="r"><code>#importing all as text to begin with
 sel_values &lt;- read_excel(&quot;../data/Riparian Data August 2018.xlsx&quot;, sheet = 2, col_types = &quot;text&quot;)
-
 # ers_data2 &lt;- read_excel(&quot;../data/Riparian Data August 2018.xlsx&quot;, sheet = 4, col_types = &quot;text&quot;)
-
-ers_data2 &lt;- read_csv(&quot;../data/Riparian Data August 2018 - sample data records.csv&quot;)
-
-effort_data &lt;- read_excel(&quot;../data/Riparian Data August 2018.xlsx&quot;, sheet = 5, col_types = &quot;text&quot;) </code></pre>
+ers_data2 &lt;- read_csv(&quot;../data/Riparian Data August 2018 - sample data records.csv&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiUGFyc2VkIHdpdGggY29sdW1uIHNwZWNpZmljYXRpb246XG5jb2xzKFxuICAuZGVmYXVsdCA9IGNvbF9jaGFyYWN0ZXIoKSxcbiAgYFZDIG51bWJlcmAgPSBcdTAwMWJbMzJtY29sX2RvdWJsZSgpXHUwMDFiWzM5bSxcbiAgWWVhciA9IFx1MDAxYlszMm1jb2xfZG91YmxlKClcdTAwMWJbMzltLFxuICBgSGFuZHNlcmFjaCAmIGV4Y2F2YXRpb25gID0gXHUwMDFiWzMzbWNvbF9sb2dpY2FsKClcdTAwMWJbMzltXG4pXG5TZWUgc3BlYyguLi4pIGZvciBmdWxsIGNvbHVtbiBzcGVjaWZpY2F0aW9ucy5cbjQgcGFyc2luZyBmYWlsdXJlcy5cbiByb3cgIGNvbCAgICAgICAgICAgICAgIGV4cGVjdGVkICBhY3R1YWwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZmlsZVxuMjAwOSBZZWFyIG5vIHRyYWlsaW5nIGNoYXJhY3RlcnMgIC0gMTk5NiAnLi4vZGF0YS9SaXBhcmlhbiBEYXRhIEF1Z3VzdCAyMDE4IC0gc2FtcGxlIGRhdGEgcmVjb3Jkcy5jc3YnXG40ODA4IFllYXIgbm8gdHJhaWxpbmcgY2hhcmFjdGVycyAgLSAxOTk2ICcuLi9kYXRhL1JpcGFyaWFuIERhdGEgQXVndXN0IDIwMTggLSBzYW1wbGUgZGF0YSByZWNvcmRzLmNzdidcbjY4NDcgWWVhciBubyB0cmFpbGluZyBjaGFyYWN0ZXJzICAtIDE5OTYgJy4uL2RhdGEvUmlwYXJpYW4gRGF0YSBBdWd1c3QgMjAxOCAtIHNhbXBsZSBkYXRhIHJlY29yZHMuY3N2J1xuNzQ1MiBZZWFyIG5vIHRyYWlsaW5nIGNoYXJhY3RlcnMgIC0gMTk5NiAnLi4vZGF0YS9SaXBhcmlhbiBEYXRhIEF1Z3VzdCAyMDE4IC0gc2FtcGxlIGRhdGEgcmVjb3Jkcy5jc3YnXG4ifQ== -->
+<pre><code>Parsed with column specification:
+cols(
+  .default = col_character(),
+  `VC number` = [32mcol_double()[39m,
+  Year = [32mcol_double()[39m,
+  `Handserach &amp; excavation` = [33mcol_logical()[39m
+)
+See spec(...) for full column specifications.
+4 parsing failures.
+ row  col               expected  actual                                                          file
+2009 Year no trailing characters  - 1996 '../data/Riparian Data August 2018 - sample data records.csv'
+4808 Year no trailing characters  - 1996 '../data/Riparian Data August 2018 - sample data records.csv'
+6847 Year no trailing characters  - 1996 '../data/Riparian Data August 2018 - sample data records.csv'
+7452 Year no trailing characters  - 1996 '../data/Riparian Data August 2018 - sample data records.csv'</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZWZmb3J0X2RhdGEgPC0gcmVhZF9leGNlbChcIi4uL2RhdGEvUmlwYXJpYW4gRGF0YSBBdWd1c3QgMjAxOC54bHN4XCIsIHNoZWV0ID0gNSwgY29sX3R5cGVzID0gXCJ0ZXh0XCIpIFxuYGBgIn0= -->
+<pre class="r"><code>effort_data &lt;- read_excel(&quot;../data/Riparian Data August 2018.xlsx&quot;, sheet = 5, col_types = &quot;text&quot;) </code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -222,15 +225,79 @@ effort_data &lt;- read_excel(&quot;../data/Riparian Data August 2018.xlsx&quot;,
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubmFtZXMoZXJzX2RhdGEyKVxuYGBgIn0= -->
 <pre class="r"><code>names(ers_data2)</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiIFsxXSBcIlNwZWNpZXNfbmFtZVwiICAgICAgICAgICAgXCJUYXhvbm9taWNfT3JkZXJcIiAgICAgICAgIFwiVGF4b25vbWljX0ZhbWlseVwiICAgICAgIFxuIFs0XSBcIlN1cnZleS9SZXBvcnRfTmFtZVwiICAgICAgXCJBdXRob3IvUmVjb3JkZXJcIiAgICAgICAgIFwiU2FtcGxlIFJpdmVyXCIgICAgICAgICAgIFxuIFs3XSBcIkNvdW50eVwiICAgICAgICAgICAgICAgICAgXCJWQyBuYW1lXCIgICAgICAgICAgICAgICAgIFwiVkMgbnVtYmVyXCIgICAgICAgICAgICAgIFxuWzEwXSBcIkNvdW50cnlcIiAgICAgICAgICAgICAgICAgXCJTdWJzdHJhdGVcIiAgICAgICAgICAgICAgIFwiTkUgRnVsbCBTYW1wbGUgTmFtZVwiICAgIFxuWzEzXSBcIkxvY2F0aW9uX05hbWVcIiAgICAgICAgICAgXCJTYW1wbGVfR3JpZF9SZWZcIiAgICAgICAgIFwiRGF0ZVwiICAgICAgICAgICAgICAgICAgIFxuWzE2XSBcIlllYXJcIiAgICAgICAgICAgICAgICAgICAgXCJTYW1wbGVfVHlwZVwiICAgICAgICAgICAgIFwiU2FkbGVyICYgQmVsbCBtZXRob2Q/XCIgIFxuWzE5XSBcIkhhbmRzZWFyY2ggJiBQaXRmYWxsXCIgICAgXCJIYW5kc2VyYWNoICYgZXhjYXZhdGlvblwiIFwiU2FtcGxlX0R1cmF0aW9uXCIgICAgICAgIFxuWzIyXSBcIkFidW5kYW5jZV9EYXRhXCIgICAgICAgICBcbiJ9 -->
+<pre><code> [1] &quot;Species_name&quot;            &quot;Taxonomic_Order&quot;         &quot;Taxonomic_Family&quot;       
+ [4] &quot;Survey/Report_Name&quot;      &quot;Author/Recorder&quot;         &quot;Sample River&quot;           
+ [7] &quot;County&quot;                  &quot;VC name&quot;                 &quot;VC number&quot;              
+[10] &quot;Country&quot;                 &quot;Substrate&quot;               &quot;NE Full Sample Name&quot;    
+[13] &quot;Location_Name&quot;           &quot;Sample_Grid_Ref&quot;         &quot;Date&quot;                   
+[16] &quot;Year&quot;                    &quot;Sample_Type&quot;             &quot;Sadler &amp; Bell method?&quot;  
+[19] &quot;Handsearch &amp; Pitfall&quot;    &quot;Handserach &amp; excavation&quot; &quot;Sample_Duration&quot;        
+[22] &quot;Abundance_Data&quot;         </code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2tpbXI6OnNraW0oc2VsX3ZhbHVlcylcbiNza2ltcjo6c2tpbShlcnNfZGF0YTIpXG5za2ltcjo6c2tpbShlZmZvcnRfZGF0YSlcbmBgYCJ9 -->
-<pre class="r"><code>skimr::skim(sel_values)
-#skimr::skim(ers_data2)
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2tpbXI6OnNraW0oc2VsX3ZhbHVlcylcbmBgYCJ9 -->
+<pre class="r"><code>skimr::skim(sel_values)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiU2tpbSBzdW1tYXJ5IHN0YXRpc3RpY3NcbiBuIG9iczogNzkgXG4gbiB2YXJpYWJsZXM6IDkgXG5cbi0tIFZhcmlhYmxlIHR5cGU6Y2hhcmFjdGVyIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXG4gICAgICAgICAgdmFyaWFibGUgbWlzc2luZyBjb21wbGV0ZSAgbiBtaW4gbWF4IGVtcHR5IG5fdW5pcXVlXG4gICAgICAgICAgICBFZmZvcnQgICAgICAgMCAgICAgICA3OSA3OSAgIDEgICAyICAgICAwICAgICAgIDEyXG4gICAgICAgICAgTWFyc2ggTm8gICAgICAgMCAgICAgICA3OSA3OSAgIDEgICAyICAgICAwICAgICAgIDI0XG4gICAgICAgICBNYXJzaCBTUUkgICAgICAgMCAgICAgICA3OSA3OSAgIDEgICAzICAgICAwICAgICAgIDIwXG4gICAgICAgICBNYXJzaCBTUVMgICAgICAgMCAgICAgICA3OSA3OSAgIDEgIDE4ICAgICAwICAgICAgIDI5XG4gICAgICAgICBORSBTYW1wbGUgICAgICAgMCAgICAgICA3OSA3OSAgIDMgIDI2ICAgICAwICAgICAgIDc5XG4gIFJ1bm5pbmcgV2F0ZXIgTm8gICAgICAgMCAgICAgICA3OSA3OSAgIDEgICAyICAgICAwICAgICAgIDMxXG4gUnVubmluZyBXYXRlciBTUUkgICAgICAgMCAgICAgICA3OSA3OSAgIDMgICAzICAgICAwICAgICAgIDU2XG4gUnVubmluZyBXYXRlciBTUVMgICAgICAgMCAgICAgICA3OSA3OSAgIDEgIDE4ICAgICAwICAgICAgIDY5XG4gICAgICAgIFdldGxhbmQgTm8gICAgICAgMCAgICAgICA3OSA3OSAgIDEgICAyICAgICAwICAgICAgIDQzXG4ifQ== -->
+<pre><code>Skim summary statistics
+ n obs: 79 
+ n variables: 9 
+
+-- Variable type:character -----------------------------------------------------
+          variable missing complete  n min max empty n_unique
+            Effort       0       79 79   1   2     0       12
+          Marsh No       0       79 79   1   2     0       24
+         Marsh SQI       0       79 79   1   3     0       20
+         Marsh SQS       0       79 79   1  18     0       29
+         NE Sample       0       79 79   3  26     0       79
+  Running Water No       0       79 79   1   2     0       31
+ Running Water SQI       0       79 79   3   3     0       56
+ Running Water SQS       0       79 79   1  18     0       69
+        Wetland No       0       79 79   1   2     0       43</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI3NraW1yOjpza2ltKGVyc19kYXRhMilcbnNraW1yOjpza2ltKGVmZm9ydF9kYXRhKVxuYGBgIn0= -->
+<pre class="r"><code>#skimr::skim(ers_data2)
 skimr::skim(effort_data)</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiU2tpbSBzdW1tYXJ5IHN0YXRpc3RpY3NcbiBuIG9iczogNzkgXG4gbiB2YXJpYWJsZXM6IDEzIFxuXG4tLSBWYXJpYWJsZSB0eXBlOmNoYXJhY3RlciAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLVxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB2YXJpYWJsZVxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIEF1dGhvclxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIEVGRk9SVCA9IEMrRFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBFRkZPUlQgVFlQRVxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBldmVudFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBudW1iZXIgb2YgMiB3ZWVrIHBpdGZhbGwgZHVyYXRpb25zIChQKVxuIE51bWJlciBvZiBFeGNhdmF0aW9uIChub3QgdXNlZCBhcyBub3QgYWxsIHdvcmtlcnMgbGlzdGVkIGl0IGFzIHNlcGFyYXRlIGZyb20gc2VhcmNoaW5nKVxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBudW1iZXIgb2YgdGltZWQgIHNlYXJjaGVzL2V4Y2F2YXRpb25zIChUKVxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBwaXRmYWxsIG51bWJlclxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgdGltZSBwZXJpb2QgMVxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgdGltZSBwZXJpb2QgMlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgdGltZSBwZXJpb2QgM1xuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgdGltZSBwZXJpb2QgNFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB0b3RhbCBudW1iZXIgb2YgcmVjb3Jkc1xuIG1pc3NpbmcgY29tcGxldGUgIG4gbWluIG1heCBlbXB0eSBuX3VuaXF1ZVxuICAgICAgIDAgICAgICAgNzkgNzkgICA0ICAxNCAgICAgMCAgICAgICAgOVxuICAgICAgIDAgICAgICAgNzkgNzkgICAxICAgMiAgICAgMCAgICAgICAxMlxuICAgICAgIDAgICAgICAgNzkgNzkgICAxICAgMiAgICAgMCAgICAgICAgMlxuICAgICAgIDAgICAgICAgNzkgNzkgICAzICAyNiAgICAgMCAgICAgICA3OVxuICAgICAgIDAgICAgICAgNzkgNzkgICAxICAgMSAgICAgMCAgICAgICAgOFxuICAgICAgIDAgICAgICAgNzkgNzkgICAxICAgMSAgICAgMCAgICAgICAgN1xuICAgICAgIDAgICAgICAgNzkgNzkgICAxICAgMiAgICAgMCAgICAgICAgOFxuICAgICAgIDAgICAgICAgNzkgNzkgICAxICAgMiAgICAgMCAgICAgICAgM1xuICAgICAgIDAgICAgICAgNzkgNzkgICA0ICAxMCAgICAgMCAgICAgICA1MlxuICAgICAgMzIgICAgICAgNDcgNzkgICA1ICAxMCAgICAgMCAgICAgICAzN1xuICAgICAgNDggICAgICAgMzEgNzkgICAyICAxMCAgICAgMCAgICAgICAyNFxuICAgICAgNjEgICAgICAgMTggNzkgICAyICAxMCAgICAgMCAgICAgICAxM1xuICAgICAgIDAgICAgICAgNzkgNzkgICAyICAgMyAgICAgMCAgICAgICA3MFxuIn0= -->
+<pre><code>Skim summary statistics
+ n obs: 79 
+ n variables: 13 
+
+-- Variable type:character -----------------------------------------------------
+                                                                                variable
+                                                                                  Author
+                                                                            EFFORT = C+D
+                                                                             EFFORT TYPE
+                                                                                   event
+                                                  number of 2 week pitfall durations (P)
+ Number of Excavation (not used as not all workers listed it as separate from searching)
+                                               number of timed  searches/excavations (T)
+                                                                          pitfall number
+                                                                           time period 1
+                                                                           time period 2
+                                                                           time period 3
+                                                                           time period 4
+                                                                 total number of records
+ missing complete  n min max empty n_unique
+       0       79 79   4  14     0        9
+       0       79 79   1   2     0       12
+       0       79 79   1   2     0        2
+       0       79 79   3  26     0       79
+       0       79 79   1   1     0        8
+       0       79 79   1   1     0        7
+       0       79 79   1   2     0        8
+       0       79 79   1   2     0        3
+       0       79 79   4  10     0       52
+      32       47 79   5  10     0       37
+      48       31 79   2  10     0       24
+      61       18 79   2  10     0       13
+       0       79 79   2   3     0       70</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -244,6 +311,13 @@ skimr::skim(effort_data)</code></pre>
 names(sel_values) &lt;- c(&quot;event&quot;, &quot;effort&quot;, &quot;n_wetland&quot;, &quot;n_runWater&quot;, &quot;sqi_runWater&quot;, &quot;sqs_runWater&quot;, &quot;n_marsh&quot;, &quot;sqi_marsh&quot;, &quot;sqs_marsh&quot;)
 sel_values</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibmNvbCI6OSwibnJvdyI6Nzl9LCJyZGYiOiJINHNJQUFBQUFBQUFCcTFhUzNQYlJoS21LQ0d4NkZkS20yeGw5OFJUS25zSUN2UEE2K2puN3NFdXB4UnVLVG01WUhFa3NrSUNXb0Ewdzl2K3BmMkRjUVlrMGQxQUQwa2xXVlZaYnZUMDYrc0haZ0RvOHVXUGN2RGpvTmZyOVh1bloyZTkvcWtsei9yMjEwbnZySGRlLy85THIzZjZGMHZVRjEvWWYrOTJDMDh1SjJZNkxtWkROWlJCb0hmYzgxR3hXZzlGbWliQVdLK21sUEZ3STdGUlVpMldybG15eFlxNGxLQ3NCMWRyUTIwLy9zRjhOR1crRldwTVBmaDM5VE1WZXJJVGtobDNHRkxXMDdmWmFqek9yaWR0cDF0SlNWbU5YMG5WSVVHU0pnaTRnbkliQTZvVlVtTVZIWDIxWTcyWlpmbDRtbWZ6R2xqYUFTWmF3UDc2TXN2TjhNcFVpMkZ4TTN4UjVMY3pzeWp5M2VvWHoyWXprdysvL2I2b3F1bUhtZmxINC90dGtlZkZ5aG9TamU4dlIyYSt6VFlYdDJ2VDIzejR6ZkI1OGRHc2g4OXB2Z2Qxa1dwZ29rSDc5RVZwekhnOVhKdUN4cjhSRkZSd0cvdXJ6QjM3MTIybjEwVitNMXVhL05wUWV4RzFkejZhem1aMWNzSkdaR3VDQlBHM1Y3ZldTV1c5REo4dmJUSy92ZXRBSGJ6STVtYldhb2p2Wit0NXUwY0dvMnllbGExbXVqS1d3UkwzNkhXeE1wMXVldkRxRjBORGVqZ3lwdHFLUUtPUGlyS2NqbTliY3FldnM5bU92UGhYVnE2S1lzd2ROaW1Bc2o1OHM3eTkzU1JwQ04zNFpwMVBUTm1HOVBSeWFydHJhSUdabWgxQUxUZnBHSlhURDh0RlZxNXA3alhOL1lZVFU4NmpGMWxwT2hQOThOMWlZY3AxSzVjYlZpc2hHREpNNEdoU0xxdUpqWVEyMUU4bW04M2JzMXVuVXRCVURuN0t5c1dhcXAyL0t1ZXR4SjV2YWtmYTVzRW9XN1VjV1RvZVBxc214UjIwMGRpTzFhWEphQWxvM3I3OFo3Yk1GN2JUS3Nmd1BadmRGZVZpRDJRQjk0Sml1WmdNUjJzN0lzekV4VlZSek1ZMmJWZFpuVHhTNzYrM2RYeGRGaGJrcGMxWjNlcDJQVzdBdnJUVFJCVWVQVGZaZkZwTktHK3dXcHR0TkRCSjJ6NGdJZitkT3JMaGpLdWJvaHhUVndSVU15YTdlV2oxUkN2aXQwVnBJT0wyam5UU3hITFMxUGFrOGRRWEFWdHI0anlKdXB5K2tFQ3ByaDR1bnVpdVkrSkc3N1dPQkxNTnduMGhHQ2k5MzFERWhMblhaTDlNeEdRa0kvUmVZQ1RXaUtrcDVwWDdpSm5wWkw4d3p5dExIZ3B6aER4VFBMOXFQOEdUZUIrQ3gzUEFlOWpwNnI1cWVxb3ZJZVZTOFZVVk9YalNzU3FBZ3ZHUTBQb1NkQVd1YXFBa3Q2eGhNaVRNZ1ZLT21NR0gwdHhIRkhGdktCZWhQZEJRNlNGZURQR0Z5b0UzNXZFSkhQL0VRVGtpa0E3azVOYVI4Z2dpNlBXVXB3QmRvRUtJNWREY01LWTBSQ3NJS0hBRWlqQ3dnTklCVnpzQWFVNUZtdXRpMlVLZ1VtZzZEYW5DUW1QTUVheHFOdUQ5UkhSbkEwRzRaZ05oTzJkRE9IaElvWlhEcytGSXFITU9zS3RkTWFjOEt2U2hFaDZCQzRkMGVFTWY1RjRBOXJRNGFBVzdHdHMxY2xES29hc2NXVU5zSWZlcjJCWkJldytEUjJpT3ljRXVKRGNGVndjSFBEeUVLeDIzU01IM096ZmxtaWFNQ25reHA4aU5VVGl3WWJ0SW5xcWdNeHVuQ25CYlVnQXBrUXZwc0NRS1FHcE9GUnpCVG1VYU8wbU5KSkVGQ3pJQmJ6SkcyU2hCVWp0SjVTSkRGRkJJUW9kYkVya0N1UWlJa2dFS0JQb1lxWndrR0JPWUVwRkdUakpFVWp0SmlhUndrdWdOa3lvUzVNYXhrd3lQa2VnaVJtTlJpbVRzSkJFYjFrMUV3UkV5akowa0dndkRZMlJ3aE5SUUlhRkNKNG54U294Qm9wcEE4RGdpZ3BRNzZBN2JSYXo4UUFma3AwSGtKWkdQRjdFbUYwbnNROVUvRTBMNDBDOTlHQ1l2VlQ1Y25DV3BMeHkwbDhZK3ZHandFdTFETy9iRFp0SThiYjAxWUx4SUVZVXdJWjRqR2g3Y3kyb0ZRVDNBZUYxRTBUN2tVZXduaUR3Z3lGWGl3L08zbDBpOElHY1JtUHZhTjlyUkVTYk4weVJ5TDZ4TEFGSFpKSVFwK1FIb3NZVUZ0OWtFQVFvL2lNRnVTRU5xdXVGQzJUUnJhaFFVbEVEZjdRdXBTWWlhRkxOMWdWdXlKd01zRFc1aVhxajlKQ2JCcHJnMzQ0WW9HRlVYRndUT0xLNFUvQWlmeEUrclU2TlBTVmF4OEZLU1RoR09rNFVPd0tJazVtMFFhTEdWRVdGVEdoNjljRzdybUJzZDBJUkx6RTM3d3VJSzBiRWk4UW1iRjRoUHBOUWE2WVFEbXkwKzJRV01rUHVYK0lNemNQUitMYTRlZE8yUVozSk9jRU9xeThFRzRnLytlRmhGRnJRWWVuRThKZUdiRS82b3pxTTdzTVNURXpKaFBEYmgyZm9laVNkSFUxQjA1QkFuVkxGNE9RTEY5UG03QVc2SEVUaGVISGcvd3VGbjczeklheXpGYkpIVEpMREM3cE1XMmY1NC85eDNzWFZxQ082bGZkQkh5d2paeXU5bjJtMlJuQjZJR1hKZXdxTjBDOWkrY3dLUWg4TTdFdlRSWlFqd2lNbytVanU1NFRGWmViaWU3UUk1WkozUnl0OFQrTzhoZWFPM2w3R0d3ZzNjalJhNW10MnFyQ24ybXZyUDdSVVhxZDArNlhrcjRMZXBQN2Q1dFBiR1A3Wi9iQTRVaW9XRDU0MFlOOXlUMXRiTmQwSlFraWs5ZmZ5LzlwS1ljZTYxbDJodWt0V0JITU9rd3RQM2dlM0VrL1pFeTE5NmN4dzhUWDlvUnptekoraGtid0s4T1BUaHhuWm1qN1ZzWS9FRWpSZWVVN1QwVzZkaEJzUUxVOTgrVExiLzFNRExzN21wZHROeTNqRE5SNU12ZGhlZm1adWJvbXl1enZQM0s3T292NFR2R0lQOGZibk1OMSs4ZHB4SDFYK21EbDdWNVgyZXY1OW5aVFZwTE5kcUhVYTFZN1JqUGkrTGxkL0UvYml1K1gvdHIwK2ZQdjJ2Qys1NmxsVU51SVk1R0dlTHpMOHByYjY5K3JXajhubHh0NWdXdVZYcTEzK0E0WFdVVDhvTzQra3lyeU1aZjNjOVdlWS9mMWQvU0Joc2xyYy9qM2YwTzBLZmIxMzJQKzFNZVpEby9IYWFOeC9TdlZuMndUU2ZscDlZeEJ2QS9sMDVoY29NTExmeUY4VUNQa0VQcm90Wnc5bGc2LzM2RzlIT0VJQnVJZ0FBIn0= -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["event"],"name":[1],"type":["chr"],"align":["left"]},{"label":["effort"],"name":[2],"type":["chr"],"align":["left"]},{"label":["n_wetland"],"name":[3],"type":["chr"],"align":["left"]},{"label":["n_runWater"],"name":[4],"type":["chr"],"align":["left"]},{"label":["sqi_runWater"],"name":[5],"type":["chr"],"align":["left"]},{"label":["sqs_runWater"],"name":[6],"type":["chr"],"align":["left"]},{"label":["n_marsh"],"name":[7],"type":["chr"],"align":["left"]},{"label":["sqi_marsh"],"name":[8],"type":["chr"],"align":["left"]},{"label":["sqs_marsh"],"name":[9],"type":["chr"],"align":["left"]}],"data":[{"1":"Rheidol 3 2004","2":"5","3":"30","4":"22","5":"332","6":"73.040000000000006","7":"6","8":"100","9":"6"},{"1":"Towy 1998","2":"8","3":"26","4":"26","5":"331","6":"86.06","7":"0","8":"0","9":"0"},{"1":"Tywi 1998","2":"7","3":"23","4":"23","5":"322","6":"74.06","7":"0","8":"0","9":"0"},{"1":"Towy 3 2003","2":"10","3":"30","4":"28","5":"314","6":"87.92","7":"2","8":"100","9":"2"},{"1":"Towy 4 2002","2":"8","3":"36","4":"36","5":"311","6":"111.96","7":"0","8":"0","9":"0"},{"1":"Towy 6 2003","2":"9","3":"30","4":"30","5":"310","6":"93","7":"0","8":"0","9":"0"},{"1":"Towy 1 2003","2":"6","3":"32","4":"31","5":"303","6":"93.93","7":"1","8":"100","9":"1"},{"1":"Wye 1998","2":"9","3":"36","4":"30","5":"297","6":"89.1","7":"6","8":"166","9":"9.9600000000000009"},{"1":"Severn 1 2002","2":"12","3":"31","4":"30","5":"297","6":"89.1","7":"1","8":"100","9":"1"},{"1":"Usk 1998","2":"13","3":"37","4":"33","5":"294","6":"97.02","7":"4","8":"100","9":"4"},{"1":"Severn 2a 2002","2":"8","3":"29","4":"29","5":"293","6":"84.97","7":"0","8":"0","9":"0"},{"1":"Towy 5 2002","2":"12","3":"20","4":"20","5":"290","6":"58","7":"0","8":"0","9":"0"},{"1":"Mawddach 1 2003","2":"4","3":"17","4":"17","5":"282","6":"47.94","7":"0","8":"0","9":"0"},{"1":"Towy 2 2003","2":"5","3":"24","4":"23","5":"274","6":"63.02","7":"1","8":"100","9":"1"},{"1":"Severn 2 2002","2":"10","3":"22","4":"22","5":"268","6":"58.96","7":"0","8":"0","9":"0"},{"1":"Rheidol 2 2004","2":"4","3":"32","4":"25","5":"264","6":"66","7":"6","8":"100","9":"6"},{"1":"Rheidol 1 2004","2":"6","3":"48","4":"33","5":"264","6":"87.12","7":"11","8":"127","9":"13.97"},{"1":"Severn 3 2002","2":"9","3":"25","4":"24","5":"263","6":"63.12","7":"1","8":"100","9":"1"},{"1":"Severn 2003","2":"9","3":"33","4":"32","5":"263","6":"84.16","7":"1","8":"100","9":"1"},{"1":"Severn Llandinam 1999","2":"3","3":"26","4":"26","5":"254","6":"66.040000000000006","7":"0","8":"0","9":"0"},{"1":"Severn 1a 2002","2":"8","3":"29","4":"29","5":"234","6":"67.86","7":"0","8":"0","9":"0"},{"1":"Dane West of Congleton","2":"6","3":"34","4":"31","5":"226","6":"70.06","7":"3","8":"100","9":"3"},{"1":"Allen (Possible)","2":"11","3":"17","4":"17","5":"224","6":"38.08","7":"0","8":"0","9":"0"},{"1":"Monnow 2013","2":"5","3":"66","4":"38","5":"216","6":"82.08","7":"21","8":"143","9":"30.03"},{"1":"Teme 1998 (Possible)","2":"4","3":"24","4":"20","5":"210","6":"42","7":"4","8":"100","9":"4"},{"1":"Teign & Bovey B 1998","2":"9","3":"34","4":"30","5":"210","6":"63","7":"4","8":"175","9":"7"},{"1":"Wye 3 2014","2":"9","3":"63","4":"31","5":"206","6":"63.86","7":"29","8":"131","9":"37.99"},{"1":"Creedy yeo 1999","2":"6","3":"27","4":"23","5":"204","6":"46.92","7":"4","8":"100","9":"4"},{"1":"Wye 1 2014","2":"5","3":"39","4":"24","5":"204","6":"48.96","7":"14","8":"164","9":"22.96"},{"1":"Dane East of Congleton","2":"6","3":"27","4":"26","5":"204","6":"53.04","7":"1","8":"100","9":"1"},{"1":"Teign & Bovey confluence","2":"9","3":"39","4":"32","5":"203","6":"64.959999999999994","7":"7","8":"100","9":"7"},{"1":"Wye 6 2014","2":"8","3":"72","4":"38","5":"203","6":"77.14","7":"28","8":"107","9":"29.96"},{"1":"Till 2005","2":"5","3":"53","4":"41","5":"200","6":"82","7":"12","8":"100","9":"12"},{"1":"Teign 1999","2":"6","3":"37","4":"31","5":"197","6":"61.07","7":"6","8":"100","9":"6"},{"1":"Eggleston Burn (possible)","2":"6","3":"27","4":"23","5":"196","6":"45.08","7":"2","8":"100","9":"2"},{"1":"Camel 2003","2":"8","3":"26","4":"25","5":"196","6":"49","7":"1","8":"100","9":"1"},{"1":"Plym 1 2003","2":"2","3":"19","4":"19","5":"195","6":"37.049999999999997","7":"0","8":"0","9":"0"},{"1":"Tamar 2002","2":"2","3":"18","4":"16","5":"194","6":"31.04","7":"2","8":"100","9":"2"},{"1":"Wear (Possible)","2":"4","3":"18","4":"16","5":"194","6":"31.04","7":"1","8":"100","9":"1"},{"1":"Fowey 2 2003","2":"4","3":"13","4":"13","5":"192","6":"24.96","7":"0","8":"0","9":"0"},{"1":"Exe 1999","2":"6","3":"27","4":"23","5":"191","6":"43.93","7":"4","8":"175","9":"7"},{"1":"Tees 2 2008","2":"11","3":"28","4":"23","5":"191","6":"43.93","7":"0","8":"0","9":"0"},{"1":"Torridge 1999","2":"6","3":"25","4":"20","5":"190","6":"38","7":"5","8":"100","9":"5"},{"1":"Fal","2":"2","3":"12","4":"11","5":"182","6":"20.02","7":"1","8":"100","9":"1"},{"1":"Harwood (Possible)","2":"3","3":"19","4":"15","5":"180","6":"27","7":"3","8":"100","9":"3"},{"1":"Till 2013","2":"5","3":"53","4":"31","5":"177","6":"54.87","7":"19","8":"100","9":"19"},{"1":"Lugg 2014 4","2":"8","3":"67","4":"35","5":"177","6":"61.95","7":"30","8":"140","9":"42"},{"1":"Lynher 1 2003","2":"2","3":"9","4":"8","5":"175","6":"14","7":"1","8":"100","9":"1"},{"1":"River Tame 2000","2":"7","3":"17","4":"12","5":"175","6":"21","7":"6","8":"150","9":"9"},{"1":"Camel Tributary","2":"4","3":"13","4":"12","5":"175","6":"21","7":"1","8":"100","9":"1"},{"1":"Wye 4 2014","2":"8","3":"53","4":"34","5":"171","6":"58.14","7":"15","8":"140","9":"21"},{"1":"Wye 7 2014","2":"8","3":"50","4":"27","5":"170","6":"45.9","7":"19","8":"126","9":"23.94"},{"1":"Carey 1 2003","2":"2","3":"14","4":"13","5":"169","6":"21.97","7":"1","8":"100","9":"1"},{"1":"Ottery 2003","2":"4","3":"19","4":"18","5":"167","6":"30.06","7":"1","8":"100","9":"1"},{"1":"Otter 1999","2":"6","3":"29","4":"27","5":"167","6":"45.09","7":"2","8":"100","9":"2"},{"1":"Lugg 2014 3","2":"8","3":"57","4":"32","5":"166","6":"53.12","7":"23","8":"126","9":"28.98"},{"1":"Thrushel 1999","2":"6","3":"16","4":"14","5":"164","6":"22.96","7":"2","8":"100","9":"2"},{"1":"Yealm 2003","2":"2","3":"10","4":"10","5":"160","6":"16","7":"0","8":"0","9":"0"},{"1":"Tees 1 2008","2":"6","3":"28","4":"20","5":"160","6":"32","7":"2","8":"100","9":"2"},{"1":"Yarty 1999","2":"6","3":"23","4":"25","5":"160","6":"40","7":"3","8":"200","9":"6"},{"1":"Erme 1999","2":"6","3":"22","4":"21","5":"157","6":"32.97","7":"1","8":"100","9":"1"},{"1":"Wear 2005","2":"5","3":"42","4":"37","5":"157","6":"58.09","7":"5","8":"100","9":"5"},{"1":"Taw 1999","2":"5","3":"18","4":"16","5":"156","6":"24.96","7":"2","8":"100","9":"2"},{"1":"1997 Ashop","2":"4","3":"14","4":"11","5":"155","6":"17.05","7":"3","8":"100","9":"3"},{"1":"Eden Read (Possible) 2000","2":"3","3":"12","4":"11","5":"155","6":"17.05","7":"2","8":"100","9":"2"},{"1":"Gauntless (Possible)","2":"3","3":"14","4":"11","5":"155","6":"17.05","7":"2","8":"100","9":"2"},{"1":"Alport 1999","2":"3","3":"14","4":"12","5":"150","6":"18","7":"2","8":"100","9":"2"},{"1":"Lugg 2014 1","2":"8","3":"64","4":"18","5":"150","6":"27","7":"40","8":"122","9":"48.8"},{"1":"South Tyne (Possible)","2":"5","3":"18","4":"18","5":"150","6":"27","7":"0","8":"0","9":"0"},{"1":"Woolder Water 2013","2":"5","3":"34","4":"28","5":"143","6":"40.04","7":"5","8":"100","9":"5"},{"1":"River Frome Rushton 2017","2":"5","3":"54","4":"17","5":"135","6":"22.95","7":"61","8":"124","9":"75.64"},{"1":"Dove 2013","2":"5","3":"91","4":"17","5":"135","6":"22.95","7":"29","8":"110","9":"31.9"},{"1":"Beamish 2013","2":"5","3":"45","4":"34","5":"134","6":"45.56","7":"8","8":"100","9":"8"},{"1":"wye 2014 5","2":"2","3":"24","4":"11","5":"127","6":"13.97","7":"13","8":"146","9":"18.98"},{"1":"Camel 1999","2":"6","3":"16","4":"13","5":"123","6":"15.99","7":"3","8":"100","9":"3"},{"1":"River Frome Woodsford 2017","2":"5","3":"65","4":"16","5":"119","6":"19.04","7":"40","8":"106","9":"42.4"},{"1":"Lugg 2014 2","2":"5","3":"46","4":"22","5":"114","6":"25.08","7":"22","8":"141","9":"31.02"},{"1":"Fowey 1 2003","2":"4","3":"8","4":"8","5":"100","6":"8","7":"0","8":"0","9":"0"},{"1":"River Frome Moreton 2017","2":"5","3":"81","4":"10","5":"100","6":"10","7":"51","8":"117","9":"59.67"}],"options":{"columns":{"min":{},"max":[10],"total":[9]},"rows":{"min":[10],"max":[10],"total":[79]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
@@ -261,30 +335,65 @@ sel_values</code></pre>
 <p>Try to find all the numeric values</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI25ldyBjb2x1bW4sIGNvbnZlcnQgYWJ1bmRhbmNlIHRvIG51bWVyaWMuIFxuZXJzX2RhdGEyJGFidW5kX251bSA8LSBhcy5udW1lcmljKGVyc19kYXRhMiRBYnVuZGFuY2VfRGF0YSlcbnNraW1yOjpza2ltKGVyc19kYXRhMiRhYnVuZF9udW0pXG4jYWxsIGRhdGEgY29udGFpbmluZyBhIG5vbi1udW1lcmljIGlzIG5vdyBOQSwgYWxsIG51bWVyaWMgaXMgbnVtZXJpY1xucGxvdChlcnNfZGF0YTIkYWJ1bmRfbnVtKVxuaGlzdChlcnNfZGF0YTIkYWJ1bmRfbnVtLCBicmVha3MgPSAxMDApXG5oaXN0KGVyc19kYXRhMiRhYnVuZF9udW0sIGJyZWFrcyA9IDEwMDAsIHhsaW0gPSBjKDAsMTAwKSlcbmBgYCJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI25ldyBjb2x1bW4sIGNvbnZlcnQgYWJ1bmRhbmNlIHRvIG51bWVyaWMuIFxuZXJzX2RhdGEyJGFidW5kX251bSA8LSBhcy5udW1lcmljKGVyc19kYXRhMiRBYnVuZGFuY2VfRGF0YSlcbmBgYCJ9 -->
 <pre class="r"><code>#new column, convert abundance to numeric. 
-ers_data2$abund_num &lt;- as.numeric(ers_data2$Abundance_Data)
-skimr::skim(ers_data2$abund_num)
-#all data containing a non-numeric is now NA, all numeric is numeric
-plot(ers_data2$abund_num)
-hist(ers_data2$abund_num, breaks = 100)
-hist(ers_data2$abund_num, breaks = 1000, xlim = c(0,100))</code></pre>
+ers_data2$abund_num &lt;- as.numeric(ers_data2$Abundance_Data)</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiTkFzIGludHJvZHVjZWQgYnkgY29lcmNpb25cbiJ9 -->
+<pre><code>NAs introduced by coercion</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2tpbXI6OnNraW0oZXJzX2RhdGEyJGFidW5kX251bSlcbmBgYCJ9 -->
+<pre class="r"><code>skimr::skim(ers_data2$abund_num)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5Ta2ltIHN1bW1hcnkgc3RhdGlzdGljc1xuXG4tLSBWYXJpYWJsZSB0eXBlOm51bWVyaWMgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLVxuICAgICAgICAgICAgdmFyaWFibGUgbWlzc2luZyBjb21wbGV0ZSAgICBuICBtZWFuICAgIHNkIHAwIHAyNSBwNTAgcDc1IHAxMDAgICAgIGhpc3RcbiBlcnNfZGF0YTIkYWJ1bmRfbnVtICAgIDQyNDkgICAgIDM4MDEgODA1MCAxNS42OCA3OS43NyAgMSAgIDEgICAyICAgNiAyMzExIOKWh+KWgeKWgeKWgeKWgeKWgeKWgeKWgVxuIn0= -->
+<pre><code>
+Skim summary statistics
+
+-- Variable type:numeric -------------------------------------------------------
+            variable missing complete    n  mean    sd p0 p25 p50 p75 p100     hist
+ ers_data2$abund_num    4249     3801 8050 15.68 79.77  1   1   2   6 2311 ▇▁▁▁▁▁▁▁</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2FsbCBkYXRhIGNvbnRhaW5pbmcgYSBub24tbnVtZXJpYyBpcyBub3cgTkEsIGFsbCBudW1lcmljIGlzIG51bWVyaWNcbnBsb3QoZXJzX2RhdGEyJGFidW5kX251bSlcbmBgYCJ9 -->
+<pre class="r"><code>#all data containing a non-numeric is now NA, all numeric is numeric
+plot(ers_data2$abund_num)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-plot-begin eyJjb25kaXRpb25zIjpbXSwiaGVpZ2h0Ijo0MzIuNjMyOSwic2l6ZV9iZWhhdmlvciI6MCwid2lkdGgiOjcwMH0= -->
+<p><img src="data:image/png;base64,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" /></p>
+<!-- rnb-plot-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaGlzdChlcnNfZGF0YTIkYWJ1bmRfbnVtLCBicmVha3MgPSAxMDApXG5gYGAifQ== -->
+<pre class="r"><code>hist(ers_data2$abund_num, breaks = 100)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-plot-begin eyJjb25kaXRpb25zIjpbXSwiaGVpZ2h0Ijo0MzIuNjMyOSwic2l6ZV9iZWhhdmlvciI6MCwid2lkdGgiOjcwMH0= -->
+<p><img src="data:image/png;base64,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" /></p>
+<!-- rnb-plot-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaGlzdChlcnNfZGF0YTIkYWJ1bmRfbnVtLCBicmVha3MgPSAxMDAwLCB4bGltID0gYygwLDEwMCkpXG5gYGAifQ== -->
+<pre class="r"><code>hist(ers_data2$abund_num, breaks = 1000, xlim = c(0,100))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-plot-begin eyJjb25kaXRpb25zIjpbXSwiaGVpZ2h0Ijo0MzIuNjMyOSwic2l6ZV9iZWhhdmlvciI6MCwid2lkdGgiOjcwMH0= -->
+<p><img src="data:image/png;base64,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" /></p>
+<!-- rnb-plot-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI3NwbGl0IG51bWVyaWMgYW5kIGNoYXJhY3RlciBhYnVuZGFuY2UgdmFsdWVzOiBcbiNjcmVhdGUgbnVtZXJpYyBjb2x1bW5cbmFidW5kX251bSA8LSBlcnNfZGF0YTIgJT4lIFxuICBzZWxlY3QoYWJ1bmRfbnVtKSAlPiUgIFxuICBmaWx0ZXIoaXMubmEoYWJ1bmRfbnVtKSA9PSBGQUxTRSkgXG5hYnVuZF9udW0gPC0gYWJ1bmRfbnVtJGFidW5kX251bVxuXG5uX2Rpc3RpbmN0KGFidW5kX251bSlcbmxlbmd0aChhYnVuZF9udW0pXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI3NwbGl0IG51bWVyaWMgYW5kIGNoYXJhY3RlciBhYnVuZGFuY2UgdmFsdWVzOiBcbiNjcmVhdGUgbnVtZXJpYyBjb2x1bW5cbmFidW5kX251bSA8LSBlcnNfZGF0YTIgJT4lIFxuICBzZWxlY3QoYWJ1bmRfbnVtKSAlPiUgIFxuICBmaWx0ZXIoaXMubmEoYWJ1bmRfbnVtKSA9PSBGQUxTRSkgXG5hYnVuZF9udW0gPC0gYWJ1bmRfbnVtJGFidW5kX251bVxubl9kaXN0aW5jdChhYnVuZF9udW0pXG5gYGAifQ== -->
 <pre class="r"><code>#split numeric and character abundance values: 
 #create numeric column
 abund_num &lt;- ers_data2 %&gt;% 
   select(abund_num) %&gt;%  
   filter(is.na(abund_num) == FALSE) 
 abund_num &lt;- abund_num$abund_num
-
-n_distinct(abund_num)
-length(abund_num)</code></pre>
+n_distinct(abund_num)</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDE4NlxuIn0= -->
+<pre><code>[1] 186</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGVuZ3RoKGFidW5kX251bSlcbmBgYCJ9 -->
+<pre class="r"><code>length(abund_num)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDM4MDFcbiJ9 -->
+<pre><code>[1] 3801</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
@@ -293,6 +402,487 @@ length(abund_num)</code></pre>
 <pre class="r"><code>ers_hist &lt;- hist(abund_num, breaks = 100, plot = FALSE)
 knitr::kable(tibble(ers_hist$breaks[-1], ers_hist$counts))</code></pre>
 <!-- rnb-source-end -->
+
+<!-- rnb-html-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImtuaXRfYXNpcyJdLCJzaXppbmdQb2xpY3kiOltdfX0= -->
+
+<table>
+<thead>
+<tr class="header">
+<th align="right">ers_hist$breaks[-1]</th>
+<th align="right">ers_hist$counts</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">20</td>
+<td align="right">3389</td>
+</tr>
+<tr class="even">
+<td align="right">40</td>
+<td align="right">168</td>
+</tr>
+<tr class="odd">
+<td align="right">60</td>
+<td align="right">70</td>
+</tr>
+<tr class="even">
+<td align="right">80</td>
+<td align="right">37</td>
+</tr>
+<tr class="odd">
+<td align="right">100</td>
+<td align="right">25</td>
+</tr>
+<tr class="even">
+<td align="right">120</td>
+<td align="right">14</td>
+</tr>
+<tr class="odd">
+<td align="right">140</td>
+<td align="right">16</td>
+</tr>
+<tr class="even">
+<td align="right">160</td>
+<td align="right">8</td>
+</tr>
+<tr class="odd">
+<td align="right">180</td>
+<td align="right">11</td>
+</tr>
+<tr class="even">
+<td align="right">200</td>
+<td align="right">8</td>
+</tr>
+<tr class="odd">
+<td align="right">220</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="right">240</td>
+<td align="right">5</td>
+</tr>
+<tr class="odd">
+<td align="right">260</td>
+<td align="right">6</td>
+</tr>
+<tr class="even">
+<td align="right">280</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">300</td>
+<td align="right">6</td>
+</tr>
+<tr class="even">
+<td align="right">320</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="right">340</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="right">360</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="right">380</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="right">400</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="right">420</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="right">440</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">460</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">480</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="right">500</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="right">520</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">540</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">560</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">580</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">600</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">620</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">640</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">660</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="right">680</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">700</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">720</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">740</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">760</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">780</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">800</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">820</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">840</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">860</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">880</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="right">900</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">920</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">940</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">960</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">980</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">1000</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">1020</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">1040</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">1060</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">1080</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">1100</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">1120</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">1140</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">1160</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">1180</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">1200</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">1220</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">1240</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">1260</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">1280</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">1300</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">1320</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">1340</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">1360</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">1380</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">1400</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">1420</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">1440</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">1460</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">1480</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">1500</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">1520</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">1540</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">1560</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">1580</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">1600</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">1620</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">1640</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">1660</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">1680</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">1700</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">1720</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">1740</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">1760</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">1780</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">1800</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">1820</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">1840</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">1860</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">1880</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">1900</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">1920</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">1940</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">1960</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">1980</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">2000</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">2020</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">2040</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">2060</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">2080</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">2100</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">2120</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">2140</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">2160</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">2180</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">2200</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">2220</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">2240</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">2260</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">2280</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">2300</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">2320</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+
+
+<!-- rnb-html-end -->
+
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>The vast majority of abundance values aer below 20.</p>
@@ -315,10 +905,18 @@ ers_data2$abund_char &lt;- replace(ers_data2$abund_char,
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubl9kaXN0aW5jdChlcnNfZGF0YTIkYWJ1bmRfY2hhcilcbmxlbmd0aChlcnNfZGF0YTIkYWJ1bmRfY2hhclt3aGljaChpcy5uYShlcnNfZGF0YTIkYWJ1bmRfY2hhcik9PUZBTFNFKV0pXG5gYGAifQ== -->
-<pre class="r"><code>n_distinct(ers_data2$abund_char)
-length(ers_data2$abund_char[which(is.na(ers_data2$abund_char)==FALSE)])</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubl9kaXN0aW5jdChlcnNfZGF0YTIkYWJ1bmRfY2hhcilcbmBgYCJ9 -->
+<pre class="r"><code>n_distinct(ers_data2$abund_char)</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDE3XG4ifQ== -->
+<pre><code>[1] 17</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGVuZ3RoKGVyc19kYXRhMiRhYnVuZF9jaGFyW3doaWNoKGlzLm5hKGVyc19kYXRhMiRhYnVuZF9jaGFyKT09RkFMU0UpXSlcbmBgYCJ9 -->
+<pre class="r"><code>length(ers_data2$abund_char[which(is.na(ers_data2$abund_char)==FALSE)])</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDU1MlxuIn0= -->
+<pre><code>[1] 552</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>552 observations; 17 unique abundance values</p>
@@ -329,6 +927,87 @@ length(ers_data2$abund_char[which(is.na(ers_data2$abund_char)==FALSE)])</code></
 ers_char &lt;- arrange(ers_char, -Freq)
 knitr::kable(ers_char)</code></pre>
 <!-- rnb-source-end -->
+
+<!-- rnb-html-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImtuaXRfYXNpcyJdLCJzaXppbmdQb2xpY3kiOltdfX0= -->
+
+<table>
+<thead>
+<tr class="header">
+<th align="left">Var1</th>
+<th align="right">Freq</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">present</td>
+<td align="right">307</td>
+</tr>
+<tr class="even">
+<td align="left">Abundance - 1 Count Adult</td>
+<td align="right">64</td>
+</tr>
+<tr class="odd">
+<td align="left">very abund</td>
+<td align="right">47</td>
+</tr>
+<tr class="even">
+<td align="left">abundant</td>
+<td align="right">39</td>
+</tr>
+<tr class="odd">
+<td align="left">1f</td>
+<td align="right">37</td>
+</tr>
+<tr class="even">
+<td align="left">1m</td>
+<td align="right">27</td>
+</tr>
+<tr class="odd">
+<td align="left">&gt;10</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">100+</td>
+<td align="right">5</td>
+</tr>
+<tr class="odd">
+<td align="left">2f</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">500+</td>
+<td align="right">5</td>
+</tr>
+<tr class="odd">
+<td align="left">2m</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="left">3f</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">4f</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">3m</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">5f</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">5m</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+
+
+<!-- rnb-html-end -->
+
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -343,6 +1022,147 @@ knitr::kable(ers_char)</code></pre>
     arrange(-n)
 )</code></pre>
 <!-- rnb-source-end -->
+
+<!-- rnb-html-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImtuaXRfYXNpcyJdLCJzaXppbmdQb2xpY3kiOltdfX0= -->
+
+<table>
+<thead>
+<tr class="header">
+<th align="left">Sample_Type</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Pitfall Trap</td>
+<td align="right">1769</td>
+</tr>
+<tr class="even">
+<td align="left">Hand Search (25min)</td>
+<td align="right">1242</td>
+</tr>
+<tr class="odd">
+<td align="left">Hand search</td>
+<td align="right">1217</td>
+</tr>
+<tr class="even">
+<td align="left">Pitfall</td>
+<td align="right">989</td>
+</tr>
+<tr class="odd">
+<td align="left">Excavation</td>
+<td align="right">497</td>
+</tr>
+<tr class="even">
+<td align="left">handsearch/excavation</td>
+<td align="right">405</td>
+</tr>
+<tr class="odd">
+<td align="left">Pitfall trap</td>
+<td align="right">307</td>
+</tr>
+<tr class="even">
+<td align="left">Handsearch</td>
+<td align="right">153</td>
+</tr>
+<tr class="odd">
+<td align="left">pitfalls</td>
+<td align="right">153</td>
+</tr>
+<tr class="even">
+<td align="left">Hand searching</td>
+<td align="right">144</td>
+</tr>
+<tr class="odd">
+<td align="left">20 minute timed search</td>
+<td align="right">135</td>
+</tr>
+<tr class="even">
+<td align="left">Quadrat</td>
+<td align="right">130</td>
+</tr>
+<tr class="odd">
+<td align="left">Sweep</td>
+<td align="right">126</td>
+</tr>
+<tr class="even">
+<td align="left">handsearch</td>
+<td align="right">124</td>
+</tr>
+<tr class="odd">
+<td align="left">30 minute timed sample</td>
+<td align="right">111</td>
+</tr>
+<tr class="even">
+<td align="left">Casual record</td>
+<td align="right">88</td>
+</tr>
+<tr class="odd">
+<td align="left">timed hand collection</td>
+<td align="right">76</td>
+</tr>
+<tr class="even">
+<td align="left">Aquatic</td>
+<td align="right">69</td>
+</tr>
+<tr class="odd">
+<td align="left">Field Observation</td>
+<td align="right">64</td>
+</tr>
+<tr class="even">
+<td align="left">timed hand search</td>
+<td align="right">44</td>
+</tr>
+<tr class="odd">
+<td align="left">excavation</td>
+<td align="right">38</td>
+</tr>
+<tr class="even">
+<td align="left">hand collection</td>
+<td align="right">37</td>
+</tr>
+<tr class="odd">
+<td align="left">Pitfalls</td>
+<td align="right">36</td>
+</tr>
+<tr class="even">
+<td align="left">20 minute dig</td>
+<td align="right">34</td>
+</tr>
+<tr class="odd">
+<td align="left">pitfall</td>
+<td align="right">29</td>
+</tr>
+<tr class="even">
+<td align="left">Hand Searching</td>
+<td align="right">13</td>
+</tr>
+<tr class="odd">
+<td align="left">timed dig</td>
+<td align="right">13</td>
+</tr>
+<tr class="even">
+<td align="left">Netting</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="left">Splashing</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">Water Trap</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">NA</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+
+
+<!-- rnb-html-end -->
+
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
@@ -350,20 +1170,51 @@ knitr::kable(ers_char)</code></pre>
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudW5pcXVlKGVyc19kYXRhMiRTYW1wbGVfVHlwZSlcbmBgYCJ9 -->
 <pre class="r"><code>unique(ers_data2$Sample_Type)</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiIFsxXSBcImhhbmRzZWFyY2hcIiAgICAgICAgICAgICBcIlBpdGZhbGwgdHJhcFwiICAgICAgICAgICBcIlBpdGZhbGxcIiAgICAgICAgICAgICAgIFxuIFs0XSBcIkhhbmQgc2VhcmNoXCIgICAgICAgICAgICBcIjIwIG1pbnV0ZSBkaWdcIiAgICAgICAgICBcImhhbmRzZWFyY2gvZXhjYXZhdGlvblwiIFxuIFs3XSBcIkZpZWxkIE9ic2VydmF0aW9uXCIgICAgICBcIlN3ZWVwXCIgICAgICAgICAgICAgICAgICBcIkhhbmQgU2VhcmNoICgyNW1pbilcIiAgIFxuWzEwXSBcIkhhbmQgU2VhcmNoaW5nXCIgICAgICAgICBcInRpbWVkIGhhbmQgY29sbGVjdGlvblwiICBcIkhhbmQgc2VhcmNoaW5nXCIgICAgICAgIFxuWzEzXSBcIkFxdWF0aWNcIiAgICAgICAgICAgICAgICBcIk5ldHRpbmdcIiAgICAgICAgICAgICAgICBcImV4Y2F2YXRpb25cIiAgICAgICAgICAgIFxuWzE2XSBcInBpdGZhbGxzXCIgICAgICAgICAgICAgICBcIjMwIG1pbnV0ZSB0aW1lZCBzYW1wbGVcIiBcIlBpdGZhbGxzXCIgICAgICAgICAgICAgIFxuWzE5XSBcImhhbmQgY29sbGVjdGlvblwiICAgICAgICBcInBpdGZhbGxcIiAgICAgICAgICAgICAgICBcIlBpdGZhbGwgVHJhcFwiICAgICAgICAgIFxuWzIyXSBcIjIwIG1pbnV0ZSB0aW1lZCBzZWFyY2hcIiBcInRpbWVkIGhhbmQgc2VhcmNoXCIgICAgICBcIkNhc3VhbCByZWNvcmRcIiAgICAgICAgIFxuWzI1XSBcIlF1YWRyYXRcIiAgICAgICAgICAgICAgICBcIkV4Y2F2YXRpb25cIiAgICAgICAgICAgICBcIldhdGVyIFRyYXBcIiAgICAgICAgICAgIFxuWzI4XSBcIkhhbmRzZWFyY2hcIiAgICAgICAgICAgICBcIlNwbGFzaGluZ1wiICAgICAgICAgICAgICBcInRpbWVkIGRpZ1wiICAgICAgICAgICAgIFxuWzMxXSBOQSAgICAgICAgICAgICAgICAgICAgICBcbiJ9 -->
+<pre><code> [1] &quot;handsearch&quot;             &quot;Pitfall trap&quot;           &quot;Pitfall&quot;               
+ [4] &quot;Hand search&quot;            &quot;20 minute dig&quot;          &quot;handsearch/excavation&quot; 
+ [7] &quot;Field Observation&quot;      &quot;Sweep&quot;                  &quot;Hand Search (25min)&quot;   
+[10] &quot;Hand Searching&quot;         &quot;timed hand collection&quot;  &quot;Hand searching&quot;        
+[13] &quot;Aquatic&quot;                &quot;Netting&quot;                &quot;excavation&quot;            
+[16] &quot;pitfalls&quot;               &quot;30 minute timed sample&quot; &quot;Pitfalls&quot;              
+[19] &quot;hand collection&quot;        &quot;pitfall&quot;                &quot;Pitfall Trap&quot;          
+[22] &quot;20 minute timed search&quot; &quot;timed hand search&quot;      &quot;Casual record&quot;         
+[25] &quot;Quadrat&quot;                &quot;Excavation&quot;             &quot;Water Trap&quot;            
+[28] &quot;Handsearch&quot;             &quot;Splashing&quot;              &quot;timed dig&quot;             
+[31] NA                      </code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGFibGUodG9sb3dlcihlcnNfZGF0YTIkU2FtcGxlX1R5cGUpKVxuXG5gYGAifQ== -->
-<pre class="r"><code>table(tolower(ers_data2$Sample_Type))
-</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGFibGUodG9sb3dlcihlcnNfZGF0YTIkU2FtcGxlX1R5cGUpKVxuYGBgIn0= -->
+<pre class="r"><code>table(tolower(ers_data2$Sample_Type))</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG4gICAgICAgICAyMCBtaW51dGUgZGlnIDIwIG1pbnV0ZSB0aW1lZCBzZWFyY2ggMzAgbWludXRlIHRpbWVkIHNhbXBsZSBcbiAgICAgICAgICAgICAgICAgICAgMzQgICAgICAgICAgICAgICAgICAgIDEzNSAgICAgICAgICAgICAgICAgICAgMTExIFxuICAgICAgICAgICAgICAgYXF1YXRpYyAgICAgICAgICBjYXN1YWwgcmVjb3JkICAgICAgICAgICAgIGV4Y2F2YXRpb24gXG4gICAgICAgICAgICAgICAgICAgIDY5ICAgICAgICAgICAgICAgICAgICAgODggICAgICAgICAgICAgICAgICAgIDUzNSBcbiAgICAgZmllbGQgb2JzZXJ2YXRpb24gICAgICAgIGhhbmQgY29sbGVjdGlvbiAgICAgICAgICAgIGhhbmQgc2VhcmNoIFxuICAgICAgICAgICAgICAgICAgICA2NCAgICAgICAgICAgICAgICAgICAgIDM3ICAgICAgICAgICAgICAgICAgIDEyMTcgXG4gICBoYW5kIHNlYXJjaCAoMjVtaW4pICAgICAgICAgaGFuZCBzZWFyY2hpbmcgICAgICAgICAgICAgaGFuZHNlYXJjaCBcbiAgICAgICAgICAgICAgICAgIDEyNDIgICAgICAgICAgICAgICAgICAgIDE1NyAgICAgICAgICAgICAgICAgICAgMjc3IFxuIGhhbmRzZWFyY2gvZXhjYXZhdGlvbiAgICAgICAgICAgICAgICBuZXR0aW5nICAgICAgICAgICAgICAgIHBpdGZhbGwgXG4gICAgICAgICAgICAgICAgICAgNDA1ICAgICAgICAgICAgICAgICAgICAgIDMgICAgICAgICAgICAgICAgICAgMTAxOCBcbiAgICAgICAgICBwaXRmYWxsIHRyYXAgICAgICAgICAgICAgICBwaXRmYWxscyAgICAgICAgICAgICAgICBxdWFkcmF0IFxuICAgICAgICAgICAgICAgICAgMjA3NiAgICAgICAgICAgICAgICAgICAgMTg5ICAgICAgICAgICAgICAgICAgICAxMzAgXG4gICAgICAgICAgICAgc3BsYXNoaW5nICAgICAgICAgICAgICAgICAgc3dlZXAgICAgICAgICAgICAgIHRpbWVkIGRpZyBcbiAgICAgICAgICAgICAgICAgICAgIDIgICAgICAgICAgICAgICAgICAgIDEyNiAgICAgICAgICAgICAgICAgICAgIDEzIFxuIHRpbWVkIGhhbmQgY29sbGVjdGlvbiAgICAgIHRpbWVkIGhhbmQgc2VhcmNoICAgICAgICAgICAgIHdhdGVyIHRyYXAgXG4gICAgICAgICAgICAgICAgICAgIDc2ICAgICAgICAgICAgICAgICAgICAgNDQgICAgICAgICAgICAgICAgICAgICAgMSBcbiJ9 -->
+<pre><code>
+         20 minute dig 20 minute timed search 30 minute timed sample 
+                    34                    135                    111 
+               aquatic          casual record             excavation 
+                    69                     88                    535 
+     field observation        hand collection            hand search 
+                    64                     37                   1217 
+   hand search (25min)         hand searching             handsearch 
+                  1242                    157                    277 
+ handsearch/excavation                netting                pitfall 
+                   405                      3                   1018 
+          pitfall trap               pitfalls                quadrat 
+                  2076                    189                    130 
+             splashing                  sweep              timed dig 
+                     2                    126                     13 
+ timed hand collection      timed hand search             water trap 
+                    76                     44                      1 </code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>Clean up sample type coding</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZXJzX2RhdGEyIDwtIGVyc19kYXRhMiAlPiUgXG4gIG11dGF0ZShTYW1wbGVfVHlwZV9vbGQgPSBTYW1wbGVfVHlwZSwgXG4gICAgICAgICBTYW1wbGVfVHlwZSA9IHJlY29kZV9mYWN0b3IodG9sb3dlcihlcnNfZGF0YTIkU2FtcGxlX1R5cGUpLFxuICAgICAgICAgICAgIGAyMCBtaW51dGUgZGlnYCA9IFwiZXhjYXZhdGlvblwiLFxuICAgICAgICAgICAgIGAyMCBtaW51dGUgdGltZWQgc2VhcmNoYCA9IFwiaGFuZF9zZWFyY2hcIixcbiAgICAgICAgICAgICBgMzAgbWludXRlIHRpbWVkIHNhbXBsZWAgPSBcInVua25vd25cIixcbiAgICAgICAgICAgICBhcXVhdGljID0gXCJhcXVhdGljXCIsXG4gICAgICAgICAgICAgYGNhc3VhbCByZWNvcmRgID0gXCJhZC1ob2NcIixcbiAgICAgICAgICAgICBleGNhdmF0aW9uID0gXCJleGNhdmF0aW9uXCIsXG4gICAgICAgICAgICAgYGZpZWxkIG9ic2VydmF0aW9uYCA9IFwiYWQtaG9jXCIsXG4gICAgICAgICAgICAgYGhhbmQgY29sbGVjdGlvbmAgPSBcImhhbmRfc2VhcmNoXCIsXG4gICAgICAgICAgICAgYGhhbmQgc2VhcmNoYCA9IFwiaGFuZF9zZWFyY2hcIixcbiAgICAgICAgICAgICBgaGFuZCBzZWFyY2ggKDI1bWluKWAgPSBcImhhbmRfc2VhcmNoXCIsXG4gICAgICAgICAgICAgYGhhbmQgc2VhcmNoaW5nYCA9IFwiaGFuZF9zZWFyY2hcIixcbiAgICAgICAgICAgICAgaGFuZHNlYXJjaCA9IFwiaGFuZF9zZWFyY2hcIixcbiAgICAgICAgICAgICBgaGFuZHNlYXJjaC9leGNhdmF0aW9uYCA9IFwiZXhjYXZhdGlvblwiLFxuICAgICAgICAgICAgIG5ldHRpbmcgPSBcInN3ZWVwXCIsXG4gICAgICAgICAgICAgcGl0ZmFsbCA9IFwicGl0ZmFsbFwiLFxuICAgICAgICAgICAgIGBwaXRmYWxsIHRyYXBgID0gXCJwaXRmYWxsXCIsXG4gICAgICAgICAgICAgcGl0ZmFsbHMgPSBcInBpdGZhbGxcIixcbiAgICAgICAgICAgICBxdWFkcmF0ID0gXCJoYW5kX3NlYXJjaFwiLFxuICAgICAgICAgICAgIHNwbGFzaGluZyA9IFwic3BsYXNoaW5nXCIsXG4gICAgICAgICAgICAgc3dlZXAgPSBcInN3ZWVwXCIsXG4gICAgICAgICAgICAgYHRpbWVkIGRpZ2AgPSBcImV4Y2F2YXRpb25cIixcbiAgICAgICAgICAgICBgdGltZWQgaGFuZCBjb2xsZWN0aW9uYCA9IFwiaGFuZF9zZWFyY2hcIixcbiAgICAgICAgICAgICBgdGltZWQgaGFuZCBzZWFyY2hgID0gXCJoYW5kX3NlYXJjaFwiLFxuICAgICAgICAgICAgIGB3YXRlciB0cmFwYCA9IFwid2F0ZXJfdHJhcFwiXG4gICAgICAgICAgICAgKSlcblxudGFibGUodG9sb3dlcihlcnNfZGF0YTIkU2FtcGxlX1R5cGUpKVxuXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZXJzX2RhdGEyIDwtIGVyc19kYXRhMiAlPiUgXG4gIG11dGF0ZShTYW1wbGVfVHlwZV9vbGQgPSBTYW1wbGVfVHlwZSwgXG4gICAgICAgICBTYW1wbGVfVHlwZSA9IHJlY29kZV9mYWN0b3IodG9sb3dlcihlcnNfZGF0YTIkU2FtcGxlX1R5cGUpLFxuICAgICAgICAgICAgIGAyMCBtaW51dGUgZGlnYCA9IFwiZXhjYXZhdGlvblwiLFxuICAgICAgICAgICAgIGAyMCBtaW51dGUgdGltZWQgc2VhcmNoYCA9IFwiaGFuZF9zZWFyY2hcIixcbiAgICAgICAgICAgICBgMzAgbWludXRlIHRpbWVkIHNhbXBsZWAgPSBcInVua25vd25cIixcbiAgICAgICAgICAgICBhcXVhdGljID0gXCJhcXVhdGljXCIsXG4gICAgICAgICAgICAgYGNhc3VhbCByZWNvcmRgID0gXCJhZC1ob2NcIixcbiAgICAgICAgICAgICBleGNhdmF0aW9uID0gXCJleGNhdmF0aW9uXCIsXG4gICAgICAgICAgICAgYGZpZWxkIG9ic2VydmF0aW9uYCA9IFwiYWQtaG9jXCIsXG4gICAgICAgICAgICAgYGhhbmQgY29sbGVjdGlvbmAgPSBcImhhbmRfc2VhcmNoXCIsXG4gICAgICAgICAgICAgYGhhbmQgc2VhcmNoYCA9IFwiaGFuZF9zZWFyY2hcIixcbiAgICAgICAgICAgICBgaGFuZCBzZWFyY2ggKDI1bWluKWAgPSBcImhhbmRfc2VhcmNoXCIsXG4gICAgICAgICAgICAgYGhhbmQgc2VhcmNoaW5nYCA9IFwiaGFuZF9zZWFyY2hcIixcbiAgICAgICAgICAgICAgaGFuZHNlYXJjaCA9IFwiaGFuZF9zZWFyY2hcIixcbiAgICAgICAgICAgICBgaGFuZHNlYXJjaC9leGNhdmF0aW9uYCA9IFwiZXhjYXZhdGlvblwiLFxuICAgICAgICAgICAgIG5ldHRpbmcgPSBcInN3ZWVwXCIsXG4gICAgICAgICAgICAgcGl0ZmFsbCA9IFwicGl0ZmFsbFwiLFxuICAgICAgICAgICAgIGBwaXRmYWxsIHRyYXBgID0gXCJwaXRmYWxsXCIsXG4gICAgICAgICAgICAgcGl0ZmFsbHMgPSBcInBpdGZhbGxcIixcbiAgICAgICAgICAgICBxdWFkcmF0ID0gXCJoYW5kX3NlYXJjaFwiLFxuICAgICAgICAgICAgIHNwbGFzaGluZyA9IFwic3BsYXNoaW5nXCIsXG4gICAgICAgICAgICAgc3dlZXAgPSBcInN3ZWVwXCIsXG4gICAgICAgICAgICAgYHRpbWVkIGRpZ2AgPSBcImV4Y2F2YXRpb25cIixcbiAgICAgICAgICAgICBgdGltZWQgaGFuZCBjb2xsZWN0aW9uYCA9IFwiaGFuZF9zZWFyY2hcIixcbiAgICAgICAgICAgICBgdGltZWQgaGFuZCBzZWFyY2hgID0gXCJoYW5kX3NlYXJjaFwiLFxuICAgICAgICAgICAgIGB3YXRlciB0cmFwYCA9IFwid2F0ZXJfdHJhcFwiXG4gICAgICAgICAgICAgKSlcbnRhYmxlKHRvbG93ZXIoZXJzX2RhdGEyJFNhbXBsZV9UeXBlKSlcbmBgYCJ9 -->
 <pre class="r"><code>ers_data2 &lt;- ers_data2 %&gt;% 
   mutate(Sample_Type_old = Sample_Type, 
          Sample_Type = recode_factor(tolower(ers_data2$Sample_Type),
@@ -392,10 +1243,15 @@ knitr::kable(ers_char)</code></pre>
              `timed hand search` = &quot;hand_search&quot;,
              `water trap` = &quot;water_trap&quot;
              ))
-
-table(tolower(ers_data2$Sample_Type))
-</code></pre>
+table(tolower(ers_data2$Sample_Type))</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG4gICAgIGFkLWhvYyAgICAgYXF1YXRpYyAgZXhjYXZhdGlvbiBoYW5kX3NlYXJjaCAgICAgcGl0ZmFsbCAgIHNwbGFzaGluZyAgICAgICBzd2VlcCBcbiAgICAgICAgMTUyICAgICAgICAgIDY5ICAgICAgICAgOTg3ICAgICAgICAzMzE1ICAgICAgICAzMjgzICAgICAgICAgICAyICAgICAgICAgMTI5IFxuICAgIHVua25vd24gIHdhdGVyX3RyYXAgXG4gICAgICAgIDExMSAgICAgICAgICAgMSBcbiJ9 -->
+<pre><code>
+     ad-hoc     aquatic  excavation hand_search     pitfall   splashing       sweep 
+        152          69         987        3315        3283           2         129 
+    unknown  water_trap 
+        111           1 </code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
@@ -403,19 +1259,37 @@ table(tolower(ers_data2$Sample_Type))
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGFibGUodG9sb3dlcihlcnNfZGF0YTIkU2FtcGxlX1R5cGVfb2xkKSlcbmBgYCJ9 -->
 <pre class="r"><code>table(tolower(ers_data2$Sample_Type_old))</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG4gICAgICAgICAyMCBtaW51dGUgZGlnIDIwIG1pbnV0ZSB0aW1lZCBzZWFyY2ggMzAgbWludXRlIHRpbWVkIHNhbXBsZSBcbiAgICAgICAgICAgICAgICAgICAgMzQgICAgICAgICAgICAgICAgICAgIDEzNSAgICAgICAgICAgICAgICAgICAgMTExIFxuICAgICAgICAgICAgICAgYXF1YXRpYyAgICAgICAgICBjYXN1YWwgcmVjb3JkICAgICAgICAgICAgIGV4Y2F2YXRpb24gXG4gICAgICAgICAgICAgICAgICAgIDY5ICAgICAgICAgICAgICAgICAgICAgODggICAgICAgICAgICAgICAgICAgIDUzNSBcbiAgICAgZmllbGQgb2JzZXJ2YXRpb24gICAgICAgIGhhbmQgY29sbGVjdGlvbiAgICAgICAgICAgIGhhbmQgc2VhcmNoIFxuICAgICAgICAgICAgICAgICAgICA2NCAgICAgICAgICAgICAgICAgICAgIDM3ICAgICAgICAgICAgICAgICAgIDEyMTcgXG4gICBoYW5kIHNlYXJjaCAoMjVtaW4pICAgICAgICAgaGFuZCBzZWFyY2hpbmcgICAgICAgICAgICAgaGFuZHNlYXJjaCBcbiAgICAgICAgICAgICAgICAgIDEyNDIgICAgICAgICAgICAgICAgICAgIDE1NyAgICAgICAgICAgICAgICAgICAgMjc3IFxuIGhhbmRzZWFyY2gvZXhjYXZhdGlvbiAgICAgICAgICAgICAgICBuZXR0aW5nICAgICAgICAgICAgICAgIHBpdGZhbGwgXG4gICAgICAgICAgICAgICAgICAgNDA1ICAgICAgICAgICAgICAgICAgICAgIDMgICAgICAgICAgICAgICAgICAgMTAxOCBcbiAgICAgICAgICBwaXRmYWxsIHRyYXAgICAgICAgICAgICAgICBwaXRmYWxscyAgICAgICAgICAgICAgICBxdWFkcmF0IFxuICAgICAgICAgICAgICAgICAgMjA3NiAgICAgICAgICAgICAgICAgICAgMTg5ICAgICAgICAgICAgICAgICAgICAxMzAgXG4gICAgICAgICAgICAgc3BsYXNoaW5nICAgICAgICAgICAgICAgICAgc3dlZXAgICAgICAgICAgICAgIHRpbWVkIGRpZyBcbiAgICAgICAgICAgICAgICAgICAgIDIgICAgICAgICAgICAgICAgICAgIDEyNiAgICAgICAgICAgICAgICAgICAgIDEzIFxuIHRpbWVkIGhhbmQgY29sbGVjdGlvbiAgICAgIHRpbWVkIGhhbmQgc2VhcmNoICAgICAgICAgICAgIHdhdGVyIHRyYXAgXG4gICAgICAgICAgICAgICAgICAgIDc2ICAgICAgICAgICAgICAgICAgICAgNDQgICAgICAgICAgICAgICAgICAgICAgMSBcbiJ9 -->
+<pre><code>
+         20 minute dig 20 minute timed search 30 minute timed sample 
+                    34                    135                    111 
+               aquatic          casual record             excavation 
+                    69                     88                    535 
+     field observation        hand collection            hand search 
+                    64                     37                   1217 
+   hand search (25min)         hand searching             handsearch 
+                  1242                    157                    277 
+ handsearch/excavation                netting                pitfall 
+                   405                      3                   1018 
+          pitfall trap               pitfalls                quadrat 
+                  2076                    189                    130 
+             splashing                  sweep              timed dig 
+                     2                    126                     13 
+ timed hand collection      timed hand search             water trap 
+                    76                     44                      1 </code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>does data type relate to sample type</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2FtcGxlX2RhdGFfdHlwZXMgPC1cbiAgZXJzX2RhdGEyICU+JVxuICAgIGdyb3VwX2J5KFNhbXBsZV9UeXBlKSAlPiVcbiAgICBjb3VudChcImFidW5kX2NoYXJhY3RlclwiID0gaXMubmEoYWJ1bmRfY2hhcik9PUZBTFNFLCBcbiAgICAgICAgXCJhYnVuZF9udW1iZXJcIiA9IGlzLm5hKGFidW5kX251bSk9PUZBTFNFKSAlPiUgXG4gICAgZmlsdGVyKGFidW5kX2NoYXJhY3RlciA9PSBUUlVFIHwgYWJ1bmRfbnVtYmVyID09IFRSVUUpIFxuXG5zYW1wbGVfZGF0YV90eXBlcyRhYnVuZF9jaGFyYWN0ZXJbd2hpY2goc2FtcGxlX2RhdGFfdHlwZXMkYWJ1bmRfY2hhcmFjdGVyPT1UUlVFKV0gPC0gXG4gIHNhbXBsZV9kYXRhX3R5cGVzJG5bd2hpY2goc2FtcGxlX2RhdGFfdHlwZXMkYWJ1bmRfY2hhcmFjdGVyPT1UUlVFKV1cbiAgXG5zYW1wbGVfZGF0YV90eXBlcyRhYnVuZF9udW1iZXJbd2hpY2goc2FtcGxlX2RhdGFfdHlwZXMkYWJ1bmRfbnVtYmVyPT1UUlVFKV0gPC0gXG4gIHNhbXBsZV9kYXRhX3R5cGVzJG5bd2hpY2goc2FtcGxlX2RhdGFfdHlwZXMkYWJ1bmRfbnVtYmVyPT1UUlVFKV1cbiAgXG4jc2FtcGxlX2RhdGFfdHlwZXMkbiA8LSBOVUxMXG5cbmtuaXRyOjprYWJsZShzYW1wbGVfZGF0YV90eXBlcylcbmBgYCJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2FtcGxlX2RhdGFfdHlwZXMgPC1cbiAgZXJzX2RhdGEyICU+JVxuICAgIGdyb3VwX2J5KFNhbXBsZV9UeXBlKSAlPiVcbiAgICBjb3VudChcImFidW5kX2NoYXJhY3RlclwiID0gaXMubmEoYWJ1bmRfY2hhcik9PUZBTFNFLCBcbiAgICAgICAgXCJhYnVuZF9udW1iZXJcIiA9IGlzLm5hKGFidW5kX251bSk9PUZBTFNFKSAlPiUgXG4gICAgZmlsdGVyKGFidW5kX2NoYXJhY3RlciA9PSBUUlVFIHwgYWJ1bmRfbnVtYmVyID09IFRSVUUpIFxuc2FtcGxlX2RhdGFfdHlwZXMkYWJ1bmRfY2hhcmFjdGVyW3doaWNoKHNhbXBsZV9kYXRhX3R5cGVzJGFidW5kX2NoYXJhY3Rlcj09VFJVRSldIDwtIFxuICBzYW1wbGVfZGF0YV90eXBlcyRuW3doaWNoKHNhbXBsZV9kYXRhX3R5cGVzJGFidW5kX2NoYXJhY3Rlcj09VFJVRSldXG4gIFxuc2FtcGxlX2RhdGFfdHlwZXMkYWJ1bmRfbnVtYmVyW3doaWNoKHNhbXBsZV9kYXRhX3R5cGVzJGFidW5kX251bWJlcj09VFJVRSldIDwtIFxuICBzYW1wbGVfZGF0YV90eXBlcyRuW3doaWNoKHNhbXBsZV9kYXRhX3R5cGVzJGFidW5kX251bWJlcj09VFJVRSldXG4gIFxuI3NhbXBsZV9kYXRhX3R5cGVzJG4gPC0gTlVMTFxua25pdHI6OmthYmxlKHNhbXBsZV9kYXRhX3R5cGVzKVxuYGBgIn0= -->
 <pre class="r"><code>sample_data_types &lt;-
   ers_data2 %&gt;%
     group_by(Sample_Type) %&gt;%
     count(&quot;abund_character&quot; = is.na(abund_char)==FALSE, 
         &quot;abund_number&quot; = is.na(abund_num)==FALSE) %&gt;% 
     filter(abund_character == TRUE | abund_number == TRUE) 
-
 sample_data_types$abund_character[which(sample_data_types$abund_character==TRUE)] &lt;- 
   sample_data_types$n[which(sample_data_types$abund_character==TRUE)]
   
@@ -423,9 +1297,99 @@ sample_data_types$abund_number[which(sample_data_types$abund_number==TRUE)] &lt;
   sample_data_types$n[which(sample_data_types$abund_number==TRUE)]
   
 #sample_data_types$n &lt;- NULL
-
 knitr::kable(sample_data_types)</code></pre>
 <!-- rnb-source-end -->
+
+<!-- rnb-html-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImtuaXRfYXNpcyJdLCJzaXppbmdQb2xpY3kiOltdfX0= -->
+
+<table>
+<thead>
+<tr class="header">
+<th align="left">Sample_Type</th>
+<th align="right">abund_character</th>
+<th align="right">abund_number</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">excavation</td>
+<td align="right">0</td>
+<td align="right">409</td>
+<td align="right">409</td>
+</tr>
+<tr class="even">
+<td align="left">excavation</td>
+<td align="right">85</td>
+<td align="right">0</td>
+<td align="right">85</td>
+</tr>
+<tr class="odd">
+<td align="left">hand_search</td>
+<td align="right">0</td>
+<td align="right">1710</td>
+<td align="right">1710</td>
+</tr>
+<tr class="even">
+<td align="left">hand_search</td>
+<td align="right">83</td>
+<td align="right">0</td>
+<td align="right">83</td>
+</tr>
+<tr class="odd">
+<td align="left">ad-hoc</td>
+<td align="right">64</td>
+<td align="right">0</td>
+<td align="right">64</td>
+</tr>
+<tr class="even">
+<td align="left">sweep</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">sweep</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">pitfall</td>
+<td align="right">0</td>
+<td align="right">1676</td>
+<td align="right">1676</td>
+</tr>
+<tr class="odd">
+<td align="left">pitfall</td>
+<td align="right">319</td>
+<td align="right">0</td>
+<td align="right">319</td>
+</tr>
+<tr class="even">
+<td align="left">splashing</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">water_trap</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">NA</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+
+
+<!-- rnb-html-end -->
+
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -433,29 +1397,90 @@ knitr::kable(sample_data_types)</code></pre>
 <h2>Fix sample timing</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGFibGUoZXJzX2RhdGEyJFNhbXBsZV9UeXBlX29sZCwgZXJzX2RhdGEyJFNhbXBsZV9EdXJhdGlvbilcblxuYGBgIn0= -->
-<pre class="r"><code>table(ers_data2$Sample_Type_old, ers_data2$Sample_Duration)
-</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGFibGUoZXJzX2RhdGEyJFNhbXBsZV9UeXBlX29sZCwgZXJzX2RhdGEyJFNhbXBsZV9EdXJhdGlvbilcbmBgYCJ9 -->
+<pre class="r"><code>table(ers_data2$Sample_Type_old, ers_data2$Sample_Duration)</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICAgICAgICAgICAgICAgMiB3ZWVrcyA4MC0xMDAgODAtMTAwIG1pbnV0ZXNcbiAgMjAgbWludXRlIGRpZyAgICAgICAgICAgICAgICAwICAgICAgMCAgICAgICAgICAgICAgMFxuICAyMCBtaW51dGUgdGltZWQgc2VhcmNoICAgICAgIDAgICAgICAwICAgICAgICAgICAgICAwXG4gIDMwIG1pbnV0ZSB0aW1lZCBzYW1wbGUgICAgICAgMCAgICAgIDAgICAgICAgICAgICAgIDBcbiAgQXF1YXRpYyAgICAgICAgICAgICAgICAgICAgICAwICAgICAgMCAgICAgICAgICAgICAgMFxuICBDYXN1YWwgcmVjb3JkICAgICAgICAgICAgICAgIDAgICAgICAwICAgICAgICAgICAgICAwXG4gIGV4Y2F2YXRpb24gICAgICAgICAgICAgICAgICAgMCAgICAgIDAgICAgICAgICAgICAgIDBcbiAgRXhjYXZhdGlvbiAgICAgICAgICAgICAgICAgICAwICAgICAgMCAgICAgICAgICAgICAgMFxuICBGaWVsZCBPYnNlcnZhdGlvbiAgICAgICAgICAgIDAgICAgICAwICAgICAgICAgICAgICAwXG4gIGhhbmQgY29sbGVjdGlvbiAgICAgICAgICAgICAgMCAgICAgIDAgICAgICAgICAgICAgIDBcbiAgSGFuZCBzZWFyY2ggICAgICAgICAgICAgICAgICAwICAgICAgMCAgICAgICAgICAgICAgMFxuICBIYW5kIFNlYXJjaCAoMjVtaW4pICAgICAgICAgIDAgICAgIDEyICAgICAgICAgICAgMzE3XG4gIEhhbmQgc2VhcmNoaW5nICAgICAgICAgICAgICAgMCAgICAgIDAgICAgICAgICAgICAgIDBcbiAgSGFuZCBTZWFyY2hpbmcgICAgICAgICAgICAgICAwICAgICAgMCAgICAgICAgICAgICAgMFxuICBoYW5kc2VhcmNoICAgICAgICAgICAgICAgICAgIDAgICAgICAwICAgICAgICAgICAgICAwXG4gIEhhbmRzZWFyY2ggICAgICAgICAgICAgICAgICAgMCAgICAgIDAgICAgICAgICAgICAgIDBcbiAgaGFuZHNlYXJjaC9leGNhdmF0aW9uICAgICAgICAwICAgICAgMCAgICAgICAgICAgICAgMFxuICBOZXR0aW5nICAgICAgICAgICAgICAgICAgICAgIDAgICAgICAwICAgICAgICAgICAgICAwXG4gIHBpdGZhbGwgICAgICAgICAgICAgICAgICAgICAgMCAgICAgIDAgICAgICAgICAgICAgIDBcbiAgUGl0ZmFsbCAgICAgICAgICAgICAgICAgICAgICAwICAgICAgMCAgICAgICAgICAgICAgMFxuICBQaXRmYWxsIHRyYXAgICAgICAgICAgICAgICAgIDAgICAgICAwICAgICAgICAgICAgICAwXG4gIFBpdGZhbGwgVHJhcCAgICAgICAgICAgICAgIDI5NiAgICAgIDAgICAgICAgICAgICAgIDBcbiAgcGl0ZmFsbHMgICAgICAgICAgICAgICAgICAgICAwICAgICAgMCAgICAgICAgICAgICAgMFxuICBQaXRmYWxscyAgICAgICAgICAgICAgICAgICAgIDAgICAgICAwICAgICAgICAgICAgICAwXG4gIFF1YWRyYXQgICAgICAgICAgICAgICAgICAgICAgMCAgICAgIDAgICAgICAgICAgICAgIDBcbiAgU3BsYXNoaW5nICAgICAgICAgICAgICAgICAgICAwICAgICAgMCAgICAgICAgICAgICAgMFxuICBTd2VlcCAgICAgICAgICAgICAgICAgICAgICAgIDAgICAgICAwICAgICAgICAgICAgICAwXG4gIHRpbWVkIGRpZyAgICAgICAgICAgICAgICAgICAgMCAgICAgIDAgICAgICAgICAgICAgIDBcbiAgdGltZWQgaGFuZCBjb2xsZWN0aW9uICAgICAgICAwICAgICAgMCAgICAgICAgICAgICAgMFxuICB0aW1lZCBoYW5kIHNlYXJjaCAgICAgICAgICAgIDAgICAgICAwICAgICAgICAgICAgICAwXG4gIFdhdGVyIFRyYXAgICAgICAgICAgICAgICAgICAgMCAgICAgIDAgICAgICAgICAgICAgIDBcbiJ9 -->
+<pre><code>                        
+                         2 weeks 80-100 80-100 minutes
+  20 minute dig                0      0              0
+  20 minute timed search       0      0              0
+  30 minute timed sample       0      0              0
+  Aquatic                      0      0              0
+  Casual record                0      0              0
+  excavation                   0      0              0
+  Excavation                   0      0              0
+  Field Observation            0      0              0
+  hand collection              0      0              0
+  Hand search                  0      0              0
+  Hand Search (25min)          0     12            317
+  Hand searching               0      0              0
+  Hand Searching               0      0              0
+  handsearch                   0      0              0
+  Handsearch                   0      0              0
+  handsearch/excavation        0      0              0
+  Netting                      0      0              0
+  pitfall                      0      0              0
+  Pitfall                      0      0              0
+  Pitfall trap                 0      0              0
+  Pitfall Trap               296      0              0
+  pitfalls                     0      0              0
+  Pitfalls                     0      0              0
+  Quadrat                      0      0              0
+  Splashing                    0      0              0
+  Sweep                        0      0              0
+  timed dig                    0      0              0
+  timed hand collection        0      0              0
+  timed hand search            0      0              0
+  Water Trap                   0      0              0</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZXJzX2RhdGEyJFNhbXBsZV9EdXJhdGlvblt3aGljaChlcnNfZGF0YTIkU2FtcGxlX1R5cGVfb2xkICVpbiUgYyhcIjIwIG1pbnV0ZSBkaWdcIiwgXCIyMCBtaW51dGUgdGltZWQgc2VhcmNoXCIpKV0gPC0gXCIyMCBtaW5cIlxuXG5lcnNfZGF0YTIkU2FtcGxlX0R1cmF0aW9uW3doaWNoKGVyc19kYXRhMiRTYW1wbGVfVHlwZV9vbGQgJWluJSBjKFwiMzAgbWludXRlIHRpbWVkIHNhbXBsZVwiKSldIDwtIFwiMzAgbWluXCJcblxuZXJzX2RhdGEyIDwtIGVyc19kYXRhMiAlPiUgXG4gIG11dGF0ZShTYW1wbGVfRHVyYXRpb24gPSByZWNvZGVfZmFjdG9yKFNhbXBsZV9EdXJhdGlvbixcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgYDgwLTEwMGAgID0gXCI4MC0xMDAgbWluXCIsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGA4MC0xMDAgbWludXRlc2AgPSBcIjgwLTEwMCBtaW5cIikpXG5cblxuXG5cbnRhYmxlKGVyc19kYXRhMiRTYW1wbGVfVHlwZV9vbGQsIGVyc19kYXRhMiRTYW1wbGVfRHVyYXRpb24pXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZXJzX2RhdGEyJFNhbXBsZV9EdXJhdGlvblt3aGljaChlcnNfZGF0YTIkU2FtcGxlX1R5cGVfb2xkICVpbiUgYyhcIjIwIG1pbnV0ZSBkaWdcIiwgXCIyMCBtaW51dGUgdGltZWQgc2VhcmNoXCIpKV0gPC0gXCIyMCBtaW5cIlxuZXJzX2RhdGEyJFNhbXBsZV9EdXJhdGlvblt3aGljaChlcnNfZGF0YTIkU2FtcGxlX1R5cGVfb2xkICVpbiUgYyhcIjMwIG1pbnV0ZSB0aW1lZCBzYW1wbGVcIikpXSA8LSBcIjMwIG1pblwiXG5lcnNfZGF0YTIgPC0gZXJzX2RhdGEyICU+JSBcbiAgbXV0YXRlKFNhbXBsZV9EdXJhdGlvbiA9IHJlY29kZV9mYWN0b3IoU2FtcGxlX0R1cmF0aW9uLFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBgODAtMTAwYCAgPSBcIjgwLTEwMCBtaW5cIixcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgYDgwLTEwMCBtaW51dGVzYCA9IFwiODAtMTAwIG1pblwiKSlcbnRhYmxlKGVyc19kYXRhMiRTYW1wbGVfVHlwZV9vbGQsIGVyc19kYXRhMiRTYW1wbGVfRHVyYXRpb24pXG5gYGAifQ== -->
 <pre class="r"><code>ers_data2$Sample_Duration[which(ers_data2$Sample_Type_old %in% c(&quot;20 minute dig&quot;, &quot;20 minute timed search&quot;))] &lt;- &quot;20 min&quot;
-
 ers_data2$Sample_Duration[which(ers_data2$Sample_Type_old %in% c(&quot;30 minute timed sample&quot;))] &lt;- &quot;30 min&quot;
-
 ers_data2 &lt;- ers_data2 %&gt;% 
   mutate(Sample_Duration = recode_factor(Sample_Duration,
                                          `80-100`  = &quot;80-100 min&quot;,
                                          `80-100 minutes` = &quot;80-100 min&quot;))
-
-
-
-
 table(ers_data2$Sample_Type_old, ers_data2$Sample_Duration)</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICAgICAgICAgICAgICAgODAtMTAwIG1pbiAyMCBtaW4gMzAgbWluIDIgd2Vla3NcbiAgMjAgbWludXRlIGRpZyAgICAgICAgICAgICAgICAgICAwICAgICAzNCAgICAgIDAgICAgICAgMFxuICAyMCBtaW51dGUgdGltZWQgc2VhcmNoICAgICAgICAgIDAgICAgMTM1ICAgICAgMCAgICAgICAwXG4gIDMwIG1pbnV0ZSB0aW1lZCBzYW1wbGUgICAgICAgICAgMCAgICAgIDAgICAgMTExICAgICAgIDBcbiAgQXF1YXRpYyAgICAgICAgICAgICAgICAgICAgICAgICAwICAgICAgMCAgICAgIDAgICAgICAgMFxuICBDYXN1YWwgcmVjb3JkICAgICAgICAgICAgICAgICAgIDAgICAgICAwICAgICAgMCAgICAgICAwXG4gIGV4Y2F2YXRpb24gICAgICAgICAgICAgICAgICAgICAgMCAgICAgIDAgICAgICAwICAgICAgIDBcbiAgRXhjYXZhdGlvbiAgICAgICAgICAgICAgICAgICAgICAwICAgICAgMCAgICAgIDAgICAgICAgMFxuICBGaWVsZCBPYnNlcnZhdGlvbiAgICAgICAgICAgICAgIDAgICAgICAwICAgICAgMCAgICAgICAwXG4gIGhhbmQgY29sbGVjdGlvbiAgICAgICAgICAgICAgICAgMCAgICAgIDAgICAgICAwICAgICAgIDBcbiAgSGFuZCBzZWFyY2ggICAgICAgICAgICAgICAgICAgICAwICAgICAgMCAgICAgIDAgICAgICAgMFxuICBIYW5kIFNlYXJjaCAoMjVtaW4pICAgICAgICAgICAzMjkgICAgICAwICAgICAgMCAgICAgICAwXG4gIEhhbmQgc2VhcmNoaW5nICAgICAgICAgICAgICAgICAgMCAgICAgIDAgICAgICAwICAgICAgIDBcbiAgSGFuZCBTZWFyY2hpbmcgICAgICAgICAgICAgICAgICAwICAgICAgMCAgICAgIDAgICAgICAgMFxuICBoYW5kc2VhcmNoICAgICAgICAgICAgICAgICAgICAgIDAgICAgICAwICAgICAgMCAgICAgICAwXG4gIEhhbmRzZWFyY2ggICAgICAgICAgICAgICAgICAgICAgMCAgICAgIDAgICAgICAwICAgICAgIDBcbiAgaGFuZHNlYXJjaC9leGNhdmF0aW9uICAgICAgICAgICAwICAgICAgMCAgICAgIDAgICAgICAgMFxuICBOZXR0aW5nICAgICAgICAgICAgICAgICAgICAgICAgIDAgICAgICAwICAgICAgMCAgICAgICAwXG4gIHBpdGZhbGwgICAgICAgICAgICAgICAgICAgICAgICAgMCAgICAgIDAgICAgICAwICAgICAgIDBcbiAgUGl0ZmFsbCAgICAgICAgICAgICAgICAgICAgICAgICAwICAgICAgMCAgICAgIDAgICAgICAgMFxuICBQaXRmYWxsIHRyYXAgICAgICAgICAgICAgICAgICAgIDAgICAgICAwICAgICAgMCAgICAgICAwXG4gIFBpdGZhbGwgVHJhcCAgICAgICAgICAgICAgICAgICAgMCAgICAgIDAgICAgICAwICAgICAyOTZcbiAgcGl0ZmFsbHMgICAgICAgICAgICAgICAgICAgICAgICAwICAgICAgMCAgICAgIDAgICAgICAgMFxuICBQaXRmYWxscyAgICAgICAgICAgICAgICAgICAgICAgIDAgICAgICAwICAgICAgMCAgICAgICAwXG4gIFF1YWRyYXQgICAgICAgICAgICAgICAgICAgICAgICAgMCAgICAgIDAgICAgICAwICAgICAgIDBcbiAgU3BsYXNoaW5nICAgICAgICAgICAgICAgICAgICAgICAwICAgICAgMCAgICAgIDAgICAgICAgMFxuICBTd2VlcCAgICAgICAgICAgICAgICAgICAgICAgICAgIDAgICAgICAwICAgICAgMCAgICAgICAwXG4gIHRpbWVkIGRpZyAgICAgICAgICAgICAgICAgICAgICAgMCAgICAgIDAgICAgICAwICAgICAgIDBcbiAgdGltZWQgaGFuZCBjb2xsZWN0aW9uICAgICAgICAgICAwICAgICAgMCAgICAgIDAgICAgICAgMFxuICB0aW1lZCBoYW5kIHNlYXJjaCAgICAgICAgICAgICAgIDAgICAgICAwICAgICAgMCAgICAgICAwXG4gIFdhdGVyIFRyYXAgICAgICAgICAgICAgICAgICAgICAgMCAgICAgIDAgICAgICAwICAgICAgIDBcbiJ9 -->
+<pre><code>                        
+                         80-100 min 20 min 30 min 2 weeks
+  20 minute dig                   0     34      0       0
+  20 minute timed search          0    135      0       0
+  30 minute timed sample          0      0    111       0
+  Aquatic                         0      0      0       0
+  Casual record                   0      0      0       0
+  excavation                      0      0      0       0
+  Excavation                      0      0      0       0
+  Field Observation               0      0      0       0
+  hand collection                 0      0      0       0
+  Hand search                     0      0      0       0
+  Hand Search (25min)           329      0      0       0
+  Hand searching                  0      0      0       0
+  Hand Searching                  0      0      0       0
+  handsearch                      0      0      0       0
+  Handsearch                      0      0      0       0
+  handsearch/excavation           0      0      0       0
+  Netting                         0      0      0       0
+  pitfall                         0      0      0       0
+  Pitfall                         0      0      0       0
+  Pitfall trap                    0      0      0       0
+  Pitfall Trap                    0      0      0     296
+  pitfalls                        0      0      0       0
+  Pitfalls                        0      0      0       0
+  Quadrat                         0      0      0       0
+  Splashing                       0      0      0       0
+  Sweep                           0      0      0       0
+  timed dig                       0      0      0       0
+  timed hand collection           0      0      0       0
+  timed hand search               0      0      0       0
+  Water Trap                      0      0      0       0</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -463,12 +1488,80 @@ table(ers_data2$Sample_Type_old, ers_data2$Sample_Duration)</code></pre>
 <h2>Look at surveys</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG5uYW1lcyhlcnNfZGF0YTIpXG5cbnRhYmxlKGVyc19kYXRhMiRgTkUgRnVsbCBTYW1wbGUgTmFtZWApXG5gYGAifQ== -->
-<pre class="r"><code>
-names(ers_data2)
-
-table(ers_data2$`NE Full Sample Name`)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubmFtZXMoZXJzX2RhdGEyKVxuYGBgIn0= -->
+<pre class="r"><code>names(ers_data2)</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiIFsxXSBcIlNwZWNpZXNfbmFtZVwiICAgICAgICAgICAgXCJUYXhvbm9taWNfT3JkZXJcIiAgICAgICAgIFwiVGF4b25vbWljX0ZhbWlseVwiICAgICAgIFxuIFs0XSBcIlN1cnZleS9SZXBvcnRfTmFtZVwiICAgICAgXCJBdXRob3IvUmVjb3JkZXJcIiAgICAgICAgIFwiU2FtcGxlIFJpdmVyXCIgICAgICAgICAgIFxuIFs3XSBcIkNvdW50eVwiICAgICAgICAgICAgICAgICAgXCJWQyBuYW1lXCIgICAgICAgICAgICAgICAgIFwiVkMgbnVtYmVyXCIgICAgICAgICAgICAgIFxuWzEwXSBcIkNvdW50cnlcIiAgICAgICAgICAgICAgICAgXCJTdWJzdHJhdGVcIiAgICAgICAgICAgICAgIFwiTkUgRnVsbCBTYW1wbGUgTmFtZVwiICAgIFxuWzEzXSBcIkxvY2F0aW9uX05hbWVcIiAgICAgICAgICAgXCJTYW1wbGVfR3JpZF9SZWZcIiAgICAgICAgIFwiRGF0ZVwiICAgICAgICAgICAgICAgICAgIFxuWzE2XSBcIlllYXJcIiAgICAgICAgICAgICAgICAgICAgXCJTYW1wbGVfVHlwZVwiICAgICAgICAgICAgIFwiU2FkbGVyICYgQmVsbCBtZXRob2Q/XCIgIFxuWzE5XSBcIkhhbmRzZWFyY2ggJiBQaXRmYWxsXCIgICAgXCJIYW5kc2VyYWNoICYgZXhjYXZhdGlvblwiIFwiU2FtcGxlX0R1cmF0aW9uXCIgICAgICAgIFxuWzIyXSBcIkFidW5kYW5jZV9EYXRhXCIgICAgICAgICAgXCJhYnVuZF9udW1cIiAgICAgICAgICAgICAgIFwiYWJ1bmRfY2hhclwiICAgICAgICAgICAgIFxuWzI1XSBcIlNhbXBsZV9UeXBlX29sZFwiICAgICAgICBcbiJ9 -->
+<pre><code> [1] &quot;Species_name&quot;            &quot;Taxonomic_Order&quot;         &quot;Taxonomic_Family&quot;       
+ [4] &quot;Survey/Report_Name&quot;      &quot;Author/Recorder&quot;         &quot;Sample River&quot;           
+ [7] &quot;County&quot;                  &quot;VC name&quot;                 &quot;VC number&quot;              
+[10] &quot;Country&quot;                 &quot;Substrate&quot;               &quot;NE Full Sample Name&quot;    
+[13] &quot;Location_Name&quot;           &quot;Sample_Grid_Ref&quot;         &quot;Date&quot;                   
+[16] &quot;Year&quot;                    &quot;Sample_Type&quot;             &quot;Sadler &amp; Bell method?&quot;  
+[19] &quot;Handsearch &amp; Pitfall&quot;    &quot;Handserach &amp; excavation&quot; &quot;Sample_Duration&quot;        
+[22] &quot;Abundance_Data&quot;          &quot;abund_num&quot;               &quot;abund_char&quot;             
+[25] &quot;Sample_Type_old&quot;        </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGFibGUoZXJzX2RhdGEyJGBORSBGdWxsIFNhbXBsZSBOYW1lYClcbmBgYCJ9 -->
+<pre class="r"><code>table(ers_data2$`NE Full Sample Name`)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG4gICAgICAgICAgICAgICAgMTk5NyBBc2hvcCAgICAgICAgQWxsZW4gMTk4NyBQT1NTSUJMRSAgICAgICAgICAgICAgICBBbHBvcnQgMTk5OSBcbiAgICAgICAgICAgICAgICAgICAgICAgIDU2ICAgICAgICAgICAgICAgICAgICAgICAgIDYxICAgICAgICAgICAgICAgICAgICAgICAgIDc1IFxuICAgICAgICAgICAgICBCZWFtaXNoIDIwMTMgICAgICAgICAgICAgICAgIENhbWVsIDE5OTkgICAgICAgICAgICAgICAgIENhbWVsIDIwMDMgXG4gICAgICAgICAgICAgICAgICAgICAgIDEyNyAgICAgICAgICAgICAgICAgICAgICAgICA1MSAgICAgICAgICAgICAgICAgICAgICAgICA4NSBcbiAgICAgICAgICAgQ2FtZWwgdHJpYnV0YXJ5ICAgICAgICAgICAgICAgQ2FyZXkgMSAyMDAzICAgICAgICAgICAgQ3JlZWR5IFllbyAxOTk5IFxuICAgICAgICAgICAgICAgICAgICAgICAgMjYgICAgICAgICAgICAgICAgICAgICAgICAgMjAgICAgICAgICAgICAgICAgICAgICAgICAgNzggXG4gICAgRGFuZSBFYXN0IG9mIENvbmdsZXRvbiAgICAgRGFuZSBXZXN0IG9mIENvbmdsZXRvbiAgICAgICAgICAgICAgICAgIERvdmUgMjAxMyBcbiAgICAgICAgICAgICAgICAgICAgICAgIDU1ICAgICAgICAgICAgICAgICAgICAgICAgMTA2ICAgICAgICAgICAgICAgICAgICAgICAgMTU4IFxuICAgRWRlbiBSZWFkIFBPU1NJQkxFIDIwMDAgICAgRWdnbGVzdG9uIEJ1cm4gUE9TU0lCTEUgICAgICAgICAgICAgICAgICBFcm1lIDE5OTkgXG4gICAgICAgICAgICAgICAgICAgICAgICA2NCAgICAgICAgICAgICAgICAgICAgICAgICA4NCAgICAgICAgICAgICAgICAgICAgICAgICA1NyBcbiAgICAgICAgICAgICAgICAgIEV4ZSAxOTk5ICAgICAgICAgICAgICAgICAgIEZhbCAyMDAyICAgICAgICAgICAgICAgRm93ZXkgMSAyMDAzIFxuICAgICAgICAgICAgICAgICAgICAgICAgNzMgICAgICAgICAgICAgICAgICAgICAgICAgMTkgICAgICAgICAgICAgICAgICAgICAgICAgMjIgXG4gICAgICAgICAgICAgIEZvd2V5IDIgMjAwMyAgICAgICAgIEdhdW50bGVzcyBQT1NTSUJMRSAgICAgICAgICAgSGFyd29vZCBQT1NTSUJMRSBcbiAgICAgICAgICAgICAgICAgICAgICAgIDI1ICAgICAgICAgICAgICAgICAgICAgICAgIDI5ICAgICAgICAgICAgICAgICAgICAgICAgIDUwIFxuICAgICAgICAgICAgICAgTHVnZyAyMDE0IDEgICAgICAgICAgICAgICAgTHVnZyAyMDE0IDIgICAgICAgICAgICAgICAgTHVnZyAyMDE0IDMgXG4gICAgICAgICAgICAgICAgICAgICAgIDM0MyAgICAgICAgICAgICAgICAgICAgICAgIDEyNyAgICAgICAgICAgICAgICAgICAgICAgIDI1NyBcbiAgICAgICAgICAgICAgIEx1Z2cgMjAxNCA0ICAgICAgICAgICAgICAgIEx5bmhlciAyMDAyICAgICAgICAgICAgTWF3ZGRhY2ggMSAyMDAzIFxuICAgICAgICAgICAgICAgICAgICAgICAyNzUgICAgICAgICAgICAgICAgICAgICAgICAgMTMgICAgICAgICAgICAgICAgICAgICAgICAgMzYgXG4gICAgICAgICAgICAgICBNb25ub3cgMjAxNSAgICAgICAgICAgICAgICAgT3R0ZXIgMTk5OSAgICAgICAgICAgICAgICBPdHRlcnkgMjAwMyBcbiAgICAgICAgICAgICAgICAgICAgICAgMTg0ICAgICAgICAgICAgICAgICAgICAgICAgIDczICAgICAgICAgICAgICAgICAgICAgICAgIDQ0IFxuICAgICAgICAgICAgICAgICBQbHltIDIwMDIgICAgICAgICAgICAgUmhlaWRvbCAxIDIwMDQgICAgICAgICAgICAgUmhlaWRvbCAyIDIwMDQgXG4gICAgICAgICAgICAgICAgICAgICAgICAyOCAgICAgICAgICAgICAgICAgICAgICAgIDExMiAgICAgICAgICAgICAgICAgICAgICAgICA1NyBcbiAgICAgICAgICAgIFJoZWlkb2wgMyAyMDA0ICAgUml2ZXIgRnJvbWUgTW9yZXRvbiAyMDE3ICAgUml2ZXIgRnJvbWUgUnVzaHRvbiAyMDE3IFxuICAgICAgICAgICAgICAgICAgICAgICAgNzIgICAgICAgICAgICAgICAgICAgICAgICAyMTkgICAgICAgICAgICAgICAgICAgICAgICAyMDggXG5SaXZlciBGcm9tZSBXb29kc2ZvcmQgMjAxNyAgICAgICAgICAgIFJpdmVyIFRhbWUgMjAwMCAgICAgIFNldmVybiBMbGFuZGluYW0gMTk5OSBcbiAgICAgICAgICAgICAgICAgICAgICAgMTQyICAgICAgICAgICAgICAgICAgICAgICAgIDMxICAgICAgICAgICAgICAgICAgICAgICAgMTQ4IFxuICAgICAgICAgICAgICBTZXZlcm4xIDIwMDIgICAgICAgICAgICAgIFNldmVybjFhIDIwMDIgICAgICAgICAgICAgICBTZXZlcm4yIDIwMDIgXG4gICAgICAgICAgICAgICAgICAgICAgIDE2MCAgICAgICAgICAgICAgICAgICAgICAgIDE2MSAgICAgICAgICAgICAgICAgICAgICAgIDExMCBcbiAgICAgICAgICAgICAgU2V2ZXJuMiAyMDAzICAgICAgICAgICAgICBTZXZlcm4yYSAyMDAyICAgICAgICAgICAgICAgU2V2ZXJuMyAyMDAzIFxuICAgICAgICAgICAgICAgICAgICAgICAxMDAgICAgICAgICAgICAgICAgICAgICAgICAxNTIgICAgICAgICAgICAgICAgICAgICAgICAgNDIgXG4gICAgICAgU291dGggVHluZSBQT1NTSUJMRSAgICAgICAgICAgICAgICAgVGFtYXIgMjAwMiAgICAgICAgICAgICAgICAgICBUYXcgMTk5OSBcbiAgICAgICAgICAgICAgICAgICAgICAgIDUwICAgICAgICAgICAgICAgICAgICAgICAgIDI3ICAgICAgICAgICAgICAgICAgICAgICAgIDM0IFxuICAgICAgICAgICAgICAgVGVlcyAxIDIwMDggICAgICAgICAgICAgICAgVGVlcyAyIDIwMDggICAgICAgVGVpZ24gJiBCb3ZleSAxOTk4IFQgXG4gICAgICAgICAgICAgICAgICAgICAgICA1OCAgICAgICAgICAgICAgICAgICAgICAgICA5NCAgICAgICAgICAgICAgICAgICAgICAgIDEwNSBcbiAgICAgIFRlaWduICYgQm92ZXkgQiAxOTk4ICAgICAgICAgICAgICAgICBUZWlnbiAxOTk5ICAgICAgICAgVGVtZSAxOTk4IFBPU1NJQkxFIFxuICAgICAgICAgICAgICAgICAgICAgICAgOTcgICAgICAgICAgICAgICAgICAgICAgICAgOTMgICAgICAgICAgICAgICAgICAgICAgICAgNDQgXG4gICAgICAgICAgICAgVGhydXNoZWwgMTk5OSAgICAgICAgICAgICAgICAgIFRpbGwgMjAwNSAgICAgICAgICAgICAgICAgIFRpbGwgMjAxMyBcbiAgICAgICAgICAgICAgICAgICAgICAgIDQ2ICAgICAgICAgICAgICAgICAgICAgICAgMTAyICAgICAgICAgICAgICAgICAgICAgICAgMTYyIFxuICAgICAgICAgICAgIFRvcnJpZGdlIDE5OTkgICAgICAgICAgICAgICAgVG93eSAyIDIwMDMgICAgICAgICAgICAgICAgVG93eSA0IDIwMDIgXG4gICAgICAgICAgICAgICAgICAgICAgICA1NyAgICAgICAgICAgICAgICAgICAgICAgIDEwNCAgICAgICAgICAgICAgICAgICAgICAgIDE3NiBcbiAgICAgICAgICAgICAgIFRvd3kgNSAyMDAyICAgICAgICAgICAgICAgICBUb3d5MSAyMDAzICAgICAgICAgICAgICAgICAgIFRvd3kxOTk4IFxuICAgICAgICAgICAgICAgICAgICAgICAgNTkgICAgICAgICAgICAgICAgICAgICAgICAxNzYgICAgICAgICAgICAgICAgICAgICAgICAgNjYgXG4gICAgICAgICAgICAgICAgVG93eTMgMjAwMyAgICAgICAgICAgICAgICAgVG93eTYgMjAwMiAgICAgICAgICAgICAgICAgICBUeXdpMTk5OCBcbiAgICAgICAgICAgICAgICAgICAgICAgMTMzICAgICAgICAgICAgICAgICAgICAgICAgIDk5ICAgICAgICAgICAgICAgICAgICAgICAgIDY3IFxuICAgICAgICAgICAgICAgICAgIFVzazE5OTggICAgICAgICAgICAgIFdhZXIgUE9TU0lCTEUgICAgICAgICAgICAgICAgICAgV2VhcjIwMDUgXG4gICAgICAgICAgICAgICAgICAgICAgIDExOSAgICAgICAgICAgICAgICAgICAgICAgICA0NSAgICAgICAgICAgICAgICAgICAgICAgICA5NyBcbiAgICAgICAgIFdvb2xlciBXYXRlciAyMDEzICAgICAgICAgICAgICAgICAgIFd5ZSAyMDE0ICAgICAgICAgICAgICAgICBXeWUgMjAxNCAzIFxuICAgICAgICAgICAgICAgICAgICAgICAgOTMgICAgICAgICAgICAgICAgICAgICAgICAxMDYgICAgICAgICAgICAgICAgICAgICAgICAyMjIgXG4gICAgICAgICAgICAgICAgV3llIDIwMTQgNCAgICAgICAgICAgICAgICAgV3llIDIwMTQgNSAgICAgICAgICAgICAgICAgV3llIDIwMTQgNiBcbiAgICAgICAgICAgICAgICAgICAgICAgMjQ2ICAgICAgICAgICAgICAgICAgICAgICAgIDkyICAgICAgICAgICAgICAgICAgICAgICAgMzE4IFxuICAgICAgICAgICAgICAgIFd5ZSAyMDE0IDcgICAgICAgICAgICAgICAgICAgIFd5ZTE5OTggICAgICAgICAgICAgICAgIFlhcnR5IDE5OTkgXG4gICAgICAgICAgICAgICAgICAgICAgIDIyNiAgICAgICAgICAgICAgICAgICAgICAgIDEwMSAgICAgICAgICAgICAgICAgICAgICAgICA2MyBcbiAgICAgICAgICAgICAgICBZZWFsbSAyMDAzIFxuICAgICAgICAgICAgICAgICAgICAgICAgMTQgXG4ifQ== -->
+<pre><code>
+                1997 Ashop        Allen 1987 POSSIBLE                Alport 1999 
+                        56                         61                         75 
+              Beamish 2013                 Camel 1999                 Camel 2003 
+                       127                         51                         85 
+           Camel tributary               Carey 1 2003            Creedy Yeo 1999 
+                        26                         20                         78 
+    Dane East of Congleton     Dane West of Congleton                  Dove 2013 
+                        55                        106                        158 
+   Eden Read POSSIBLE 2000    Eggleston Burn POSSIBLE                  Erme 1999 
+                        64                         84                         57 
+                  Exe 1999                   Fal 2002               Fowey 1 2003 
+                        73                         19                         22 
+              Fowey 2 2003         Gauntless POSSIBLE           Harwood POSSIBLE 
+                        25                         29                         50 
+               Lugg 2014 1                Lugg 2014 2                Lugg 2014 3 
+                       343                        127                        257 
+               Lugg 2014 4                Lynher 2002            Mawddach 1 2003 
+                       275                         13                         36 
+               Monnow 2015                 Otter 1999                Ottery 2003 
+                       184                         73                         44 
+                 Plym 2002             Rheidol 1 2004             Rheidol 2 2004 
+                        28                        112                         57 
+            Rheidol 3 2004   River Frome Moreton 2017   River Frome Rushton 2017 
+                        72                        219                        208 
+River Frome Woodsford 2017            River Tame 2000      Severn Llandinam 1999 
+                       142                         31                        148 
+              Severn1 2002              Severn1a 2002               Severn2 2002 
+                       160                        161                        110 
+              Severn2 2003              Severn2a 2002               Severn3 2003 
+                       100                        152                         42 
+       South Tyne POSSIBLE                 Tamar 2002                   Taw 1999 
+                        50                         27                         34 
+               Tees 1 2008                Tees 2 2008       Teign &amp; Bovey 1998 T 
+                        58                         94                        105 
+      Teign &amp; Bovey B 1998                 Teign 1999         Teme 1998 POSSIBLE 
+                        97                         93                         44 
+             Thrushel 1999                  Till 2005                  Till 2013 
+                        46                        102                        162 
+             Torridge 1999                Towy 2 2003                Towy 4 2002 
+                        57                        104                        176 
+               Towy 5 2002                 Towy1 2003                   Towy1998 
+                        59                        176                         66 
+                Towy3 2003                 Towy6 2002                   Tywi1998 
+                       133                         99                         67 
+                   Usk1998              Waer POSSIBLE                   Wear2005 
+                       119                         45                         97 
+         Wooler Water 2013                   Wye 2014                 Wye 2014 3 
+                        93                        106                        222 
+                Wye 2014 4                 Wye 2014 5                 Wye 2014 6 
+                       246                         92                        318 
+                Wye 2014 7                    Wye1998                 Yarty 1999 
+                       226                        101                         63 
+                Yealm 2003 
+                        14 </code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -478,24 +1571,27 @@ table(ers_data2$`NE Full Sample Name`)</code></pre>
 <p>Note, I’ve renamed some of the columns for clarity: col A = ‘Event’, Col C = number of pitfall replicates (P), col D = number of timed search/excavation replicates(T), Col G = number of pitfalls per replicate.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZXJzX2RhdGEyJGV2ZW50IDwtIGVyc19kYXRhMiRgTkUgRnVsbCBTYW1wbGUgTmFtZWBcblxuZXJzX2V2ZW50cyA8LSBkYXRhLmZyYW1lKHNvdXJjZSA9IFwiZXJzXCIsIGV2ZW50ID0gdW5pcXVlKGVyc19kYXRhMiRldmVudCkpXG5zZWxfZXZlbnRzIDwtIGRhdGEuZnJhbWUoc291cmNlID0gXCJzZWxcIiwgZXZlbnQgPSB1bmlxdWUoc2VsX3ZhbHVlcyRldmVudCkpXG5cbmV2ZW50cyA8LSByYmluZChlcnNfZXZlbnRzLCBzZWxfZXZlbnRzKVxuXG5ldmVudHMgJT4lIHNwcmVhZChrZXkgPSBzb3VyY2UsIHZhbHVlID0gc291cmNlKSAlPiUgXG4gIG11dGF0ZShldmVudCA9IGFzLmNoYXJhY3RlcihldmVudCkpICU+JSBcbiAgYXJyYW5nZShldmVudClcblxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZXJzX2RhdGEyJGV2ZW50IDwtIGVyc19kYXRhMiRgTkUgRnVsbCBTYW1wbGUgTmFtZWBcbmVyc19ldmVudHMgPC0gZGF0YS5mcmFtZShzb3VyY2UgPSBcImVyc1wiLCBldmVudCA9IHVuaXF1ZShlcnNfZGF0YTIkZXZlbnQpKVxuc2VsX2V2ZW50cyA8LSBkYXRhLmZyYW1lKHNvdXJjZSA9IFwic2VsXCIsIGV2ZW50ID0gdW5pcXVlKHNlbF92YWx1ZXMkZXZlbnQpKVxuZXZlbnRzIDwtIHJiaW5kKGVyc19ldmVudHMsIHNlbF9ldmVudHMpXG5ldmVudHMgJT4lIHNwcmVhZChrZXkgPSBzb3VyY2UsIHZhbHVlID0gc291cmNlKSAlPiUgXG4gIG11dGF0ZShldmVudCA9IGFzLmNoYXJhY3RlcihldmVudCkpICU+JSBcbiAgYXJyYW5nZShldmVudClcbmBgYCJ9 -->
 <pre class="r"><code>ers_data2$event &lt;- ers_data2$`NE Full Sample Name`
-
 ers_events &lt;- data.frame(source = &quot;ers&quot;, event = unique(ers_data2$event))
 sel_events &lt;- data.frame(source = &quot;sel&quot;, event = unique(sel_values$event))
-
 events &lt;- rbind(ers_events, sel_events)
-
 events %&gt;% spread(key = source, value = source) %&gt;% 
   mutate(event = as.character(event)) %&gt;% 
-  arrange(event)
-</code></pre>
+  arrange(event)</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibmNvbCI6MywibnJvdyI6MTE2fSwicmRmIjoiSDRzSUFBQUFBQUFBQnAyWDBYUGlOaENISFNBTk9NY2x6ZDMxZW4zeVU2ZDl1RXl3U1FpUElTRnRaNUs1VE9JT2wwY0ZDL0Nja0JqWkhPZTMvdVhYcm16TFNMWkltRExqUlBwK3U5SnF0UmJpL3VxemEzKzJMY3VxV2ZWR3c2clZvZG1vd1o4ZHEyRzF4UDl2bGxWL0F3MmhITUlUNTRMZDZmZDd6a1UwWTR1Y0hGNFFncW56MngyTG92Q0o0Tjl6L2liam5mNTV6N243OVBEdzErQm1tRXY3RjJUQmVBeGF2NStqVndPTTVtRTBjOXlUamlmbnVrUnpURlNybkxnbko5TG1JQ014RDUrV01lS0pqdjBTZm5XSk9FNmNqajRDeHpoSW5BUXpkU3FKSDNYODB4V2kyQm1pS0hiWXhMbGtkRXB3ektpbWpyQlpiVjJ4cjFoZDRJZGhBQm02eHloUTBpZGlPOGtOM3E4TlpBcFYrY053Q2hORU1JTXpXSExZZzBWcEQ5NlhERXI3MEJyeU9WWlgxeHgrMC9yMWEwU2tCRTB4dHl0VGVjMVc1VlRtekZYWjJ6L1Frc1lRUkZRdGthTzFWb3JzNkUvRVY0d0ZWWjlEcVpScjZtWTVuWXJrZHAxT0ZibFY1RlZSTjBmdG00VE9NTmNYdDU5REpRY0h0MmdWQkdnOEsxbmVNa3JaU3QxcEJaM0tXdjRVeDJLT2RiYjNVNUpvUTkyUlpLNlAza3FSRXNYcit4a09BMFl5czI2WnVrYnFxZlRuKy9BcmhITE5HWlRETGVPaVprV29QWk4rdjR4bUpmMFhWUi9CNWtRVHhnUFY0aUN6OE9HdFZBdTQvWUFCMHl6eVlqMFNJcFZLVTFlRit4S3UweU85WGFPM3A4SjNPYndoaUFZaFJYUHRRTXJFam1FVVBiRGMwTjNFUE4zWk5UbDdxdUc3QjdhTVo0NmZ3RkZTUFZVVnNmUUcySkJkcE5WbjAwY3JyY0I4aktNczJlY2FjbFgwMXNmaGxEcS9PZ000cmhMaGYrNzRabTJRcXJKS2RHM002SVFzTVIzaklyNVVWK0tCMGJMejU5eHdOcXkxMGpyYi9veEREZXJmREMwL0pPbjVkRm9DeFN2WTlobm5ZVERGZWtiWXFuU0l0VEswWGxkbW8rMWxocndxNm1yVm1hTFRLanBUSFcyQnRBaWFLVmtIa0ZwNEZaOHpkZUNXbjZ4Q05lcW1BR3IvNytpTHF1OUJYK20yUndqZXoxS21EMFlZQ3FxeU5hMFVLN2x1Q3FEMGorQU1JQUdNTjBKeGVtSVdtL0NqVUV5Q1BVcHd1ZytkYmpGb2dyVUZpYjZpMjdMdmVCVlMyS3drT2EzWVZNbFpoZlJVNGxWbTcxYklXWVgwVkxJSFJOM1lSOFRqUkx2Z1BHSkU1dGxXUTZML2hROThDN2ZUQ3hqY3l2NngwcytPNlpHYXlXYVR0cW0vYVI2VnZ6VFdKbi9UODVMUE52cHpNWnRzdHMyVHlkOFV0Nm4vL0JxMUcvY1BCTDRKU0dSbDErMmF2SUJoSHNsbWhFbkpaM2RNVUNSZGlvRW1hQnd6RHEzdlN1a0l0MW9lUmsxOXl1dzVtNWRzTjltWjdMZVpkOXRIK0pxZWJkZjhmK1ovYmk2VmxibkozOVRmRkZ2V0ZtVlFnNlBoNVdLcFN5dGpmZWpsQkZjZ0xNdXBMaUdVSlkyM0tzY1daNnRqT1VaYkNUemVFSW9kb0JnZFR6aTRHTUxaWTRzNFpCUUdxNGxmb3JzbDV4MWVBb2RMS2lZUFBvNW5TL3Jsbyt1S0dhenNiYlB5aUhheWFJcDJQWnV6SVNQYmxVbkNkQnBTZVhQWkplZ0p5eDlDcjJHVjZTS1BGendzTW1NRGpZNWpGaGMvbU93eEk1S2tpN08rL3djOC9Lb2tlQThBQUE9PSJ9 -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["event"],"name":[1],"type":["chr"],"align":["left"]},{"label":["ers"],"name":[2],"type":["fctr"],"align":["left"]},{"label":["sel"],"name":[3],"type":["fctr"],"align":["left"]}],"data":[{"1":"1997 Ashop","2":"ers","3":"sel"},{"1":"Allen (Possible)","2":"NA","3":"sel"},{"1":"Allen 1987 POSSIBLE","2":"ers","3":"NA"},{"1":"Alport 1999","2":"ers","3":"sel"},{"1":"Beamish 2013","2":"ers","3":"sel"},{"1":"Camel 1999","2":"ers","3":"sel"},{"1":"Camel 2003","2":"ers","3":"sel"},{"1":"Camel tributary","2":"ers","3":"NA"},{"1":"Camel Tributary","2":"NA","3":"sel"},{"1":"Carey 1 2003","2":"ers","3":"sel"},{"1":"Creedy yeo 1999","2":"NA","3":"sel"},{"1":"Creedy Yeo 1999","2":"ers","3":"NA"},{"1":"Dane East of Congleton","2":"ers","3":"sel"},{"1":"Dane West of Congleton","2":"ers","3":"sel"},{"1":"Dove 2013","2":"ers","3":"sel"},{"1":"Eden Read (Possible) 2000","2":"NA","3":"sel"},{"1":"Eden Read POSSIBLE 2000","2":"ers","3":"NA"},{"1":"Eggleston Burn (possible)","2":"NA","3":"sel"},{"1":"Eggleston Burn POSSIBLE","2":"ers","3":"NA"},{"1":"Erme 1999","2":"ers","3":"sel"},{"1":"Exe 1999","2":"ers","3":"sel"},{"1":"Fal","2":"NA","3":"sel"},{"1":"Fal 2002","2":"ers","3":"NA"},{"1":"Fowey 1 2003","2":"ers","3":"sel"},{"1":"Fowey 2 2003","2":"ers","3":"sel"},{"1":"Gauntless (Possible)","2":"NA","3":"sel"},{"1":"Gauntless POSSIBLE","2":"ers","3":"NA"},{"1":"Harwood (Possible)","2":"NA","3":"sel"},{"1":"Harwood POSSIBLE","2":"ers","3":"NA"},{"1":"Lugg 2014 1","2":"ers","3":"sel"},{"1":"Lugg 2014 2","2":"ers","3":"sel"},{"1":"Lugg 2014 3","2":"ers","3":"sel"},{"1":"Lugg 2014 4","2":"ers","3":"sel"},{"1":"Lynher 1 2003","2":"NA","3":"sel"},{"1":"Lynher 2002","2":"ers","3":"NA"},{"1":"Mawddach 1 2003","2":"ers","3":"sel"},{"1":"Monnow 2013","2":"NA","3":"sel"},{"1":"Monnow 2015","2":"ers","3":"NA"},{"1":"Otter 1999","2":"ers","3":"sel"},{"1":"Ottery 2003","2":"ers","3":"sel"},{"1":"Plym 1 2003","2":"NA","3":"sel"},{"1":"Plym 2002","2":"ers","3":"NA"},{"1":"Rheidol 1 2004","2":"ers","3":"sel"},{"1":"Rheidol 2 2004","2":"ers","3":"sel"},{"1":"Rheidol 3 2004","2":"ers","3":"sel"},{"1":"River Frome Moreton 2017","2":"ers","3":"sel"},{"1":"River Frome Rushton 2017","2":"ers","3":"sel"},{"1":"River Frome Woodsford 2017","2":"ers","3":"sel"},{"1":"River Tame 2000","2":"ers","3":"sel"},{"1":"Severn 1 2002","2":"NA","3":"sel"},{"1":"Severn 1a 2002","2":"NA","3":"sel"},{"1":"Severn 2 2002","2":"NA","3":"sel"},{"1":"Severn 2003","2":"NA","3":"sel"},{"1":"Severn 2a 2002","2":"NA","3":"sel"},{"1":"Severn 3 2002","2":"NA","3":"sel"},{"1":"Severn Llandinam 1999","2":"ers","3":"sel"},{"1":"Severn1 2002","2":"ers","3":"NA"},{"1":"Severn1a 2002","2":"ers","3":"NA"},{"1":"Severn2 2002","2":"ers","3":"NA"},{"1":"Severn2 2003","2":"ers","3":"NA"},{"1":"Severn2a 2002","2":"ers","3":"NA"},{"1":"Severn3 2003","2":"ers","3":"NA"},{"1":"South Tyne (Possible)","2":"NA","3":"sel"},{"1":"South Tyne POSSIBLE","2":"ers","3":"NA"},{"1":"Tamar 2002","2":"ers","3":"sel"},{"1":"Taw 1999","2":"ers","3":"sel"},{"1":"Tees 1 2008","2":"ers","3":"sel"},{"1":"Tees 2 2008","2":"ers","3":"sel"},{"1":"Teign & Bovey 1998 T","2":"ers","3":"NA"},{"1":"Teign & Bovey B 1998","2":"ers","3":"sel"},{"1":"Teign & Bovey confluence","2":"NA","3":"sel"},{"1":"Teign 1999","2":"ers","3":"sel"},{"1":"Teme 1998 (Possible)","2":"NA","3":"sel"},{"1":"Teme 1998 POSSIBLE","2":"ers","3":"NA"},{"1":"Thrushel 1999","2":"ers","3":"sel"},{"1":"Till 2005","2":"ers","3":"sel"},{"1":"Till 2013","2":"ers","3":"sel"},{"1":"Torridge 1999","2":"ers","3":"sel"},{"1":"Towy 1 2003","2":"NA","3":"sel"},{"1":"Towy 1998","2":"NA","3":"sel"},{"1":"Towy 2 2003","2":"ers","3":"sel"},{"1":"Towy 3 2003","2":"NA","3":"sel"},{"1":"Towy 4 2002","2":"ers","3":"sel"},{"1":"Towy 5 2002","2":"ers","3":"sel"},{"1":"Towy 6 2003","2":"NA","3":"sel"},{"1":"Towy1 2003","2":"ers","3":"NA"},{"1":"Towy1998","2":"ers","3":"NA"},{"1":"Towy3 2003","2":"ers","3":"NA"},{"1":"Towy6 2002","2":"ers","3":"NA"},{"1":"Tywi 1998","2":"NA","3":"sel"},{"1":"Tywi1998","2":"ers","3":"NA"},{"1":"Usk 1998","2":"NA","3":"sel"},{"1":"Usk1998","2":"ers","3":"NA"},{"1":"Waer POSSIBLE","2":"ers","3":"NA"},{"1":"Wear (Possible)","2":"NA","3":"sel"},{"1":"Wear 2005","2":"NA","3":"sel"},{"1":"Wear2005","2":"ers","3":"NA"},{"1":"Woolder Water 2013","2":"NA","3":"sel"},{"1":"Wooler Water 2013","2":"ers","3":"NA"},{"1":"Wye 1 2014","2":"NA","3":"sel"},{"1":"Wye 1998","2":"NA","3":"sel"},{"1":"Wye 2014","2":"ers","3":"NA"},{"1":"Wye 2014 3","2":"ers","3":"NA"},{"1":"Wye 2014 4","2":"ers","3":"NA"},{"1":"wye 2014 5","2":"NA","3":"sel"},{"1":"Wye 2014 5","2":"ers","3":"NA"},{"1":"Wye 2014 6","2":"ers","3":"NA"},{"1":"Wye 2014 7","2":"ers","3":"NA"},{"1":"Wye 3 2014","2":"NA","3":"sel"},{"1":"Wye 4 2014","2":"NA","3":"sel"},{"1":"Wye 6 2014","2":"NA","3":"sel"},{"1":"Wye 7 2014","2":"NA","3":"sel"},{"1":"Wye1998","2":"ers","3":"NA"},{"1":"Yarty 1999","2":"ers","3":"sel"},{"1":"Yealm 2003","2":"ers","3":"sel"},{"1":"NA","2":"ers","3":"NA"}],"options":{"columns":{"min":{},"max":[10],"total":[3]},"rows":{"min":[10],"max":[10],"total":[116]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI01hdGNoIGV2ZW50IG5hbWVzIHRvIHRob3NlIGluICdzZWxlY3RlZCB2YWx1ZXMnXG5lcnNfZGF0YTIgPC0gZXJzX2RhdGEyICU+JSBcbiAgbXV0YXRlKGV2ZW50ID0gcmVjb2RlX2ZhY3RvcihldmVudCxcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcIkNhbWVsIHRyaWJ1dGFyeVwiID0gXCJDYW1lbCBUcmlidXRhcnlcIixcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcIkNyZWVkeSBZZW8gMTk5OVwiID0gXCJDcmVlZHkgeWVvIDE5OTlcIixcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcIkVkZW4gUmVhZCBQT1NTSUJMRSAyMDAwXCIgPSBcIkVkZW4gUmVhZCAoUG9zc2libGUpIDIwMDBcIixcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcIkVnZ2xlc3RvbiBCdXJuIFBPU1NJQkxFXCIgPSBcIkVnZ2xlc3RvbiBCdXJuIChwb3NzaWJsZSlcIixcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcIkdhdW50bGVzcyBQT1NTSUJMRVwiID0gXCJHYXVudGxlc3MgKFBvc3NpYmxlKVwiLFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwiU2V2ZXJuMSAyMDAyXCIgPSBcIlNldmVybiAxIDIwMDJcIixcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcIlNldmVybjFhIDIwMDJcIiA9IFwiU2V2ZXJuIDFhIDIwMDJcIixcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcIlNldmVybjIgMjAwMlwiID0gXCJTZXZlcm4gMiAyMDAyXCIsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXCJTZXZlcm4yIDIwMDNcIiA9IFwiU2V2ZXJuIDIwMDNcIiwgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXCJTZXZlcm4yYSAyMDAyXCIgPSBcIlNldmVybiAyYSAyMDAyXCIsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXCJTZXZlcm4zIDIwMDNcIiA9IFwiU2V2ZXJuIDMgMjAwMlwiLFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwiU291dGggVHluZSBQT1NTSUJMRVwiID0gXCJTb3V0aCBUeW5lIChQb3NzaWJsZSlcIixcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcIlRlbWUgMTk5OCBQT1NTSUJMRVwiID0gXCJUZW1lIDE5OTggKFBvc3NpYmxlKVwiLFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwiVG93eTEgMjAwM1wiID0gXCJUb3d5IDEgMjAwM1wiLFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwiVG93eTMgMjAwM1wiID0gXCJUb3d5IDMgMjAwM1wiLFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwiVG93eTYgMjAwMlwiID0gXCJUb3d5IDYgMjAwM1wiLFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwiVG93eTE5OThcIiA9IFwiVG93eSAxOTk4XCIsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXCJUeXdpMTk5OFwiID0gXCJUeXdpIDE5OThcIixcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcIlVzazE5OThcIiA9IFwiVXNrIDE5OThcIiwgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXCJXYWVyIFBPU1NJQkxFXCIgPSBcIldlYXIgKFBvc3NpYmxlKVwiLFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwiV2VhcjIwMDVcIiA9IFwiV2VhciAyMDA1XCIsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXCJXb2xsZGVyIFdhdGVyIDIwMTNcIiA9IFwiV29vbGRlciBXYXRlciAyMDEzXCIsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXCJXeWUgMjAxNFwiID0gXCJXeWUgMSAyMDE0XCIsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXCJXeWUgMjAxNCAzXCIgPSBcIld5ZSAzIDIwMTRcIixcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcIld5ZSAyMDE0IDRcIiA9IFwiV3llIDQgMjAxNFwiLFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwiV3llIDIwMTQgNVwiID0gXCJ3eWUgMjAxNCA1XCIsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXCJXeWUgMjAxNCA2XCIgPSBcIld5ZSA2IDIwMTRcIixcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcIld5ZSAyMDE0IDdcIiA9IFwiV3llIDcgMjAxNFwiLFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwiV3llMTk5OFwiID0gXCJXeWUgMTk5OFwiXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgKSlcblxuXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI01hdGNoIGV2ZW50IG5hbWVzIHRvIHRob3NlIGluICdzZWxlY3RlZCB2YWx1ZXMnXG5lcnNfZGF0YTIgPC0gZXJzX2RhdGEyICU+JSBcbiAgbXV0YXRlKGV2ZW50ID0gcmVjb2RlX2ZhY3RvcihldmVudCxcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcIkNhbWVsIHRyaWJ1dGFyeVwiID0gXCJDYW1lbCBUcmlidXRhcnlcIixcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcIkNyZWVkeSBZZW8gMTk5OVwiID0gXCJDcmVlZHkgeWVvIDE5OTlcIixcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcIkVkZW4gUmVhZCBQT1NTSUJMRSAyMDAwXCIgPSBcIkVkZW4gUmVhZCAoUG9zc2libGUpIDIwMDBcIixcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcIkVnZ2xlc3RvbiBCdXJuIFBPU1NJQkxFXCIgPSBcIkVnZ2xlc3RvbiBCdXJuIChwb3NzaWJsZSlcIixcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcIkdhdW50bGVzcyBQT1NTSUJMRVwiID0gXCJHYXVudGxlc3MgKFBvc3NpYmxlKVwiLFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwiU2V2ZXJuMSAyMDAyXCIgPSBcIlNldmVybiAxIDIwMDJcIixcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcIlNldmVybjFhIDIwMDJcIiA9IFwiU2V2ZXJuIDFhIDIwMDJcIixcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcIlNldmVybjIgMjAwMlwiID0gXCJTZXZlcm4gMiAyMDAyXCIsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXCJTZXZlcm4yIDIwMDNcIiA9IFwiU2V2ZXJuIDIwMDNcIiwgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXCJTZXZlcm4yYSAyMDAyXCIgPSBcIlNldmVybiAyYSAyMDAyXCIsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXCJTZXZlcm4zIDIwMDNcIiA9IFwiU2V2ZXJuIDMgMjAwMlwiLFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwiU291dGggVHluZSBQT1NTSUJMRVwiID0gXCJTb3V0aCBUeW5lIChQb3NzaWJsZSlcIixcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcIlRlbWUgMTk5OCBQT1NTSUJMRVwiID0gXCJUZW1lIDE5OTggKFBvc3NpYmxlKVwiLFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwiVG93eTEgMjAwM1wiID0gXCJUb3d5IDEgMjAwM1wiLFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwiVG93eTMgMjAwM1wiID0gXCJUb3d5IDMgMjAwM1wiLFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwiVG93eTYgMjAwMlwiID0gXCJUb3d5IDYgMjAwM1wiLFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwiVG93eTE5OThcIiA9IFwiVG93eSAxOTk4XCIsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXCJUeXdpMTk5OFwiID0gXCJUeXdpIDE5OThcIixcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcIlVzazE5OThcIiA9IFwiVXNrIDE5OThcIiwgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXCJXYWVyIFBPU1NJQkxFXCIgPSBcIldlYXIgKFBvc3NpYmxlKVwiLFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwiV2VhcjIwMDVcIiA9IFwiV2VhciAyMDA1XCIsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXCJXb2xsZGVyIFdhdGVyIDIwMTNcIiA9IFwiV29vbGRlciBXYXRlciAyMDEzXCIsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXCJXeWUgMjAxNFwiID0gXCJXeWUgMSAyMDE0XCIsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXCJXeWUgMjAxNCAzXCIgPSBcIld5ZSAzIDIwMTRcIixcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcIld5ZSAyMDE0IDRcIiA9IFwiV3llIDQgMjAxNFwiLFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwiV3llIDIwMTQgNVwiID0gXCJ3eWUgMjAxNCA1XCIsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXCJXeWUgMjAxNCA2XCIgPSBcIld5ZSA2IDIwMTRcIixcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcIld5ZSAyMDE0IDdcIiA9IFwiV3llIDcgMjAxNFwiLFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwiV3llMTk5OFwiID0gXCJXeWUgMTk5OFwiXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgKSlcbmBgYCJ9 -->
 <pre class="r"><code>#Match event names to those in 'selected values'
 ers_data2 &lt;- ers_data2 %&gt;% 
   mutate(event = recode_factor(event,
@@ -528,67 +1624,38 @@ ers_data2 &lt;- ers_data2 %&gt;%
                                &quot;Wye 2014 6&quot; = &quot;Wye 6 2014&quot;,
                                &quot;Wye 2014 7&quot; = &quot;Wye 7 2014&quot;,
                                &quot;Wye1998&quot; = &quot;Wye 1998&quot;
-                               ))
-</code></pre>
+                               ))</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZXJzX2V2ZW50cyA8LSBkYXRhLmZyYW1lKHNvdXJjZSA9IFwiZXJzXCIsIGV2ZW50ID0gdW5pcXVlKGVyc19kYXRhMiRldmVudCkpXG5zZWxfZXZlbnRzIDwtIGRhdGEuZnJhbWUoc291cmNlID0gXCJzZWxcIiwgZXZlbnQgPSB1bmlxdWUoc2VsX3ZhbHVlcyRldmVudCkpXG5cbmV2ZW50cyA8LSByYmluZChlcnNfZXZlbnRzLCBzZWxfZXZlbnRzKVxuXG5ldmVudHMgJT4lIHNwcmVhZChrZXkgPSBzb3VyY2UsIHZhbHVlID0gc291cmNlKSAlPiUgXG4gIG11dGF0ZShldmVudCA9IGFzLmNoYXJhY3RlcihldmVudCkpICU+JSBcbiAgYXJyYW5nZShldmVudClcbmBgYCJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZXJzX2V2ZW50cyA8LSBkYXRhLmZyYW1lKHNvdXJjZSA9IFwiZXJzXCIsIGV2ZW50ID0gdW5pcXVlKGVyc19kYXRhMiRldmVudCkpXG5zZWxfZXZlbnRzIDwtIGRhdGEuZnJhbWUoc291cmNlID0gXCJzZWxcIiwgZXZlbnQgPSB1bmlxdWUoc2VsX3ZhbHVlcyRldmVudCkpXG5ldmVudHMgPC0gcmJpbmQoZXJzX2V2ZW50cywgc2VsX2V2ZW50cylcbmV2ZW50cyAlPiUgc3ByZWFkKGtleSA9IHNvdXJjZSwgdmFsdWUgPSBzb3VyY2UpICU+JSBcbiAgbXV0YXRlKGV2ZW50ID0gYXMuY2hhcmFjdGVyKGV2ZW50KSkgJT4lIFxuICBhcnJhbmdlKGV2ZW50KVxuYGBgIn0= -->
 <pre class="r"><code>ers_events &lt;- data.frame(source = &quot;ers&quot;, event = unique(ers_data2$event))
 sel_events &lt;- data.frame(source = &quot;sel&quot;, event = unique(sel_values$event))
-
 events &lt;- rbind(ers_events, sel_events)
-
 events %&gt;% spread(key = source, value = source) %&gt;% 
   mutate(event = as.character(event)) %&gt;% 
   arrange(event)</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibmNvbCI6MywibnJvdyI6ODh9LCJyZGYiOiJINHNJQUFBQUFBQUFCcjJXelUvYk1CVEFRMXMyR3RiQlByWHRsTk8wSFlab1dnWTlVaWpiSk5CUXlWUjJOSTNiUkxoMjVTUUx1ZTB2WjN1SjQyQW5RV05NV3FXMDd1OTkrRDIvWnp2anczUGJQRGNOdzJnWXpWYkxhRFJoMkdyQTE0clJNdHJwNzVWaE5KL0JJSlZzd25PZUM4enVZTEJyN1FjZVcrWmtjNThRVEsxM3B5d0kvQXVDMytmOG1lRGR3ZDZ1ZGZyMTdPekw4SGlVaTliM3laTHhFR1NEUVk0ZURURmErSUZuMmR2ZG5wenJBQzB3VWJWeVltOXZTNTBOUVJ6dVgwUWg0b2wwZDRBNFRxeXVyc294ZGhNcndVejErZklRVVd5TlVCQmFiR1lkTURvbk9HUlVrMDV3dmJSOXlINWdOZVRYSXhkeUhtUGtLZ3VTQnJGZEtNekJRd0F1ckdIRVlkbVdwV1Zyai9nQ3EvR3RqYTYwLzgwalJLUUlocWx6VzJaOXhPSnkxam16VmZiOEU0cG9DR0VFMWJJOS9ZeDR6SmhibFd4S1NibWF4OUY4bmk1QzMrcFdrVjFGdlNycTU2aHpuRkFQY3oyRjlSd3FtVzZjb05oMTBkUXJhWjR3U2xtc1ZrUkJPN0tMdm9aaE9zZk5tcTVuSk5GY25aSmtvWHR2WjBpSjR2SFl3NzdMaUZEcmw2bGRTM3NxZlRYMmYwQW9SNXhCMFU4WVQzc3JEWFczVGo2T0FxOGtmNlBLSjFDY1lNYTRxMnBzQ0EwSHRvbmFoNTB6REppS3lJdDhKRVFxbGFxMkN0Y2x2RmtlYVczWFd2ZFUrQ0tIeHdSUjE2ZG9vUmJqeFJtTFFzOXlFdGg0bFNZMElSR2t0Y0thZzJLdGxnN0dnY2hyVDBPMmlwNDcySjlUNjYwMWhCMmNwUFo3bGxNdkcyWlNXUkJkTm1WMFJpSk1wN2lJTDVNcjhZQTNzYUgzcXRsMEhJOURVZlZEcnUzNEpOdldPeVZROUhUSFlaejc3aHpyZWJPNHRQZmJBdDFFTDNTMHMwQ2dYaFgxdFhKbmFLZUtQdXJ6SmJHdnpyZjJMYmhVLzI5TU1CU3ZzZ3p0RENzWlA0VldKaTYwN1FTRjJjWXZVbitTU3VvRTVpVEJXZlpkdWJmV01uSXp1UmtuV0p3Mk82cE5UN1hKU0w5Q1BsYklya2ErSXg0bTJrWDFIU095RUdzRCtmMkNENXpjbmV3aWhkdjFwNUY5VnU3NzFObmY1bFBsWloxL2plTnZZL3cvZnJRM21RY0VqaG9TR09JMXBpRXZVY3dET1F3d0tkbXNUZ2tLcEVuaGFJYW1JZU13dWxaS21abzE4aEFiOTMzcTdHL3pxZkt5enIvR2NkY1kvb2RQb1plV3BRRmI1OC9GYTBxdDJucnA1WVVMQjh2eU5pV0VOcUhobmRxanpWbThKWDEwbEtUT2J3bkZkRkdJdG1ZY1RHckNlY2lXb2M4b09HdWtiOXlySmVNVlhnS2JFVTBuZHo5TXZZaGVmckQ3NlF5RzZINGpqMmhGUkZPTW0yTE9sb3hzVlM0U3BuT2Z5c3RybGFBTExGOHVIME9XV1pKYlMrNFhLMk1DRGJaQ0ZoWXZvZWFVRVVteTVJenIzeTVKd3dsZ0RBQUEifQ== -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["event"],"name":[1],"type":["chr"],"align":["left"]},{"label":["ers"],"name":[2],"type":["fctr"],"align":["left"]},{"label":["sel"],"name":[3],"type":["fctr"],"align":["left"]}],"data":[{"1":"1997 Ashop","2":"ers","3":"sel"},{"1":"Allen (Possible)","2":"NA","3":"sel"},{"1":"Allen 1987 POSSIBLE","2":"ers","3":"NA"},{"1":"Alport 1999","2":"ers","3":"sel"},{"1":"Beamish 2013","2":"ers","3":"sel"},{"1":"Camel 1999","2":"ers","3":"sel"},{"1":"Camel 2003","2":"ers","3":"sel"},{"1":"Camel Tributary","2":"ers","3":"sel"},{"1":"Carey 1 2003","2":"ers","3":"sel"},{"1":"Creedy yeo 1999","2":"ers","3":"sel"},{"1":"Dane East of Congleton","2":"ers","3":"sel"},{"1":"Dane West of Congleton","2":"ers","3":"sel"},{"1":"Dove 2013","2":"ers","3":"sel"},{"1":"Eden Read (Possible) 2000","2":"ers","3":"sel"},{"1":"Eggleston Burn (possible)","2":"ers","3":"sel"},{"1":"Erme 1999","2":"ers","3":"sel"},{"1":"Exe 1999","2":"ers","3":"sel"},{"1":"Fal","2":"NA","3":"sel"},{"1":"Fal 2002","2":"ers","3":"NA"},{"1":"Fowey 1 2003","2":"ers","3":"sel"},{"1":"Fowey 2 2003","2":"ers","3":"sel"},{"1":"Gauntless (Possible)","2":"ers","3":"sel"},{"1":"Harwood (Possible)","2":"NA","3":"sel"},{"1":"Harwood POSSIBLE","2":"ers","3":"NA"},{"1":"Lugg 2014 1","2":"ers","3":"sel"},{"1":"Lugg 2014 2","2":"ers","3":"sel"},{"1":"Lugg 2014 3","2":"ers","3":"sel"},{"1":"Lugg 2014 4","2":"ers","3":"sel"},{"1":"Lynher 1 2003","2":"NA","3":"sel"},{"1":"Lynher 2002","2":"ers","3":"NA"},{"1":"Mawddach 1 2003","2":"ers","3":"sel"},{"1":"Monnow 2013","2":"NA","3":"sel"},{"1":"Monnow 2015","2":"ers","3":"NA"},{"1":"Otter 1999","2":"ers","3":"sel"},{"1":"Ottery 2003","2":"ers","3":"sel"},{"1":"Plym 1 2003","2":"NA","3":"sel"},{"1":"Plym 2002","2":"ers","3":"NA"},{"1":"Rheidol 1 2004","2":"ers","3":"sel"},{"1":"Rheidol 2 2004","2":"ers","3":"sel"},{"1":"Rheidol 3 2004","2":"ers","3":"sel"},{"1":"River Frome Moreton 2017","2":"ers","3":"sel"},{"1":"River Frome Rushton 2017","2":"ers","3":"sel"},{"1":"River Frome Woodsford 2017","2":"ers","3":"sel"},{"1":"River Tame 2000","2":"ers","3":"sel"},{"1":"Severn 1 2002","2":"ers","3":"sel"},{"1":"Severn 1a 2002","2":"ers","3":"sel"},{"1":"Severn 2 2002","2":"ers","3":"sel"},{"1":"Severn 2003","2":"ers","3":"sel"},{"1":"Severn 2a 2002","2":"ers","3":"sel"},{"1":"Severn 3 2002","2":"ers","3":"sel"},{"1":"Severn Llandinam 1999","2":"ers","3":"sel"},{"1":"South Tyne (Possible)","2":"ers","3":"sel"},{"1":"Tamar 2002","2":"ers","3":"sel"},{"1":"Taw 1999","2":"ers","3":"sel"},{"1":"Tees 1 2008","2":"ers","3":"sel"},{"1":"Tees 2 2008","2":"ers","3":"sel"},{"1":"Teign & Bovey 1998 T","2":"ers","3":"NA"},{"1":"Teign & Bovey B 1998","2":"ers","3":"sel"},{"1":"Teign & Bovey confluence","2":"NA","3":"sel"},{"1":"Teign 1999","2":"ers","3":"sel"},{"1":"Teme 1998 (Possible)","2":"ers","3":"sel"},{"1":"Thrushel 1999","2":"ers","3":"sel"},{"1":"Till 2005","2":"ers","3":"sel"},{"1":"Till 2013","2":"ers","3":"sel"},{"1":"Torridge 1999","2":"ers","3":"sel"},{"1":"Towy 1 2003","2":"ers","3":"sel"},{"1":"Towy 1998","2":"ers","3":"sel"},{"1":"Towy 2 2003","2":"ers","3":"sel"},{"1":"Towy 3 2003","2":"ers","3":"sel"},{"1":"Towy 4 2002","2":"ers","3":"sel"},{"1":"Towy 5 2002","2":"ers","3":"sel"},{"1":"Towy 6 2003","2":"ers","3":"sel"},{"1":"Tywi 1998","2":"ers","3":"sel"},{"1":"Usk 1998","2":"ers","3":"sel"},{"1":"Wear (Possible)","2":"ers","3":"sel"},{"1":"Wear 2005","2":"ers","3":"sel"},{"1":"Woolder Water 2013","2":"NA","3":"sel"},{"1":"Wooler Water 2013","2":"ers","3":"NA"},{"1":"Wye 1 2014","2":"ers","3":"sel"},{"1":"Wye 1998","2":"ers","3":"sel"},{"1":"wye 2014 5","2":"ers","3":"sel"},{"1":"Wye 3 2014","2":"ers","3":"sel"},{"1":"Wye 4 2014","2":"ers","3":"sel"},{"1":"Wye 6 2014","2":"ers","3":"sel"},{"1":"Wye 7 2014","2":"ers","3":"sel"},{"1":"Yarty 1999","2":"ers","3":"sel"},{"1":"Yealm 2003","2":"ers","3":"sel"},{"1":"NA","2":"ers","3":"NA"}],"options":{"columns":{"min":{},"max":[10],"total":[3]},"rows":{"min":[10],"max":[10],"total":[88]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2NyZWF0ZSBldmVudCBjb2RlcyBsb29rdXBcbmV2ZW50c19jb2RlIDwtIGV2ZW50cyAlPiUgc3ByZWFkKGtleSA9IHNvdXJjZSwgdmFsdWUgPSBzb3VyY2UpICU+JSBcbiAgbXV0YXRlKGV2ZW50ID0gYXMuY2hhcmFjdGVyKGV2ZW50KSkgJT4lIFxuICBhcnJhbmdlKGV2ZW50KVxuXG5cbmV2ZW50c19jb2RlJGV2ZW50X2NvZGUgPC0gYyhcbiAgXCJBc2hvcF8xOTk3XCIsIFwiQWxsZW5fcG9zc1wiLCBcIkFsbGVuXzE5ODdfcG9zc1wiLCBcbiAgXCJBbHBvcnRfMTk5OVwiLCBcIkJlYW1pc2hfMjAxM1wiLCBcIkNhbWVsXzE5OTlcIixcbiAgIFwiQ2FtZWxfMjAwM1wiLCBcIkNhbWVsVHJpYlwiLCBcIkNhcmV5XzIwMDNfMVwiLCBcbiAgXCJDcmVlZHlZZW9fMTk5OVwiLCBcIkRhbmVFYXN0XCIsIFwiRGFuZVdlc3RcIiwgXG4gIFwiRG92ZV8yMDEzXCIsIFwiRWRlblJlYWRfMjAwMF9wb3NzXCIsIFwiRWdnbGVzdG9uX3Bvc3NcIiwgXG4gIFwiRXJtZV8xOTk5XCIsIFwiRXhlXzE5OTlcIiwgXCJGYWxcIiwgXG4gIFwiRmFsXzIwMDJcIiwgXCJGb3dleV8yMDAzXzFcIiwgXCJGb3dleV8yMDAzXzJcIiwgXG4gIFwiR2F1bnRsZXNzX3Bvc3NcIiwgXCJIYXJ3b29kX3Bvc3NfMVwiLCBcIkhhcndvb2RfcG9zc18yXCIsIFxuICBcIkx1Z2dfMjAxNF8xXCIsICBcIkx1Z2dfMjAxNF8yXCIsIFwiTHVnZ18yMDE0XzNcIiwgXG4gIFwiTHVnZ18yMDE0XzRcIiwgXCJMeW5oZXJfMjAwM18xXCIsIFwiTHluaGVyXzIwMDJcIiwgXG4gIFwiTWF3ZGRhY2hfMjAwM1wiLCBcIk1vbm5vd18yMDEzXCIsIFwiTW9ubm93XzIwMTVcIiwgXG4gIFwiT3R0ZXJfMTk5OVwiLCBcIk90dGVyeV8yMDAzXCIsIFwiUGx5bV8yMDAzXCIsXG4gIFwiUGx5bV8yMDAyXCIsIFwiUmhlaWRvbF8yMDA0XzFcIiwgXCJSaGVpZG9sXzIwMDRfMlwiLCBcbiAgXCJSaGVpZG9sXzIwMDRfM1wiLCBcIkZyb21lTW9yZXRvbl8yMDE3XCIsIFwiRnJvbWVSdXNodG9uXzIwMTdcIiwgXG4gIFwiRnJvbWVXb29kc2ZvcmRfMjAxN1wiLCBcIlRhbWVfMjAwMFwiLCBcIlNldmVybl8yMDAyXzFcIiwgXG4gIFwiU2V2ZXJuXzIwMDJfMWFcIiwgXCJTZXZlcm5fMjAwMl8yXCIsIFwiU2V2ZXJuXzIwMDNcIiwgXG4gIFwiU2V2ZXJuXzIwMDJfMmFcIiwgXCJTZXZlcm5fMjAwMl8zXCIsIFwiU2V2ZXJuTGxhbmRpbmFtXzE5OTlcIixcbiAgXCJTb3V0aFR5bmVfcG9zc1wiLCBcIlRhbWFyXzIwMDJcIiwgXCJUYXdfMTk5OVwiLCBcbiAgXCJUZWVzXzIwMDhfMVwiLCBcIlRlZXNfMjAwOF8yXCIsIFwiVGVpZ25Cb3ZleV8xOTk4X1RcIixcbiAgXCJUZWlnbkJvdmV5XzE5OThfQlwiLCBcIlRlaWduQm92ZXlDb25mbHVlbmNlXCIsIFwiVGVpZ25fMTk5OVwiLCBcbiAgXCJUZW1lXzE5OThfcG9zc1wiLCBcIlRocnVzaGVsXzE5OTlcIiwgXCJUaWxsXzIwMDVcIiwgXG4gIFwiVGlsbF8yMDEzXCIsIFwiVG9ycmlkZ2VfMTk5OVwiLCBcIlRvd3lfMjAwM18xXCIsIFxuICBcIlRvd3lfMTk5OFwiLCBcIlRvd3lfMjAwM18yXCIsICBcIlRvd3lfMjAwM18zXCIsIFxuICBcIlRvd3lfMjAwMl80XCIsIFwiVG93eV8yMDAyXzVcIiwgXCJUb3d5XzIwMDNfNlwiLCBcbiAgXCJUeXdpXzE5OThcIiwgXCJVc2tfMTk5OFwiLCBcIldlYXJfcG9zc1wiLCBcbiAgXCJXZWFyXzIwMDVcIiwgXCJXb29sZGVyXzIwMTNcIiwgXCJXb29sZXJfMjAxM1wiLCBcbiAgXCJXeWVfMjAxNF8xXCIsIFwiV3llXzE5OThcIiwgXCJXeWVfMjAxNF81XCIsXG4gIFwiV3llXzIwMTRfM1wiLCBcIld5ZV8yMDE0XzRcIiwgXCJXeWVfMjAxNF82XCIsIFxuICBcIld5ZV8yMDE0XzdcIiwgXCJZYXJ0eV8xOTk5XCIsIFwiWWVhbG1fMjAwM1wiLCBcInVua25vd25cIlxuKVxuZXZlbnRzX2NvZGVcbmBgYCJ9 -->
-<pre class="r"><code>#create event codes lookup
-events_code &lt;- events %&gt;% spread(key = source, value = source) %&gt;% 
-  mutate(event = as.character(event)) %&gt;% 
-  arrange(event)
-
-
-events_code$event_code &lt;- c(
-  &quot;Ashop_1997&quot;, &quot;Allen_poss&quot;, &quot;Allen_1987_poss&quot;, 
-  &quot;Alport_1999&quot;, &quot;Beamish_2013&quot;, &quot;Camel_1999&quot;,
-   &quot;Camel_2003&quot;, &quot;CamelTrib&quot;, &quot;Carey_2003_1&quot;, 
-  &quot;CreedyYeo_1999&quot;, &quot;DaneEast&quot;, &quot;DaneWest&quot;, 
-  &quot;Dove_2013&quot;, &quot;EdenRead_2000_poss&quot;, &quot;Eggleston_poss&quot;, 
-  &quot;Erme_1999&quot;, &quot;Exe_1999&quot;, &quot;Fal&quot;, 
-  &quot;Fal_2002&quot;, &quot;Fowey_2003_1&quot;, &quot;Fowey_2003_2&quot;, 
-  &quot;Gauntless_poss&quot;, &quot;Harwood_poss_1&quot;, &quot;Harwood_poss_2&quot;, 
-  &quot;Lugg_2014_1&quot;,  &quot;Lugg_2014_2&quot;, &quot;Lugg_2014_3&quot;, 
-  &quot;Lugg_2014_4&quot;, &quot;Lynher_2003_1&quot;, &quot;Lynher_2002&quot;, 
-  &quot;Mawddach_2003&quot;, &quot;Monnow_2013&quot;, &quot;Monnow_2015&quot;, 
-  &quot;Otter_1999&quot;, &quot;Ottery_2003&quot;, &quot;Plym_2003&quot;,
-  &quot;Plym_2002&quot;, &quot;Rheidol_2004_1&quot;, &quot;Rheidol_2004_2&quot;, 
-  &quot;Rheidol_2004_3&quot;, &quot;FromeMoreton_2017&quot;, &quot;FromeRushton_2017&quot;, 
-  &quot;FromeWoodsford_2017&quot;, &quot;Tame_2000&quot;, &quot;Severn_2002_1&quot;, 
-  &quot;Severn_2002_1a&quot;, &quot;Severn_2002_2&quot;, &quot;Severn_2003&quot;, 
-  &quot;Severn_2002_2a&quot;, &quot;Severn_2002_3&quot;, &quot;SevernLlandinam_1999&quot;,
-  &quot;SouthTyne_poss&quot;, &quot;Tamar_2002&quot;, &quot;Taw_1999&quot;, 
-  &quot;Tees_2008_1&quot;, &quot;Tees_2008_2&quot;, &quot;TeignBovey_1998_T&quot;,
-  &quot;TeignBovey_1998_B&quot;, &quot;TeignBoveyConfluence&quot;, &quot;Teign_1999&quot;, 
-  &quot;Teme_1998_poss&quot;, &quot;Thrushel_1999&quot;, &quot;Till_2005&quot;, 
-  &quot;Till_2013&quot;, &quot;Torridge_1999&quot;, &quot;Towy_2003_1&quot;, 
-  &quot;Towy_1998&quot;, &quot;Towy_2003_2&quot;,  &quot;Towy_2003_3&quot;, 
-  &quot;Towy_2002_4&quot;, &quot;Towy_2002_5&quot;, &quot;Towy_2003_6&quot;, 
-  &quot;Tywi_1998&quot;, &quot;Usk_1998&quot;, &quot;Wear_poss&quot;, 
-  &quot;Wear_2005&quot;, &quot;Woolder_2013&quot;, &quot;Wooler_2013&quot;, 
-  &quot;Wye_2014_1&quot;, &quot;Wye_1998&quot;, &quot;Wye_2014_5&quot;,
-  &quot;Wye_2014_3&quot;, &quot;Wye_2014_4&quot;, &quot;Wye_2014_6&quot;, 
-  &quot;Wye_2014_7&quot;, &quot;Yarty_1999&quot;, &quot;Yealm_2003&quot;, &quot;unknown&quot;
-)
-events_code</code></pre>
-<!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibmNvbCI6MywibnJvdyI6ODh9LCJyZGYiOiJINHNJQUFBQUFBQUFCcjJXelUvYk1CVEFRMXMyR3RiQlByWHRsTk8wSFlab1dnWTlVaWpiSk5CUXlWUjJOSTNiUkxoMjVTUUx1ZTB2WjN1SjQyQW5RV05NV3FXMDd1OTkrRDIvWnp2anczUGJQRGNOdzJnWXpWYkxhRFJoMkdyQTE0clJNdHJwNzVWaE5KL0JJSlZzd25PZUM4enVZTEJyN1FjZVcrWmtjNThRVEsxM3B5d0kvQXVDMytmOG1lRGR3ZDZ1ZGZyMTdPekw4SGlVaTliM3laTHhFR1NEUVk0ZURURmErSUZuMmR2ZG5wenJBQzB3VWJWeVltOXZTNTBOUVJ6dVgwUWg0b2wwZDRBNFRxeXVyc294ZGhNcndVejErZklRVVd5TlVCQmFiR1lkTURvbk9HUlVrMDV3dmJSOXlINWdOZVRYSXhkeUhtUGtLZ3VTQnJGZEtNekJRd0F1ckdIRVlkbVdwV1Zyai9nQ3EvR3RqYTYwLzgwalJLUUlocWx6VzJaOXhPSnkxam16VmZiOEU0cG9DR0VFMWJJOS9ZeDR6SmhibFd4S1NibWF4OUY4bmk1QzMrcFdrVjFGdlNycTU2aHpuRkFQY3oyRjlSd3FtVzZjb05oMTBkUXJhWjR3U2xtc1ZrUkJPN0tMdm9aaE9zZk5tcTVuSk5GY25aSmtvWHR2WjBpSjR2SFl3NzdMaUZEcmw2bGRTM3NxZlRYMmYwQW9SNXhCMFU4WVQzc3JEWFczVGo2T0FxOGtmNlBLSjFDY1lNYTRxMnBzQ0EwSHRvbmFoNTB6REppS3lJdDhKRVFxbGFxMkN0Y2x2RmtlYVczWFd2ZFUrQ0tIeHdSUjE2ZG9vUmJqeFJtTFFzOXlFdGg0bFNZMElSR2t0Y0thZzJLdGxnN0dnY2hyVDBPMmlwNDcySjlUNjYwMWhCMmNwUFo3bGxNdkcyWlNXUkJkTm1WMFJpSk1wN2lJTDVNcjhZQTNzYUgzcXRsMEhJOURVZlZEcnUzNEpOdldPeVZROUhUSFlaejc3aHpyZWJPNHRQZmJBdDFFTDNTMHMwQ2dYaFgxdFhKbmFLZUtQdXJ6SmJHdnpyZjJMYmhVLzI5TU1CU3ZzZ3p0RENzWlA0VldKaTYwN1FTRjJjWXZVbitTU3VvRTVpVEJXZlpkdWJmV01uSXp1UmtuV0p3Mk82cE5UN1hKU0w5Q1BsYklya2ErSXg0bTJrWDFIU095RUdzRCtmMkNENXpjbmV3aWhkdjFwNUY5VnU3NzFObmY1bFBsWloxL2plTnZZL3cvZnJRM21RY0VqaG9TR09JMXBpRXZVY3dET1F3d0tkbXNUZ2tLcEVuaGFJYW1JZU13dWxaS21abzE4aEFiOTMzcTdHL3pxZkt5enIvR2NkY1kvb2RQb1plV3BRRmI1OC9GYTBxdDJucnA1WVVMQjh2eU5pV0VOcUhobmRxanpWbThKWDEwbEtUT2J3bkZkRkdJdG1ZY1RHckNlY2lXb2M4b09HdWtiOXlySmVNVlhnS2JFVTBuZHo5TXZZaGVmckFINlF5RzZINGpqMmhGUkZPTW0yTE9sb3hzVlM0U3BuT2Z5c3RybGFBTExGOHVIME9XV1pKYlMrNFhLMk1DRGJaQ0ZoWXZvZWFVRVVteTVJenIzMWY0aDVCZ0RBQUEifQ== -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["event"],"name":[1],"type":["chr"],"align":["left"]},{"label":["ers"],"name":[2],"type":["fctr"],"align":["left"]},{"label":["sel"],"name":[3],"type":["fctr"],"align":["left"]}],"data":[{"1":"1997 Ashop","2":"ers","3":"sel"},{"1":"Allen (Possible)","2":"NA","3":"sel"},{"1":"Allen 1987 POSSIBLE","2":"ers","3":"NA"},{"1":"Alport 1999","2":"ers","3":"sel"},{"1":"Beamish 2013","2":"ers","3":"sel"},{"1":"Camel 1999","2":"ers","3":"sel"},{"1":"Camel 2003","2":"ers","3":"sel"},{"1":"Camel Tributary","2":"ers","3":"sel"},{"1":"Carey 1 2003","2":"ers","3":"sel"},{"1":"Creedy yeo 1999","2":"ers","3":"sel"},{"1":"Dane East of Congleton","2":"ers","3":"sel"},{"1":"Dane West of Congleton","2":"ers","3":"sel"},{"1":"Dove 2013","2":"ers","3":"sel"},{"1":"Eden Read (Possible) 2000","2":"ers","3":"sel"},{"1":"Eggleston Burn (possible)","2":"ers","3":"sel"},{"1":"Erme 1999","2":"ers","3":"sel"},{"1":"Exe 1999","2":"ers","3":"sel"},{"1":"Fal","2":"NA","3":"sel"},{"1":"Fal 2002","2":"ers","3":"NA"},{"1":"Fowey 1 2003","2":"ers","3":"sel"},{"1":"Fowey 2 2003","2":"ers","3":"sel"},{"1":"Gauntless (Possible)","2":"ers","3":"sel"},{"1":"Harwood (Possible)","2":"NA","3":"sel"},{"1":"Harwood POSSIBLE","2":"ers","3":"NA"},{"1":"Lugg 2014 1","2":"ers","3":"sel"},{"1":"Lugg 2014 2","2":"ers","3":"sel"},{"1":"Lugg 2014 3","2":"ers","3":"sel"},{"1":"Lugg 2014 4","2":"ers","3":"sel"},{"1":"Lynher 1 2003","2":"NA","3":"sel"},{"1":"Lynher 2002","2":"ers","3":"NA"},{"1":"Mawddach 1 2003","2":"ers","3":"sel"},{"1":"Monnow 2013","2":"NA","3":"sel"},{"1":"Monnow 2015","2":"ers","3":"NA"},{"1":"Otter 1999","2":"ers","3":"sel"},{"1":"Ottery 2003","2":"ers","3":"sel"},{"1":"Plym 1 2003","2":"NA","3":"sel"},{"1":"Plym 2002","2":"ers","3":"NA"},{"1":"Rheidol 1 2004","2":"ers","3":"sel"},{"1":"Rheidol 2 2004","2":"ers","3":"sel"},{"1":"Rheidol 3 2004","2":"ers","3":"sel"},{"1":"River Frome Moreton 2017","2":"ers","3":"sel"},{"1":"River Frome Rushton 2017","2":"ers","3":"sel"},{"1":"River Frome Woodsford 2017","2":"ers","3":"sel"},{"1":"River Tame 2000","2":"ers","3":"sel"},{"1":"Severn 1 2002","2":"ers","3":"sel"},{"1":"Severn 1a 2002","2":"ers","3":"sel"},{"1":"Severn 2 2002","2":"ers","3":"sel"},{"1":"Severn 2003","2":"ers","3":"sel"},{"1":"Severn 2a 2002","2":"ers","3":"sel"},{"1":"Severn 3 2002","2":"ers","3":"sel"},{"1":"Severn Llandinam 1999","2":"ers","3":"sel"},{"1":"South Tyne (Possible)","2":"ers","3":"sel"},{"1":"Tamar 2002","2":"ers","3":"sel"},{"1":"Taw 1999","2":"ers","3":"sel"},{"1":"Tees 1 2008","2":"ers","3":"sel"},{"1":"Tees 2 2008","2":"ers","3":"sel"},{"1":"Teign & Bovey 1998 T","2":"ers","3":"NA"},{"1":"Teign & Bovey B 1998","2":"ers","3":"sel"},{"1":"Teign & Bovey confluence","2":"NA","3":"sel"},{"1":"Teign 1999","2":"ers","3":"sel"},{"1":"Teme 1998 (Possible)","2":"ers","3":"sel"},{"1":"Thrushel 1999","2":"ers","3":"sel"},{"1":"Till 2005","2":"ers","3":"sel"},{"1":"Till 2013","2":"ers","3":"sel"},{"1":"Torridge 1999","2":"ers","3":"sel"},{"1":"Towy 1 2003","2":"ers","3":"sel"},{"1":"Towy 1998","2":"ers","3":"sel"},{"1":"Towy 2 2003","2":"ers","3":"sel"},{"1":"Towy 3 2003","2":"ers","3":"sel"},{"1":"Towy 4 2002","2":"ers","3":"sel"},{"1":"Towy 5 2002","2":"ers","3":"sel"},{"1":"Towy 6 2003","2":"ers","3":"sel"},{"1":"Tywi 1998","2":"ers","3":"sel"},{"1":"Usk 1998","2":"ers","3":"sel"},{"1":"Wear (Possible)","2":"ers","3":"sel"},{"1":"Wear 2005","2":"ers","3":"sel"},{"1":"Woolder Water 2013","2":"NA","3":"sel"},{"1":"Wooler Water 2013","2":"ers","3":"NA"},{"1":"Wye 1 2014","2":"ers","3":"sel"},{"1":"Wye 1998","2":"ers","3":"sel"},{"1":"wye 2014 5","2":"ers","3":"sel"},{"1":"Wye 3 2014","2":"ers","3":"sel"},{"1":"Wye 4 2014","2":"ers","3":"sel"},{"1":"Wye 6 2014","2":"ers","3":"sel"},{"1":"Wye 7 2014","2":"ers","3":"sel"},{"1":"Yarty 1999","2":"ers","3":"sel"},{"1":"Yealm 2003","2":"ers","3":"sel"},{"1":"NA","2":"ers","3":"NA"}],"options":{"columns":{"min":{},"max":[10],"total":[3]},"rows":{"min":[10],"max":[10],"total":[88]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
@@ -600,6 +1667,15 @@ events %&gt;% spread(key = source, value = source) %&gt;%
 #  arrange(event) %&gt;% 
   select(event) %&gt;% duplicated()</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiIFsxXSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRVxuWzE1XSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRVxuWzI5XSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRVxuWzQzXSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRVxuWzU3XSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRVxuWzcxXSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRVxuWzg1XSBGQUxTRSBGQUxTRSBGQUxTRSBGQUxTRVxuIn0= -->
+<pre><code> [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[15] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[29] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[43] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[57] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[71] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[85] FALSE FALSE FALSE FALSE</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
@@ -613,11 +1689,14 @@ ers_data2 &lt;- left_join(
   mutate(event = as.factor(event)) %&gt;% 
   mutate(event_code = as.factor(event_code))</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiQ29sdW1uIGBldmVudGAgam9pbmluZyBmYWN0b3IgYW5kIGNoYXJhY3RlciB2ZWN0b3IsIGNvZXJjaW5nIGludG8gY2hhcmFjdGVyIHZlY3RvclxuIn0= -->
+<pre><code>Column `event` joining factor and character vector, coercing into character vector</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2JyaW5nIGNvZGVzIGJhY2sgaW50byBzZWxfZXZlbnRzXG5zZWxfdmFsdWVzIDwtIHNlbF92YWx1ZXMgJT4lIFxuICBsZWZ0X2pvaW4oXG4gIHNlbGVjdChldmVudHNfY29kZSwgZXZlbnQsIGV2ZW50X2NvZGUpLCBcbiAgYnkgPSBcImV2ZW50XCIpICU+JSBcbiAgbXV0YXRlKGV2ZW50ID0gYXMuZmFjdG9yKGV2ZW50KSkgJT4lIFxuICBtdXRhdGUoZXZlbnRfY29kZSA9IGFzLmZhY3RvcihldmVudF9jb2RlKSlcblxuc2VsX3ZhbHVlc1xuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2JyaW5nIGNvZGVzIGJhY2sgaW50byBzZWxfZXZlbnRzXG5zZWxfdmFsdWVzIDwtIHNlbF92YWx1ZXMgJT4lIFxuICBsZWZ0X2pvaW4oXG4gIHNlbGVjdChldmVudHNfY29kZSwgZXZlbnQsIGV2ZW50X2NvZGUpLCBcbiAgYnkgPSBcImV2ZW50XCIpICU+JSBcbiAgbXV0YXRlKGV2ZW50ID0gYXMuZmFjdG9yKGV2ZW50KSkgJT4lIFxuICBtdXRhdGUoZXZlbnRfY29kZSA9IGFzLmZhY3RvcihldmVudF9jb2RlKSlcbnNlbF92YWx1ZXNcbmBgYCJ9 -->
 <pre class="r"><code>#bring codes back into sel_events
 sel_values &lt;- sel_values %&gt;% 
   left_join(
@@ -625,9 +1704,15 @@ sel_values &lt;- sel_values %&gt;%
   by = &quot;event&quot;) %&gt;% 
   mutate(event = as.factor(event)) %&gt;% 
   mutate(event_code = as.factor(event_code))
-
 sel_values</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibmNvbCI6MTAsIm5yb3ciOjc5fSwicmRmIjoiSDRzSUFBQUFBQUFBQnExYWEzZmJ4aEdGS05HUlpFdTJaVHUxMHhmYnRHbmMxaXl3ZVBjWnk0OGtyVjNuT09weC9Ba0hGaUdKSnhUaGtwUVpmdXRmNmgrTU93Tndkd2FZcGVTazhUbGpEZTd1em10M3NVdnlQbi80bGRyK2F0dHhuSTZ6dnJIaGROWkIzZWpBZjJ2T2hyT0ZmNzl4blBVYm9FQ245UjM0K3d6a2x5Qi9CdGtIK1N2STMwRHVnL3dKNURPUTM0QThBUGtkeUNjZ1B3YjVDOGhka0YrQTlFQitEL0pia0hzZ0g0TmNyb0p3bkorQVJDQSt5TjlCTUloUGEvOU9BUElFSkFFSlFYWkJMb0g4SE9RUElBOUJNTlpySUFya2p5RFhRVzZCcENCM1FENEErUWprUFpCL2dEd0YyUVQ1R2NoUFFXNkR4TXM4UFpCL2dsd0ZlUVRpVm9WeEhLekRUUkNzMXZzZ2ZaREhJTDhDdVlJVkJQa2NwQXZ5YTVBZmdleUJmTmdxN3FWUjhhWVlUWmNSUDF1aTIxNmF4cjM3MDVQeTlSSzVkbjgwS3NhOWo3OG9wOVBocTFGeGQ0bGZ2ajk2WFU1bVBSaVFMcUVyKzBWK09weWU5SlRyK2RyZ2cveTBHUEZlUzBTNXJ1NXp0VVlPSnNOWFo3TjhzdERtSHVTVFl0SHptbDBuUlRGWTlCWkZ5VzIrL3pBZkY3MUgrWFRXSzQ5NkQ4cng4YWlZbGVORzY0dkMzcnIxc0h4VDhKRHZQQnBBd3MrTGZNQ3l4aUJjMCtFWUxFekJSRy8vYkFLMWVkMnF6ZGFqeVduQjQ5dDg5RTNqZWYxeFB0SlpQaTduN1N5WG1PTFl6VS96cy9FTTNFN2xYT3g5bGsvbVpUbXd6TktUcytOalRDN29lUkpTRXZJbEZDeWhuU2VMOFVreGFVM0kwM3crR09TSEowMzQ4dE55UEM3bmpaWHdiRGJEMFZTRnl4V3lhSXo3WXJRNGJacmFmWDVTREFmbHFFYUROcXFzcU0vUjI4K0hiOER6NDBrSnMvSzBuT0RrWTJTeHJmMzUyZlNrMWY0QmIzOEJkWjRlbFpNQjczRzE3bkVBNjVndmxKMHZZWS9CQXFraTE4WGUxV0RPVWQxVmNmQ3lCbGsxTkdRZDdYUHcxaEo4TXNySGcrRTRQK1cxdi9WbGVUWTc2UjBzWUdlSVZiTU5pZVFUYm12eklKODNwdTZnS0taMVhra0RVaHk2ZVZBTWo4ZTlqM3I3c01VV3ZYMjBvTnR1TjlzT3kvSFI2S3dZSHhZbWhxcWQrUVJyOWE1S1pNUTdCeWNUbUxqbW0yYnJZRGlxWGpSaEN6QnJjdWVnbkV5R2crT2ltVnM1YjIzSXJScWk2T3MralExYVE3NkVnc2FVVmxBb29hanBiekVmY24rYi81cCt6Wit2dmloZ2drUVp0aXFZWmJ3SHkzVTBnS1g1SXNmTng3ZmppMFZSSmVucGJiSlpJZVJqZTc0bzZqZEF5TWY0ZkV5RkJBS0pCQkkza0pmNVpMWm9IQW92aTN4MFdwZWdlVTUxRDBmNVZCOVQ1dkE2eWc5bjVRUzBiMXNIMkpxT2RVMm5zYVkzYWNkelJadjJ2eGExa1k2bmpPYTN4MUhqV3RCMnpOd0VLNjJUSW15YnpoM1BFMGtGcXcxRm9yUDBtcXp1RTRrK1NpakJ5c1JZckpFWTVndXYwa2NzVENlck84dTZpdUpSWjVtaHJKU3NyNzlha1VWOEYwWEdjNDczc0xXcU83NWVVeDFsU3E1ODJlcEhGa3haV2oyam1lMmh6TkpYWnF4SHJZSFJsTFFjbUoyaHpEN3dmVXZNeG9jZlNCOVJKTDFSdjRqc21SRitlaDRXbS9oQzM1SnZMT1B6YVBzbkZzMFNnYkpremw0ZHFZd2dNbXM5bFNVZ0Z6UWdwT2tJcEdFcWFVaFdLQ0hYRWlpbFFST29MT2tHbG9RQ3FVV0JIRXZURmhvdE5Zc3VNS1dpaWFhWUk5TWFpQTNlU2J6MjNxQWtiSHVEMHJidURjK0NrVVpXenQ4YmxvSmE5d0d0YWx2TXFZeUtmUGlKak1DV2g3SjRJeC9zWFdEc0JkNjVWbWhWMDNLTkxKcHZHZXRicWthNWhkS3ZMNDRJdnZZb2VFck5zbk5vRmJLWGdtMEZ1ekk4U2xkWlhwR2VQTy9zbW0wM1VWU0V4VkpqTDBiUGtoc3RGeVZMNWJiMnhycHY4Z2JWTTZvaTFKUURWT3BnU3JQdW0wdnB1a3BqcXhxUXl2b2FDeW94M2xSTWZhT0UxTUNxK2pZMXBBNCtxV2FGZzBxb1J5Z2x4RldYT3JqQlJhcHZWWTB4ajByaXBaRlZEVWtOcktvaTFiT3E1STJLNmlXRXhyRlZEUzlTeVVWTXhxS1UxTmlxVW00MGIxN2tYcUNHc1ZVbFkyRjRrZXBlb0FabWhqdy90S29VcjZJWUZBM3pLSG5hSWg2YmJyZTkyZlppdis4R0x2dW5NK29tVVo4ZTRvQTlKSEhmelBvbHovUDZacjEwekdicXBuN2ZQR3drYWQrejZOMDA3cHVQbE4wazZKdmwyQW4xVHVzRzRFMG4wNDE4TmlCTW1PZUloMmZlWlRqQTR4N005dHFMb2xXWlIzRS9vY3hkbHJtZjlNMFhCZDFFMFFPN2k1aDlqNzdKVGhCUjBib0JpN3diNGhTWXFLQUlZY3IrbWRSalNNdThaaE5LME91N3NiRWI4cEQwYXRqem9jd0JOMm9HK0I3NWJqNm9nSVVZc01sc1BOQ1IzRlV1VFEwZFl0MHc2Q2N4Q3phbHM1a09SRTlvT0xtbXd3YmtsUm8vWHAvRnoyY0hzMDlaVlduaWxXSXJ4YlBjTEFMWFdGVE1QQVJCRmhzVjhhQ2s0WVVQMW1PZGFoTzR2T0NLYXROOGdMeENjdXl6K0R5b2k0blBTN2sxdGhMT09XenBrNTByRkxXNlNYNXdOa2l3ZXBRYzdyYnRzTS9rVXBHRy9EWkNDMGgrOEtmTEtrRm1pWkVYeTZjayt1WkVmbFNYMFozVEpJc1RpczUwYmFLNzlUc1VubDFOelVCTERXbUgraUplbVlFdnhzdnZCcVFkb2REMmtvbDNJdHI4NGpzZjlqV1dMMnl4MjZTQnd2WW5MWGI4eWZYenJvMk5XNFA3VHFQUDlkRXd3bzd5ZHpOdHQ4aHVEOHdNdXkvUlZicVIyS3A3Z2xIUEQrK0NvQzlzTmdGZU1HU1ZHbGpSOEtLKzZ2ejViRTZRcGE4MVd2VmRBdjh1cWx6b3pXYWFROCtldUQxYlFnUHhxZ0pUc2ZPRG5oVjdLUnlmL0w3bHl0ZlUvM2Q0Tk03RzczZCtWQmNLWDRSRDk0MllEdHkxeHRFdFQwSXpTS1g4OXZGRG5TV3hRTjdwTEFta1NURVA3QnFtZkxwOW4zT2NkQlhjYU9XWDNqSVBXYWJ2ZGFKc3dBMDZXVm1BYmh6MnpZdHRBNjYxNG1EcGVqeGU4emtsVVAzR2JWZ2swZzNUUG55WUpHb0gwaFdReG9IVWprK2NtdWFCMUE2a2VTQU5BNmtUU08yNDY5U1VEcVJOSVAwREtSeElmL2pRcVdrZFNQMUFpZ2RTUVpEYWdiUUpwR2tndFFOcEhKODdOYlVENlNKSTdjQnYyelcxQTZrZm10cUJWQk9rVnlEOXdrYnRRTHBHNnRTMEVhUnZJQTBFcVIxSUhkSFVEazA1UVJxS2pkcUJ0QkVYQk9rY1dBZWthK0RQWDNlY21wNkMxQTZra0docUI5SkdrTnFCMUEra2t5QzE0NlpUL1dUV2VldTB5QndWZFNORGRzSVNXWkkyTXY3TFcwWDJRRVJ2QWszanlBU05JeE0wam96L2FGa2h5T0xRaGlvQ1I5VWwwMHQwdHlad3ZDeEtibXdUR1JwSTMrRFBTTmpRcHBHandlUFpRNDRHVWpUUXVzdFQzRFhrREk1V2pJeXN4Y2pJem1Oa05NUG1tRjdJMXl0Q3dKSlBrREUyUU4yd0pCTHdoaHRWZzJFUThLWmRRKzlvSkxNa2RsU1lDYWJpWnVEZ3dBWXBDZmtTYXBFNm10bnVhRklIbjk0bHBTTVRsSTVNVWpvYXl3SXBIUnpRSkEzRUtJTW1xcXlvK2RtK1pqWWdxTWhBQTh4dFhaV3RxN0oyTlZrVGFKZzROV1JvRlR6LzNZcFdnYXdLUG8wMW55Smp2L2x2SVZVa1kxUVJKRmhrYllJRmRraG9qZ2xTeGpDU0pQaTQ2eFZTY1NvUVRySjlIVFUxUEdoekxYYVJXVkYzWjFFYlRrWFc1bFJrYlU1Rlp1TlVOSWVWOHpvZ2t3d0NWYWtEQ1lWdHlHZFZNSkNTa0MraHlJU3dtQSt6RnFlQ1AxZmtpVVpxRmNBcWNtWEpwdURwSW11Q1cwRzJRM052RXVJTEpCQklLSkJJSVBxbFVmTW9Nc0dqeUloSHNhNFBCU3Qxb3NtMGdMVmNhS2JGdGdaaHJZLzFhL2hTY1FUdkxmTlNIbWZ6WW9hN1FEc2ZaNU96Y2NVMDBRV2IvbnRvd2FadDdMMXhCaHRrZXFJdDQ3QVdNRzBBMjFWWTJXRTVLRmJrdVQzSVozbi9hQUk1dGZMY21wVHp2czRWejl6T2YrQy90Mi9mL3RkU2xQZksxN05oT1lhdW5SdkxvNWQ3V1p1MGdHdG5ZelE5dUhkNGNqYisrcDVLblBxT2dYY1FaK2tQOVdkTTM2NTlidWdVdXFiYzQrUGhXRy9TN2loL1ZlZ3phaGR5cUZMb3Y1NE16ZnhzQXpydHo4cVpPY3UyRDh1UlJtcXl6TGYvQTBXZTg3dDRLd0FBIn0= -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["event"],"name":[1],"type":["fctr"],"align":["left"]},{"label":["effort"],"name":[2],"type":["chr"],"align":["left"]},{"label":["n_wetland"],"name":[3],"type":["chr"],"align":["left"]},{"label":["n_runWater"],"name":[4],"type":["chr"],"align":["left"]},{"label":["sqi_runWater"],"name":[5],"type":["chr"],"align":["left"]},{"label":["sqs_runWater"],"name":[6],"type":["chr"],"align":["left"]},{"label":["n_marsh"],"name":[7],"type":["chr"],"align":["left"]},{"label":["sqi_marsh"],"name":[8],"type":["chr"],"align":["left"]},{"label":["sqs_marsh"],"name":[9],"type":["chr"],"align":["left"]},{"label":["event_code"],"name":[10],"type":["fctr"],"align":["left"]}],"data":[{"1":"Rheidol 3 2004","2":"5","3":"30","4":"22","5":"332","6":"73.040000000000006","7":"6","8":"100","9":"6","10":"Rheidol_2004_3"},{"1":"Towy 1998","2":"8","3":"26","4":"26","5":"331","6":"86.06","7":"0","8":"0","9":"0","10":"Towy_1998"},{"1":"Tywi 1998","2":"7","3":"23","4":"23","5":"322","6":"74.06","7":"0","8":"0","9":"0","10":"Tywi_1998"},{"1":"Towy 3 2003","2":"10","3":"30","4":"28","5":"314","6":"87.92","7":"2","8":"100","9":"2","10":"Towy_2003_3"},{"1":"Towy 4 2002","2":"8","3":"36","4":"36","5":"311","6":"111.96","7":"0","8":"0","9":"0","10":"Towy_2002_4"},{"1":"Towy 6 2003","2":"9","3":"30","4":"30","5":"310","6":"93","7":"0","8":"0","9":"0","10":"Towy_2003_6"},{"1":"Towy 1 2003","2":"6","3":"32","4":"31","5":"303","6":"93.93","7":"1","8":"100","9":"1","10":"Towy_2003_1"},{"1":"Wye 1998","2":"9","3":"36","4":"30","5":"297","6":"89.1","7":"6","8":"166","9":"9.9600000000000009","10":"Wye_1998"},{"1":"Severn 1 2002","2":"12","3":"31","4":"30","5":"297","6":"89.1","7":"1","8":"100","9":"1","10":"Severn_2002_1"},{"1":"Usk 1998","2":"13","3":"37","4":"33","5":"294","6":"97.02","7":"4","8":"100","9":"4","10":"Usk_1998"},{"1":"Severn 2a 2002","2":"8","3":"29","4":"29","5":"293","6":"84.97","7":"0","8":"0","9":"0","10":"Severn_2002_2a"},{"1":"Towy 5 2002","2":"12","3":"20","4":"20","5":"290","6":"58","7":"0","8":"0","9":"0","10":"Towy_2002_5"},{"1":"Mawddach 1 2003","2":"4","3":"17","4":"17","5":"282","6":"47.94","7":"0","8":"0","9":"0","10":"Mawddach_2003"},{"1":"Towy 2 2003","2":"5","3":"24","4":"23","5":"274","6":"63.02","7":"1","8":"100","9":"1","10":"Towy_2003_2"},{"1":"Severn 2 2002","2":"10","3":"22","4":"22","5":"268","6":"58.96","7":"0","8":"0","9":"0","10":"Severn_2002_2"},{"1":"Rheidol 2 2004","2":"4","3":"32","4":"25","5":"264","6":"66","7":"6","8":"100","9":"6","10":"Rheidol_2004_2"},{"1":"Rheidol 1 2004","2":"6","3":"48","4":"33","5":"264","6":"87.12","7":"11","8":"127","9":"13.97","10":"Rheidol_2004_1"},{"1":"Severn 3 2002","2":"9","3":"25","4":"24","5":"263","6":"63.12","7":"1","8":"100","9":"1","10":"Severn_2002_3"},{"1":"Severn 2003","2":"9","3":"33","4":"32","5":"263","6":"84.16","7":"1","8":"100","9":"1","10":"Severn_2003"},{"1":"Severn Llandinam 1999","2":"3","3":"26","4":"26","5":"254","6":"66.040000000000006","7":"0","8":"0","9":"0","10":"SevernLlandinam_1999"},{"1":"Severn 1a 2002","2":"8","3":"29","4":"29","5":"234","6":"67.86","7":"0","8":"0","9":"0","10":"Severn_2002_1a"},{"1":"Dane West of Congleton","2":"6","3":"34","4":"31","5":"226","6":"70.06","7":"3","8":"100","9":"3","10":"DaneWest"},{"1":"Allen (Possible)","2":"11","3":"17","4":"17","5":"224","6":"38.08","7":"0","8":"0","9":"0","10":"Allen_poss"},{"1":"Monnow 2013","2":"5","3":"66","4":"38","5":"216","6":"82.08","7":"21","8":"143","9":"30.03","10":"Monnow_2013"},{"1":"Teme 1998 (Possible)","2":"4","3":"24","4":"20","5":"210","6":"42","7":"4","8":"100","9":"4","10":"Teme_1998_poss"},{"1":"Teign & Bovey B 1998","2":"9","3":"34","4":"30","5":"210","6":"63","7":"4","8":"175","9":"7","10":"TeignBovey_1998_B"},{"1":"Wye 3 2014","2":"9","3":"63","4":"31","5":"206","6":"63.86","7":"29","8":"131","9":"37.99","10":"Wye_2014_3"},{"1":"Creedy yeo 1999","2":"6","3":"27","4":"23","5":"204","6":"46.92","7":"4","8":"100","9":"4","10":"CreedyYeo_1999"},{"1":"Wye 1 2014","2":"5","3":"39","4":"24","5":"204","6":"48.96","7":"14","8":"164","9":"22.96","10":"Wye_2014_1"},{"1":"Dane East of Congleton","2":"6","3":"27","4":"26","5":"204","6":"53.04","7":"1","8":"100","9":"1","10":"DaneEast"},{"1":"Teign & Bovey confluence","2":"9","3":"39","4":"32","5":"203","6":"64.959999999999994","7":"7","8":"100","9":"7","10":"TeignBoveyConfluence"},{"1":"Wye 6 2014","2":"8","3":"72","4":"38","5":"203","6":"77.14","7":"28","8":"107","9":"29.96","10":"Wye_2014_6"},{"1":"Till 2005","2":"5","3":"53","4":"41","5":"200","6":"82","7":"12","8":"100","9":"12","10":"Till_2005"},{"1":"Teign 1999","2":"6","3":"37","4":"31","5":"197","6":"61.07","7":"6","8":"100","9":"6","10":"Teign_1999"},{"1":"Eggleston Burn (possible)","2":"6","3":"27","4":"23","5":"196","6":"45.08","7":"2","8":"100","9":"2","10":"Eggleston_poss"},{"1":"Camel 2003","2":"8","3":"26","4":"25","5":"196","6":"49","7":"1","8":"100","9":"1","10":"Camel_2003"},{"1":"Plym 1 2003","2":"2","3":"19","4":"19","5":"195","6":"37.049999999999997","7":"0","8":"0","9":"0","10":"Plym_2003"},{"1":"Tamar 2002","2":"2","3":"18","4":"16","5":"194","6":"31.04","7":"2","8":"100","9":"2","10":"Tamar_2002"},{"1":"Wear (Possible)","2":"4","3":"18","4":"16","5":"194","6":"31.04","7":"1","8":"100","9":"1","10":"Wear_poss"},{"1":"Fowey 2 2003","2":"4","3":"13","4":"13","5":"192","6":"24.96","7":"0","8":"0","9":"0","10":"Fowey_2003_2"},{"1":"Exe 1999","2":"6","3":"27","4":"23","5":"191","6":"43.93","7":"4","8":"175","9":"7","10":"Exe_1999"},{"1":"Tees 2 2008","2":"11","3":"28","4":"23","5":"191","6":"43.93","7":"0","8":"0","9":"0","10":"Tees_2008_2"},{"1":"Torridge 1999","2":"6","3":"25","4":"20","5":"190","6":"38","7":"5","8":"100","9":"5","10":"Torridge_1999"},{"1":"Fal","2":"2","3":"12","4":"11","5":"182","6":"20.02","7":"1","8":"100","9":"1","10":"Fal"},{"1":"Harwood (Possible)","2":"3","3":"19","4":"15","5":"180","6":"27","7":"3","8":"100","9":"3","10":"Harwood_poss_1"},{"1":"Till 2013","2":"5","3":"53","4":"31","5":"177","6":"54.87","7":"19","8":"100","9":"19","10":"Till_2013"},{"1":"Lugg 2014 4","2":"8","3":"67","4":"35","5":"177","6":"61.95","7":"30","8":"140","9":"42","10":"Lugg_2014_4"},{"1":"Lynher 1 2003","2":"2","3":"9","4":"8","5":"175","6":"14","7":"1","8":"100","9":"1","10":"Lynher_2003_1"},{"1":"River Tame 2000","2":"7","3":"17","4":"12","5":"175","6":"21","7":"6","8":"150","9":"9","10":"Tame_2000"},{"1":"Camel Tributary","2":"4","3":"13","4":"12","5":"175","6":"21","7":"1","8":"100","9":"1","10":"CamelTrib"},{"1":"Wye 4 2014","2":"8","3":"53","4":"34","5":"171","6":"58.14","7":"15","8":"140","9":"21","10":"Wye_2014_4"},{"1":"Wye 7 2014","2":"8","3":"50","4":"27","5":"170","6":"45.9","7":"19","8":"126","9":"23.94","10":"Wye_2014_7"},{"1":"Carey 1 2003","2":"2","3":"14","4":"13","5":"169","6":"21.97","7":"1","8":"100","9":"1","10":"Carey_2003_1"},{"1":"Ottery 2003","2":"4","3":"19","4":"18","5":"167","6":"30.06","7":"1","8":"100","9":"1","10":"Ottery_2003"},{"1":"Otter 1999","2":"6","3":"29","4":"27","5":"167","6":"45.09","7":"2","8":"100","9":"2","10":"Otter_1999"},{"1":"Lugg 2014 3","2":"8","3":"57","4":"32","5":"166","6":"53.12","7":"23","8":"126","9":"28.98","10":"Lugg_2014_3"},{"1":"Thrushel 1999","2":"6","3":"16","4":"14","5":"164","6":"22.96","7":"2","8":"100","9":"2","10":"Thrushel_1999"},{"1":"Yealm 2003","2":"2","3":"10","4":"10","5":"160","6":"16","7":"0","8":"0","9":"0","10":"Yealm_2003"},{"1":"Tees 1 2008","2":"6","3":"28","4":"20","5":"160","6":"32","7":"2","8":"100","9":"2","10":"Tees_2008_1"},{"1":"Yarty 1999","2":"6","3":"23","4":"25","5":"160","6":"40","7":"3","8":"200","9":"6","10":"Yarty_1999"},{"1":"Erme 1999","2":"6","3":"22","4":"21","5":"157","6":"32.97","7":"1","8":"100","9":"1","10":"Erme_1999"},{"1":"Wear 2005","2":"5","3":"42","4":"37","5":"157","6":"58.09","7":"5","8":"100","9":"5","10":"Wear_2005"},{"1":"Taw 1999","2":"5","3":"18","4":"16","5":"156","6":"24.96","7":"2","8":"100","9":"2","10":"Taw_1999"},{"1":"1997 Ashop","2":"4","3":"14","4":"11","5":"155","6":"17.05","7":"3","8":"100","9":"3","10":"Ashop_1997"},{"1":"Eden Read (Possible) 2000","2":"3","3":"12","4":"11","5":"155","6":"17.05","7":"2","8":"100","9":"2","10":"EdenRead_2000_poss"},{"1":"Gauntless (Possible)","2":"3","3":"14","4":"11","5":"155","6":"17.05","7":"2","8":"100","9":"2","10":"Gauntless_poss"},{"1":"Alport 1999","2":"3","3":"14","4":"12","5":"150","6":"18","7":"2","8":"100","9":"2","10":"Alport_1999"},{"1":"Lugg 2014 1","2":"8","3":"64","4":"18","5":"150","6":"27","7":"40","8":"122","9":"48.8","10":"Lugg_2014_1"},{"1":"South Tyne (Possible)","2":"5","3":"18","4":"18","5":"150","6":"27","7":"0","8":"0","9":"0","10":"SouthTyne_poss"},{"1":"Woolder Water 2013","2":"5","3":"34","4":"28","5":"143","6":"40.04","7":"5","8":"100","9":"5","10":"Woolder_2013"},{"1":"River Frome Rushton 2017","2":"5","3":"54","4":"17","5":"135","6":"22.95","7":"61","8":"124","9":"75.64","10":"FromeRushton_2017"},{"1":"Dove 2013","2":"5","3":"91","4":"17","5":"135","6":"22.95","7":"29","8":"110","9":"31.9","10":"Dove_2013"},{"1":"Beamish 2013","2":"5","3":"45","4":"34","5":"134","6":"45.56","7":"8","8":"100","9":"8","10":"Beamish_2013"},{"1":"wye 2014 5","2":"2","3":"24","4":"11","5":"127","6":"13.97","7":"13","8":"146","9":"18.98","10":"Wye_2014_5"},{"1":"Camel 1999","2":"6","3":"16","4":"13","5":"123","6":"15.99","7":"3","8":"100","9":"3","10":"Camel_1999"},{"1":"River Frome Woodsford 2017","2":"5","3":"65","4":"16","5":"119","6":"19.04","7":"40","8":"106","9":"42.4","10":"FromeWoodsford_2017"},{"1":"Lugg 2014 2","2":"5","3":"46","4":"22","5":"114","6":"25.08","7":"22","8":"141","9":"31.02","10":"Lugg_2014_2"},{"1":"Fowey 1 2003","2":"4","3":"8","4":"8","5":"100","6":"8","7":"0","8":"0","9":"0","10":"Fowey_2003_1"},{"1":"River Frome Moreton 2017","2":"5","3":"81","4":"10","5":"100","6":"10","7":"51","8":"117","9":"59.67","10":"FromeMoreton_2017"}],"options":{"columns":{"min":{},"max":[10],"total":[10]},"rows":{"min":[10],"max":[10],"total":[79]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <div id="sort-out-date-field" class="section level2">

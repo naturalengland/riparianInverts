@@ -95,6 +95,9 @@ great, no duplicates
 newdata
 ```
 
+```{r}
+unique(newdata$Grid.ref)
+```
 
 
 ##Assign event code to new data
@@ -268,6 +271,10 @@ spp_corrections <- read.csv("../data/further_checking_checked.csv") %>%
 
 ```
 
+
+
+
+
 ```{r}
 #replace
 
@@ -275,7 +282,11 @@ spp_matched_corrected <- spp_matched[(spp_matched$match %in% panth_spp),] %>%
   mutate(include = factor(x = "y", levels = c("y","n"))) %>% 
   rbind(spp_corrections)
 
-unique(spp_matched_corrected$match)
+glimpse(spp_matched_corrected)
+
+spp_matched_corrected %>% filter(duplicated(old_name))
+
+#write_csv(spp_matched_corrected, "../data/speciesmatch_corrected.csv")
 ```
 
 
