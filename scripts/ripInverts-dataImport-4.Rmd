@@ -1,0 +1,528 @@
+---
+title: "Riparian Invertebrates: Data Import 4"
+output: html_notebook
+---
+
+This script consolidates dataImport_2 and dataImport3, and replaces some of teh data with a new version received from JW in March 2019.  
+
+##Packages
+```{r}
+# packages
+library(tidyverse)
+library(readxl)
+library(forcats)
+```
+
+
+##Import data 
+```{r}
+#importing all as text to begin with
+biol_records <- read_csv("../data/Riparian Event Data Jan2019 - biological records.csv")
+
+events_code <- read_csv("../data/event_code_lookup_orig.csv") %>% select(-1)
+```
+
+
+
+```{r}
+#summary
+n_spp <- length(unique(biol_records$Species_name))
+n_rivers <- length(unique(biol_records$`Sample River`))
+n_events <-  length(unique(biol_records$`Event Name`))
+```
+
+There are `r n_spp` unique species in this dataset.  It contains `r nrow(biol_records)` individual species observations, accross `r n_events` unique events in `r n_rivers` rivers.  
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+plot(table(as.numeric(biol_records$Year)), ylab = "number of records", xlab = "year")
+```
+
+##examine new data
+
+compare it to the old ers_data2
+```{r}
+# cbind(names(biol_records), names(ers_data2))
+# 
+# #col 12 differs: [12,] "Event Name"              "NE Full Sample Name"    
+# olddata <- ers_data2 #[-12]
+# newdata <- biol_records #[-12]
+# names(olddata) <- make.names(names(newdata))
+# names(newdata) <- make.names(names(newdata))
+# cbind(names(newdata), names(olddata))
+# 
+# 
+# library(compareDF)
+# 
+# compareDF::compare_df(newdata, olddata, group_col = "Event.Name")
+```
+
+```{r}
+
+```
+
+
+### start import
+#Full sSample data
+
+#### Get a handle on numeric data
+
+Try to find all the numeric values
+```{r}
+#new column, convert abundance to numeric. 
+biol_records$abund_num <- as.numeric(biol_records$Abundance_Data)
+skimr::skim(biol_records$abund_num)
+#all data containing a non-numeric is now NA, all numeric is numeric
+plot(biol_records$abund_num)
+hist(biol_records$abund_num, breaks = 100)
+hist(biol_records$abund_num, breaks = 1000, xlim = c(0,100))
+```
+
+
+```{r}
+#split numeric and character abundance values: 
+#create numeric column
+abund_num <- biol_records %>% 
+  select(abund_num) %>%  
+  filter(is.na(abund_num) == FALSE) 
+abund_num <- abund_num$abund_num
+
+n_distinct(abund_num)
+length(abund_num)
+```
+
+```{r}
+ers_hist <- hist(abund_num, breaks = 100, plot = FALSE)
+knitr::kable(tibble(ers_hist$breaks[-1], ers_hist$counts))
+```
+The vast majority of abundance values aer below 20.  
+
+#### Get a handle on non-numeric data
+
+```{r}
+#create a character abundance column
+biol_records <- add_column(biol_records, abund_char = biol_records$Abundance_Data) 
+  
+biol_records$abund_char <- replace(biol_records$abund_char, 
+                               is.na(biol_records$abund_num)==FALSE, 
+                               NA)
+  
+  
+```
+
+
+
+
+```{r}
+n_distinct(biol_records$abund_char)
+length(biol_records$abund_char[which(is.na(biol_records$abund_char)==FALSE)])
+```
+552 observations; 17 unique abundance values
+
+- same as ers_data2
+
+
+```{r}
+ers_char <- data.frame(table(biol_records$abund_char))
+ers_char <- arrange(ers_char, -Freq)
+knitr::kable(ers_char)
+```
+
+##what about sample types
+```{r}
+knitr::kable(
+  biol_records %>%
+    count(Sample_Type) %>%
+    arrange(-n)
+)
+```
+
+```{r}
+unique(biol_records$Sample_Type)
+```
+
+
+```{r}
+table(tolower(biol_records$Sample_Type))
+
+```
+
+
+Clean up sample type coding
+```{r}
+biol_records <- biol_records %>% 
+  mutate(Sample_Type_old = Sample_Type, 
+         Sample_Type = recode_factor(tolower(biol_records$Sample_Type),
+             `20 minute dig` = "excavation",
+             `20 minute timed search` = "hand_search",
+             `30 minute timed sample` = "unknown",
+             aquatic = "aquatic",
+             `casual record` = "ad-hoc",
+             excavation = "excavation",
+             `field observation` = "ad-hoc",
+             `hand collection` = "hand_search",
+             `hand search` = "hand_search",
+             `hand search (25min)` = "hand_search",
+             `hand searching` = "hand_search",
+              handsearch = "hand_search",
+             `handsearch/excavation` = "excavation",
+             netting = "sweep",
+             pitfall = "pitfall",
+             `pitfall trap` = "pitfall",
+             pitfalls = "pitfall",
+             quadrat = "hand_search",
+             splashing = "splashing",
+             sweep = "sweep",
+             `timed dig` = "excavation",
+             `timed hand collection` = "hand_search",
+             `timed hand search` = "hand_search",
+             `water trap` = "water_trap"
+             ))
+
+table(tolower(biol_records$Sample_Type))
+
+```
+
+
+
+```{r}
+table(tolower(biol_records$Sample_Type_old))
+```
+
+
+
+does data type relate to sample type
+```{r}
+sample_data_types <-
+  biol_records %>%
+    group_by(Sample_Type) %>%
+    count("abund_character" = is.na(abund_char)==FALSE, 
+        "abund_number" = is.na(abund_num)==FALSE) %>% 
+    filter(abund_character == TRUE | abund_number == TRUE) 
+
+sample_data_types$abund_character[which(sample_data_types$abund_character==TRUE)] <- 
+  sample_data_types$n[which(sample_data_types$abund_character==TRUE)]
+  
+sample_data_types$abund_number[which(sample_data_types$abund_number==TRUE)] <- 
+  sample_data_types$n[which(sample_data_types$abund_number==TRUE)]
+  
+#sample_data_types$n <- NULL
+
+knitr::kable(sample_data_types)
+```
+
+
+##Fix sample timing
+```{r}
+table(biol_records$Sample_Type_old, biol_records$Sample_Duration)
+
+```
+
+```{r}
+biol_records$Sample_Duration[which(biol_records$Sample_Type_old %in% c("20 minute dig", "20 minute timed search"))] <- "20 min"
+
+biol_records$Sample_Duration[which(biol_records$Sample_Type_old %in% c("30 minute timed sample"))] <- "30 min"
+
+biol_records <- biol_records %>% 
+  mutate(Sample_Duration = recode_factor(Sample_Duration,
+                                         `80-100`  = "80-100 min",
+                                         `80-100 minutes` = "80-100 min"))
+
+
+
+
+table(biol_records$Sample_Type_old, biol_records$Sample_Duration)
+```
+
+
+
+## Look at surveys
+
+
+```{r}
+# 
+# names(ers_data2)
+# 
+# table(ers_data2$`NE Full Sample Name`)
+```
+
+
+#Sort out events
+
+Note, I've renamed some of the columns for clarity: col A = 'Event',  Col C = number of pitfall replicates (P), col D = number of timed  search/excavation replicates(T), Col G = number of pitfalls per replicate.  
+
+
+```{r}
+biol_records$event <- biol_records$`Event Name` 
+
+table(biol_records$event)
+```
+
+
+```{r}
+events_code
+```
+
+
+```{r}
+biol_events <- biol_records %>% select(event) %>% unique() %>% arrange(event) %>% 
+  mutate(biol = "biol")
+
+#%>% filter(!event %in% events_code$event)
+
+events_code_lookup_apr_2019 <- full_join(events_code, biol_events) %>% 
+  select(event, ers, sel, biol, event_code) %>% arrange(event)
+
+#write_csv(events_code_lookup_apr_2019, "../data/events_code_lookup_apr_2019.csv")
+
+#make changes in excel
+
+events_code <- read_csv("../data/events_code_lookup_apr_2019.csv")
+
+```
+
+
+```{r}
+#bind codes back into biol_records
+biol_records <- left_join(
+  biol_records, 
+  select(events_code, event, event_code), 
+  by = "event") %>% 
+  mutate(event = as.factor(event)) %>% 
+  mutate(event_code = as.factor(event_code))
+```
+
+```{r}
+biol_records %>% group_by(event_code) %>% count(event_code)
+```
+
+
+
+##Sort out date field
+```{r}
+unique(biol_records$Date)
+```
+
+
+```{r}
+# date validation rules: 
+# - if span of dates, choose start date
+# - if just a year, set to NA
+# - if range of years, set to NA
+# - NA, keep as NA
+
+biol_records <- biol_records %>% 
+  mutate(date_orig = Date) %>% 
+  mutate(Date = str_replace_all(
+    Date, 
+    c(
+    "1997" = NA,
+    "1987" = NA,
+    "12/06/2003- 23/06/2003" = "12/06/2003",
+    "1998"  = NA,
+    "NA" = NA,
+    "11/06/2013 for two weeks" = "11/06/2013",
+    "30/04/2003- 15/05/2003" = "30/04/2003",
+    "26/04/2002- 09/05/2002" = "26/04/2002",
+    "17/05/2003- 04/06/2003" = "17/05/2003",
+    "13/06/2003- 23/06/2003" = "13/06/2003",
+    "30/06/2002- 14/07/2002" = "30/06/2002",
+    "19/09/2001- 03/10/2001" = "19/09/2001",
+    "25/04/2002- 09/05/2002" = "25/04/2002",
+    "1990 - 1996" = NA,
+    "02 to 06/06/2015" = "02/06/2015",
+    "18/09/2001- 03/10/2001" = "18/09/2001",
+    "24/04/2002- 09/05/2002" = "24/04/2002",
+    "13/06/2002- 14/07/2002" = "13/06/2002"))) %>% 
+  droplevels()
+
+unique(biol_records$Date)
+```
+
+```{r}
+unique(biol_records$year_orig)
+
+biol_records <- biol_records %>% 
+  mutate(year_orig = Year) %>% 
+  mutate(Year = replace(Year, is.na(Year), str_sub(Date, -4, -1))) %>%
+  mutate(Year = replace(Year, is.na(Year), str_sub(Date, -4, -1)))  #weirdly I need too repeat this to get all the NAs
+
+biol_records %>% filter(is.na(Year)) %>% select(Year, year_orig, Date)
+```
+
+
+
+## replication
+```{r}
+#create location replicates column
+biol_records <- biol_records %>%
+  mutate(smpshort = str_replace_all(
+    Sample_Type, c(
+      "hand_search" = "HS", "pitfall" = "PF", "excavation" = "EX", 
+      "ad-hoc" = "AH", "sweep" = "SW", "aquatic" =  "AQ", 
+      "unknown" = "UK", "water_trap" = "WT", "splashing" = "SP"))) %>% 
+  mutate(locshort = str_remove_all(Location_Name, "[ ,.]")) %>% 
+  mutate(repl_loc = paste(event_code, smpshort, locshort, sep = "-")) 
+
+biol_records %>% group_by(event_code, Sample_Type, Location_Name) %>% 
+  summarise(n.loc = length(unique(repl_loc))) %>% 
+  arrange(-n.loc) 
+
+biol_records %>% group_by(event_code, Sample_Type) %>% 
+  summarise(n.loc = length(unique(repl_loc))) %>% 
+  arrange(-n.loc) 
+```
+
+
+```{r}
+#create date replicate column
+biol_records <- biol_records %>%
+  mutate(dateshort = str_remove_all(Date, "/")) %>%
+  mutate(repl_date = paste(event_code, smpshort, dateshort, sep = "-"))
+
+#create date-location replicates column
+biol_records <- biol_records %>% 
+  mutate(repl_dateloc = paste(event, smpshort, dateshort, locshort, sep = "-"))  
+
+head(unique(biol_records$repl_dateloc))
+  
+biol_records %>% group_by(event, Sample_Type, Date, Location_Name) %>% count() %>% arrange(-n)
+
+biol_records %>% group_by(event, Sample_Type) %>% summarise(n.dateloc = length(unique(repl_dateloc))) %>% 
+  arrange(-n.dateloc) 
+```
+
+
+
+##Select field data
+```{r}
+field_data <- biol_records %>% 
+  select(spp_name = Species_name, 
+         abund_num,
+         abund_char,          
+         river = `Sample River`,
+         event = event, 
+         event_code = event_code,
+         date = Date,
+         year = Year, 
+         sample_type = Sample_Type,
+         location = Location_Name,
+         repl_dateloc = repl_dateloc,
+         repl_date = repl_date,
+         replicate = repl_loc,
+         sadler_bell = "Sadler & Bell method?",
+         search_pitfall = "Handsearch & Pitfall",
+         search_excavation = "Handserach & excavation",
+         sample_duration = "Sample_Duration"
+         )
+
+field_data %>% 
+  #group_by(event, sample_type) %>% 
+  count(sadler_bell)
+  
+field_data %>% 
+  #group_by(event, sample_type) %>% 
+  count(sample_type, sadler_bell) %>% 
+  arrange(-n)
+
+field_data %>% 
+  count(sample_type)
+
+```
+
+```{r}
+#select field data
+field_data_selected <- filter(field_data, sample_type %in% c("excavation", "hand_search", "pitfall")) %>% droplevels()
+
+field_data_selected
+```
+
+
+
+```{r}
+field_data_selected %>%
+  summarise(n.events = n_distinct(event_code), n.rep_loc = n_distinct(replicate),
+            n.rep_date = n_distinct(repl_date), n.rep_dateloc = n_distinct(repl_dateloc))
+```
+
+
+```{r}
+#species richness 
+field_data_selected %>% 
+  mutate(sample_type = recode(sample_type, 
+                              "excavation" = "timed", 
+                              "hand_search" = "timed")) %>% 
+  group_by(event, sample_type) %>% 
+  summarise(n_spp = n_distinct(spp_name),
+            n_rec = length(spp_name))
+```
+
+
+##Check if new-data is alread incorporated
+```{r}
+raw <- read.csv("../data/2018 riparian update corrected.csv")
+newdata <- raw
+dim(newdata)
+table(newdata$Grid.ref)
+biol_records %>% filter(Sample_Grid_Ref %in% unique(newdata$Grid.ref)) %>%  dim()
+```
+
+hard to say 
+
+##Select subset of events
+```{r}
+field_data_selected %>% select(year, event_code) %>% unique() %>% 
+  arrange(-as.numeric(year)) %>% pull(event_code)
+```
+
+
+
+```{r}
+event_code_selected <- c("Frome_2017_2", "Frome_2017_1", "Frome_2017_3", "Lugg_2014_1",
+                         "Lugg_2014_3", "Lugg_2014_4", "Wye_2014_6", "Wye_2014_7", 
+                         "Wye_2014_4", "Wye_2014_3", "Wye_2014_5", "Lugg_2014_2", 
+                         "Wye_2014_1", "Dove_2013", "Till_2013", "Beamish_2013", 
+                         "Wooler_2013")
+
+field_data_extract <- field_data_selected %>% 
+  filter(event_code %in% event_code_selected) %>% droplevels() 
+
+field_data_extract %>% count(event_code)
+```
+
+
+
+
+##Correct species names
+
+refer to ripInverts-dataImport_3.Rmd
+
+```{r}
+spp_matched_corrected <- read.csv("../data/speciesmatch_corrected.csv") 
+```
+
+
+```{r}
+#correct the names in the original data
+tempnames <- names(field_data_extract)
+
+field_data_extract <- field_data_extract %>% 
+  mutate(old_name = spp_name) %>% 
+  left_join(spp_matched_corrected, by = "old_name") %>% 
+  mutate(spp_name = match) %>%
+  filter(include == "y") %>% 
+  select(tempnames)
+```
+
+
+
+#Export data
+```{r}
+# write_csv(field_data_selected, "../data/field_data_selected_Apr2019.csv")
+# write_csv(field_data_extract, "../data/field_data_extract_Apr2019.csv")
+```
+
+
+
+
+
+
+
