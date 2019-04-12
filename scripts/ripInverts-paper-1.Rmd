@@ -32,7 +32,7 @@ We examined the completeness of the riparian beetle inventory by creating specie
 Accross all sampling events, `r sum(samp_types_spp_sum)` species were found.  Of these, `r samp_types_spp_sum["h"]` species were found by handsearch only, `r samp_types_spp_sum["p"]` by pitfall only and `r samp_types_spp_sum["hp"]` by both handsearch and pitfall methods (see fig x).    
 
 ```{r fig.width=5}
-graphdata <- obs_freq_types %>% filter(wetland_spp %in% c(TRUE,FALSE))
+graphdata <- obs_all_freq_types %>% filter(wetland_spp %in% c(TRUE,FALSE))
 labels <-  c(`0` = "not wetland species", `1` = "wetland species")
 
 ggplot(graphdata, aes(sample_types)) +
@@ -41,7 +41,7 @@ ggplot(graphdata, aes(sample_types)) +
   labs(title = "Distribution of species \nby capture type", 
        x = "sample type", y = "n species")
 ```
-Of these, `r obs_freq_types %>% filter(wetland_spp == TRUE) %>%  count(wetland_spp) %>% pull(n)` are wetland species, and `r obs_freq_types %>% filter(wetland_spp != TRUE) %>%  count(wetland_spp) %>% pull(n)` are not.  Wetland species were caught by pitfall in significantly lower proportions to non-wetland species (Pearson's Chi-squared test, X-squared = `r chitest_wetland_props$statistic`, df =  `r chitest_wetland_props$parameter`, p = `r Hmisc::format.pval(chitest_wetland_props$p.value)`)
+Of these, `r obs_all_freq_types %>% filter(wetland_spp == TRUE) %>%  count(wetland_spp) %>% pull(n)` are wetland species, and `r obs_all_freq_types %>% filter(wetland_spp != TRUE) %>%  count(wetland_spp) %>% pull(n)` are not.  Wetland species were caught by pitfall in significantly lower proportions to non-wetland species (Pearson's Chi-squared test, X-squared = `r chitest_wetland_props$statistic`, df =  `r chitest_wetland_props$parameter`, p = `r Hmisc::format.pval(chitest_wetland_props$p.value)`)
 
 
 
@@ -52,13 +52,6 @@ ggplot(graphdata, aes(sample_types)) +
   scale_alpha_discrete(range = c(0.6, 0.9))+
   labs(title = "Distribution of species \nby capture type and species trait", 
        x = "sample type", y = "n species")
-
-# ggplot(graphdata, aes(x = sample_types)) +
-#   geom_bar(aes(fill = sample_types, alpha = wetland_spp), position = position_stack(), stat = "prop") +
-# #  theme(legend.position = "none") +
-#   scale_alpha_discrete(range = c(0.6, 0.9))+
-#   labs(title = "Distribution of species \nby capture type and species trait", 
-#        x = "sample type", y = "n species")
 ```
 
 
@@ -170,6 +163,7 @@ It may be that this is due to the heterogeneity of species compositions along ri
 ```{r}
 ggplot(graphdata, aes(x = n_sites, y = n_spp, group = event_code, colour = river))+
   geom_line(size = 1) +
+   scale_x_continuous(breaks = 1:max(graphdata$n_sites))+
   labs(title = "Species accumulation by event", x = "replicates", y = "number of species") +
   NULL 
 ```
