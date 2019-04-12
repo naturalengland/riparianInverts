@@ -443,6 +443,37 @@ field_data_selected %>%
             n.rep_date = n_distinct(repl_date), n.rep_dateloc = n_distinct(repl_dateloc))
 ```
 
+##Correct species names
+
+refer to ripInverts-dataImport_3.Rmd
+
+```{r}
+#spp_matched_corrected <- read.csv("../data/speciesmatch_corrected.csv") 
+
+spp_matched_corrected <- read.csv("../data/speciesmatch_further_correctionsApr2019.csv") 
+```
+
+
+```{r}
+field_data_selected <- read.csv("../data/field_data_selected_Apr2019.csv")
+
+#correct the names in the original data
+tempnames <- names(field_data_selected)
+
+temp_field_data_selected <- field_data_selected %>% 
+  mutate(old_name = spp_name) %>% 
+  left_join(spp_matched_corrected, by = "old_name") %>% 
+  mutate(spp_name = match) %>%
+#  filter(include == "y") %>% 
+  select(old_name, tempnames)
+
+
+```
+
+
+
+
+
 
 ```{r}
 #species richness 
@@ -490,27 +521,6 @@ field_data_extract %>% count(event_code)
 
 
 
-
-##Correct species names
-
-refer to ripInverts-dataImport_3.Rmd
-
-```{r}
-spp_matched_corrected <- read.csv("../data/speciesmatch_corrected.csv") 
-```
-
-
-```{r}
-#correct the names in the original data
-tempnames <- names(field_data_extract)
-
-field_data_extract <- field_data_extract %>% 
-  mutate(old_name = spp_name) %>% 
-  left_join(spp_matched_corrected, by = "old_name") %>% 
-  mutate(spp_name = match) %>%
-  filter(include == "y") %>% 
-  select(tempnames)
-```
 
 
 

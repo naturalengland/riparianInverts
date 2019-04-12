@@ -3,6 +3,7 @@ title: "ripInverts - paper content"
 output:
   word_document: default
   html_notebook: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -31,9 +32,15 @@ We examined the completeness of the riparian beetle inventory by creating specie
  
 Accross all sampling events, `r sum(samp_types_spp_sum)` species were found.  Of these, `r samp_types_spp_sum["h"]` species were found by handsearch only, `r samp_types_spp_sum["p"]` by pitfall only and `r samp_types_spp_sum["hp"]` by both handsearch and pitfall methods (see fig x).    
 
+```{r}
+obs_all_freq_types %>% count(wetland_spp)
+obs_all_freq_types %>% count(is_wetland)
+```
+*Note issue with table: i need to recode wetland species*
+
+
 ```{r fig.width=5}
-graphdata <- obs_all_freq_types %>% filter(wetland_spp %in% c(TRUE,FALSE))
-labels <-  c(`0` = "not wetland species", `1` = "wetland species")
+graphdata <- obs_all_freq_types 
 
 ggplot(graphdata, aes(sample_types)) +
   geom_bar(aes(fill = sample_types)) +
@@ -47,12 +54,15 @@ Of these, `r obs_all_freq_types %>% filter(wetland_spp == TRUE) %>%  count(wetla
 
 ```{r}
 ggplot(graphdata, aes(sample_types)) +
-  geom_bar(aes(fill = sample_types, alpha = wetland_spp), position = position_stack()) +
+  geom_bar(aes(fill = sample_types, alpha = is_wetland), position = position_stack()) +
 #  theme(legend.position = "none") +
   scale_alpha_discrete(range = c(0.6, 0.9))+
   labs(title = "Distribution of species \nby capture type and species trait", 
        x = "sample type", y = "n species")
+
 ```
+
+*note: this graph has issues because I need to re-code what is and isn't wetland species.  Will be fixed, may affect results. *
 
 
 
@@ -61,6 +71,7 @@ ggplot(graphdata, aes(sample_types)) +
 adon1_results <- paste0(adon1$Df, " Df, F = ", round(adon1$F, 2), ", p = ", round(adon1$`Pr(>F)`, 4))
 names(adon1_results) <- row.names(adon1) 
 ```
+
 After controlling for river and event, sample type makes a significant contribution to the dissimilarity between samples (`r adon1_results["sample_type"]`)
 
 ```{r}
@@ -167,6 +178,7 @@ ggplot(graphdata, aes(x = n_sites, y = n_spp, group = event_code, colour = river
   labs(title = "Species accumulation by event", x = "replicates", y = "number of species") +
   NULL 
 ```
+
 The last remaining source of sampling variability is is the type of sample (hand search or pitfall) and we looked at whether splitting by these results in a sample reaching an asymptote within an event.  Here we have even less replication (max is n = 5, the majority are n = 4 or lower) and it is clear that no asymptote is reached.  
 
 ```{r}

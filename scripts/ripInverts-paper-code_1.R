@@ -7,6 +7,9 @@ library(vegan)
 obs_all <- read_csv("../data/field_data_selected_Apr2019.csv") #all observations
 ##import species lookup data
 pantheon_data <- readxl::read_xlsx("../data/Species and Event data pivot table March with summary.xlsx", sheet = 2)
+spp_matched_corrected <- read.csv("../data/speciesmatch_further_correctionsApr2019.csv") 
+
+
 
 #Prepare data----
 
@@ -17,6 +20,15 @@ event_lookup <- obs_all %>% select(river, event_code) %>% unique()
 spp_lookup <- pantheon_data %>% select(-event) %>% unique() 
 #spp_lookup[is.na(spp_lookup$`Wetland species`)] <- 0
 spp_lookup$`Wetland species`[spp_lookup$`Wetland species` == "NA"] <- 0
+#add further lookup fields
+extra_lookup <- spp_matched_corrected %>% 
+  mutate(species = match) %>% 
+  mutate(is_wetland = wetland) %>% 
+  select(-c(old_name, match, wetland)) %>% 
+  unique() %>% 
+  select(species, everything())%>% 
+  arrange(species) 
+
 #convert excavations to handsearch
 obs_all <- obs_all %>% 
   mutate(sample_type = as.factor(sample_type)) %>% 
@@ -74,6 +86,7 @@ obs_all_freq_types <- obs_all_freq %>%
   spread(key = sample_type, value = freq, fill = 0) %>% 
   full_join(samptypes) %>% 
   left_join(spp_lookup, by = c("spp_name" = "species"))  %>% 
+  left_join(extra_lookup, by = c("spp_name" = "species")) %>% 
   rename("cons_status" = "Conservation status", 
          "wetland_spp" = "Wetland species", 
          "runningwater_spp" = "running water W23",  
@@ -133,7 +146,6 @@ obs_rct_mat <- obs_all_mat %>%
 ###Grand total accumulation
 #species accumulation curve by resampling events
 spec_accum_selected <- specaccum(comm = obs_rct_mat %>% select(-c(river:sample_type)))
-
 
 
 param_sampletype <- c("hand_search", "pitfall")
