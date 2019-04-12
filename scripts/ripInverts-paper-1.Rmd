@@ -18,7 +18,11 @@ source("../scripts/ripInverts-paper-code_1.R", chdir = T)
 ### 3.2	Comparison between pit falling and timed hand searches.
 
 
-We explored effect of sampling type on the the composition of the communities we recorded.  The similarity of the presence/absence data between each two replicates was quantified using the Jaccard index.  Permutational Multivariate Analysis of Variance (PERMANOVA) was carried out on the resulting similarity matrix to establish the contribution of event, river and sample type to the variance of similarity.  All this was carried out in one step using the R function vegan::adonis2.  
+We explored effect of sampling type on the the composition of the communities we recorded.  The similarity of the presence/absence data between each two replicates was quantified using the Jaccard index.  Permutational Multivariate Analysis of Variance (PERMANOVA) was carried out on the resulting similarity matrix to establish the contribution of event, river and sample type to the variance of similarity.  All this was carried out in one step using the R function vegan::adonis2.  [citations to be added]
+
+### 3.4. To what extent do sampling events adequately represent the full diversity of riparian beetles present along any given stretch?
+
+We examined the completeness of the riparian beetle inventory by creating species accumulation curves which plot the number of species against sampling effort.  In most cases, we used number of replicates as the measure of sampling effort, although we also considered events and event/sample-type.  Species accumulation curves were fitted using the R function vegan::specaccum.   As the probability of finding a new species with an additional sample approaches zero, species accumulation curves reach an asymptote.  We considered it sufficient to judge this by eye using graphs of the relevant curves.  [citations to be added]
 
 
 ## 4	Results and Conclusions
@@ -91,16 +95,16 @@ ggplot(graphdata, aes(y = n_spp, x = genus, fill = sample_types)) +
 ```
 
 ```{r}
-genus_types %>%
-  ungroup() %>% 
-  filter(n_spp < min_n_spp) %>% 
-  arrange(-n_spp) %>%
-  mutate(genus = factor(genus, levels = rev(genus))) %>% 
-  select(-n_spp) %>% 
-  gather(key = sample_types, 
-         value = n_spp, handsearch, pitfall, handsearch_pitfall) %>% 
-  filter(n_spp > 0) %>% 
-  count(sample_types)
+# genus_types %>%
+#   ungroup() %>% 
+#   filter(n_spp < min_n_spp) %>% 
+#   arrange(-n_spp) %>%
+#   mutate(genus = factor(genus, levels = rev(genus))) %>% 
+#   select(-n_spp) %>% 
+#   gather(key = sample_types, 
+#          value = n_spp, handsearch, pitfall, handsearch_pitfall) %>% 
+#   filter(n_spp > 0) %>% 
+#   count(sample_types)
 ```
 
 
@@ -127,7 +131,7 @@ ggplot(graphdata, aes(x = n_spp, fill = sample_types)) +
 
 
 
-##Species accumulation curves
+### 4.4	To what extent do sampling events adequately represent the full diversity of riparian beetles present along any given stretch?
 
 If a survey has found all species present, the species accumulation curve should flatten and reach an asymptote as it approaches the total number of species found.  When plotting the observations of all species on an accumulation curve, there is still an appreciable gradient in the curve as it approaches the total nubmer of species (`r sum(samp_types_spp_sum)`n).  We can therefore conclude that the data does not comprise an exhaustive inventory of all wetland invertebrates in all the rivers sampled.  This should not be surprising as the surveys in question cover a range of rivers and geographical locations.       
 

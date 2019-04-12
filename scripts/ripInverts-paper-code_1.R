@@ -113,7 +113,9 @@ genus_types <- field_data_freq_types %>%
   mutate(handsearch_pitfall = hp) %>% 
   select(genus, handsearch, pitfall, handsearch_pitfall, n_spp) %>% 
   arrange(-n_spp)
-
+##Dissimilarity
+#calculate jaccard dissimilarity
+adon1 <- vegan::adonis2(selected_data ~ river + event_code + sample_type, data = selected_env, permutations = 120, method = "jaccard", by = "terms")
 
 ##Species accumulation curves ----
 
