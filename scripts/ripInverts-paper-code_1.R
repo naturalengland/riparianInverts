@@ -3,14 +3,14 @@ library(tidyverse)
 library(vegan)
 
 #Import data----
-field_data <- read_csv("../data/field_data_extract_Apr2019.csv")
+obs <- read_csv("../data/field_data_extract_Apr2019.csv")
 
 pantheon_data <- readxl::read_xlsx("../data/Species and Event data pivot table March with summary.xlsx", sheet = 2)
 
 #Prepare data----
 
 #create event lookup 
-event_lookup <- field_data %>% select(river, event_code) %>% unique()
+event_lookup <- obs %>% select(river, event_code) %>% unique()
 
 #create species score lookup
 pantheon_lookup <- pantheon_data %>% select(-event) %>% unique() 
@@ -19,18 +19,18 @@ pantheon_lookup <- pantheon_data %>% select(-event) %>% unique()
 pantheon_lookup$`Wetland species`[pantheon_lookup$`Wetland species` == "NA"] <- 0
 
 #convert excavations to handsearch
-field_data <- field_data %>% 
+obs <- obs %>% 
   mutate(sample_type = as.factor(sample_type)) %>% 
   mutate(sample_type = recode_factor(sample_type, excavation = "hand_search")) %>% 
   droplevels() 
 # #remove excavations----
-# field_data <- field_data %>% 
+# obs <- obs %>% 
 #   filter(sample_type %in% c("pitfall", "hand_search"))
 
 
 #convert to a frequency matrix----
 #This matrix calculates the frequency each species occurs in each replicate. Because it's by 'replicate' each species should only occur once, so in this case the frequency matrix is the same as an occurrence matrix.
-field_data_mat <- field_data %>% 
+obs_mat <- obs %>% 
   #calculate frequencies
   group_by(river, replicate, event_code, location, sample_type, spp_name) %>% 
   summarise(n = length(spp_name)) %>% 
@@ -42,16 +42,16 @@ field_data_mat <- field_data %>%
   arrange(river) 
 
 #split species matrix into data and environment matrices----
-selected_data <- field_data_mat %>%  
+selected_data <- obs_mat %>%  
   select(-c(river:sample_type))
 
-selected_env <- field_data_mat %>%  
+selected_env <- obs_mat %>%  
   select(c(river:sample_type))
 unique(selected_env$river)
 
 
 #create a frequency table----
-field_data_freq <- field_data %>% 
+obs_freq <- obs %>% 
   select(spp_name, sample_type) %>%
   mutate(presabs = 1) %>%
   group_by(spp_name, sample_type) %>% 
@@ -59,7 +59,7 @@ field_data_freq <- field_data %>%
   ungroup()
 
 #sample types----
-samptypes <- field_data_freq %>% 
+samptypes <- obs_freq %>% 
   select(-freq) %>% 
   mutate(smptp = str_replace_all(sample_type, c("hand_search" = "h", "pitfall" = "p"))) %>% 
   # ungroup() %>% 
@@ -71,7 +71,7 @@ write_csv(samptypes, "../data/samptypes.csv")
 
 samp_types_spp_sum <- table(samptypes$sample_types)
 
-field_data_freq_types <- field_data_freq %>% 
+obs_freq_types <- obs_freq %>% 
   spread(key = sample_type, value = freq, fill = 0) %>% 
   full_join(samptypes) %>% 
   left_join(pantheon_lookup, by = c("spp_name" = "species"))  %>% 
@@ -91,7 +91,7 @@ field_data_freq_types <- field_data_freq %>%
 
 
 #test difference in sampling type proportions between wetland and non wetland species
-chitest_wetland_props <- field_data_freq_types %>% 
+chitest_wetland_props <- obs_freq_types %>% 
   group_by(wetland_spp) %>% 
   count(sample_types) %>% 
   filter(wetland_spp %in% c(TRUE, FALSE)) %>% 
@@ -101,7 +101,7 @@ chitest_wetland_props <- field_data_freq_types %>%
 
 
 #extract genus data----
-genus_types <- field_data_freq_types %>% 
+genus_types <- obs_freq_types %>% 
   separate(col = spp_name, into = c("genus", NA), remove = T) %>% 
   select(-c(hand_search, pitfall)) %>%
   group_by(genus, sample_types) %>% 
@@ -126,8 +126,8 @@ spec_accum_selected <- specaccum(comm = selected_data)
 
 
 param_sampletype <- c("hand_search", "pitfall")
-param_rivers <- unique(field_data_mat$river)
-param_eventcode <- unique(field_data_mat$event_code)
+param_rivers <- unique(obs_mat$river)
+param_eventcode <- unique(obs_mat$event_code)
 
 
 #create empty data frame as template for accumulation data
@@ -145,7 +145,7 @@ spec_accum_temp <- spec_accum_empty
 #iterate through rivers
 for(selectedriver in param_rivers){
   
-  tempdata <- field_data_mat %>%
+  tempdata <- obs_mat %>%
     filter(river == selectedriver) %>%  
     select(-c(river:sample_type))
   
@@ -172,7 +172,7 @@ spec_accum_byevent <- spec_accum_empty
 spec_accum_temp <- spec_accum_empty
 
 for(selectedevent in param_eventcode){
-  tempdata <- field_data_mat %>%
+  tempdata <- obs_mat %>%
     filter(event_code == selectedevent) %>%  
     select(-c(river:sample_type))
   
@@ -203,7 +203,7 @@ for(selectedevent in param_eventcode){
   #iterate through samples
   for(sampletype in param_sampletype){
     
-    tempdata <- field_data_mat %>%
+    tempdata <- obs_mat %>%
       filter(sample_type == sampletype & 
                event_code == selectedevent) %>%  
       select(-c(river:sample_type))
