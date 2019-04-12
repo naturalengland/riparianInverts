@@ -1,6 +1,8 @@
 ---
 title: "ripInverts - paper content"
-output: html_notebook
+output:
+  word_document: default
+  html_notebook: default
 ---
 
 ```{r setup, include=FALSE}
@@ -125,6 +127,60 @@ ggplot(graphdata, aes(x = n_spp, fill = sample_types)) +
 
 
 
+##Species accumulation curves
+
+If a survey has found all species present, the species accumulation curve should flatten and reach an asymptote as it approaches the total number of species found.  When plotting the observations of all species on an accumulation curve, there is still an appreciable gradient in the curve as it approaches the total nubmer of species (`r sum(samp_types_spp_sum)`n).  We can therefore conclude that the data does not comprise an exhaustive inventory of all wetland invertebrates in all the rivers sampled.  This should not be surprising as the surveys in question cover a range of rivers and geographical locations.       
+
+```{r}
+plot(spec_accum_selected, ci.type = "polygon", ci.col = "grey", ci.lty = "dotted", 
+     main = "Species accumulation curve: grand total")
+abline(h = max(spec_accum_selected$richness), col = "black")
+abline(h = max(spec_accum_selected$richness)*0.95, col = "red")
+abline(h = max(spec_accum_selected$richness)*0.9, col = "red", lty = "dotted")
+```
+  
+```{r}
+graphdata <- spec_accum_byriver 
+#colours <- c("hand_search" = "royalblue", "excavation" = "green", "pitfall" = "red")
+legenddata <- graphdata %>% group_by(river) %>% summarise(max_sites = max(n_sites)) 
+```
+
+Of more interest is whether there is sufficient sampling of each river. Most of the rivers have very low levels of replication and it is clear from the steepness of the accumulation curves that they are not close to leveling out.  In the case of the Wye (`r legenddata$max_sites[which(legenddata$river == "Wye")]` replicates) and the Lugg (`r legenddata$max_sites[which(legenddata$river == "Lugg")]` replicates) there is some levelling out but still no asymptote is reached.  
+
+```{r}
+ggplot(graphdata, aes(x = n_sites, y = n_spp, colour = river))+
+  geom_line(size = 1) +
+  scale_colour_discrete(labels = paste0(legenddata$river, " (", legenddata$max_sites, ")"))+
+  labs(title = "Species accumulation by river", x = "replicates", y = "number of species") +
+  NULL 
+```
 
 
+```{r}
+graphdata <- spec_accum_byevent 
+legenddata <- graphdata %>% group_by(event_code) %>% summarise(max_sites = max(n_sites)) 
+```
+
+It may be that this is due to the heterogeneity of species compositions along rivers - this should be reduced at the event level.  Unfortunately, at the level of events the greatest level of replication is n = `r max(legenddata$max_sites)` samples.  It can be seen that this is insufficient replication for the species accumulation curve to reach an asymptote.  
+
+```{r}
+ggplot(graphdata, aes(x = n_sites, y = n_spp, group = event_code, colour = river))+
+  geom_line(size = 1) +
+  labs(title = "Species accumulation by event", x = "replicates", y = "number of species") +
+  NULL 
+```
+The last remaining source of sampling variability is is the type of sample (hand search or pitfall) and we looked at whether splitting by these results in a sample reaching an asymptote within an event.  Here we have even less replication (max is n = 5, the majority are n = 4 or lower) and it is clear that no asymptote is reached.  
+
+```{r}
+graphdata <- spec_accum_bysampletype 
+colours <- c("hand_search" = "royalblue", "pitfall" = "red")
+  
+ggplot(graphdata, aes(x = n_sites, y = n_spp))+
+  geom_line(size = 1, aes(colour = event_code), alpha = 0.5) +
+  facet_wrap(~sample_type, ncol = 1)+
+  labs(title = "Species accumulation by sample type and event", x = "replicates", y = "number of species") +
+  NULL  
+```
+
+We therefore conclude that the proposed method is not capable of sampling the full abundance of species even at replication of 40 samples for a single river.  It is not known what level of replication would be sufficient.    
 

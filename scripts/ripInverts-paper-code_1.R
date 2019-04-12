@@ -9,6 +9,9 @@ pantheon_data <- readxl::read_xlsx("../data/Species and Event data pivot table M
 
 #Prepare data----
 
+#create event lookup 
+event_lookup <- field_data %>% select(river, event_code) %>% unique()
+
 #create species score lookup
 pantheon_lookup <- pantheon_data %>% select(-event) %>% unique() 
 
@@ -112,13 +115,111 @@ genus_types <- field_data_freq_types %>%
   arrange(-n_spp)
 
 
+##Species accumulation curves ----
+
+###Grand total accumulation
+#species accumulation curve by resampling events
+spec_accum_selected <- specaccum(comm = selected_data)
 
 
-#calculate jaccard dissimilarity
-adon1 <- vegan::adonis2(selected_data ~ 
-                          river + event_code + sample_type, 
-                        data = selected_env, 
-                        permutations = 120, method = "jaccard", 
-                        by = "terms")
+
+param_sampletype <- c("hand_search", "pitfall")
+param_rivers <- unique(field_data_mat$river)
+param_eventcode <- unique(field_data_mat$event_code)
 
 
+#create empty data frame as template for accumulation data
+spec_accum_empty <- data_frame(
+  sample_type = as.character(), 
+  river = as.character(), 
+  event_code = as.character(),
+  n_sites = as.integer(), n_spp = as.double(), sd = as.double())
+
+
+###accumulation by river
+spec_accum_byriver <- spec_accum_empty
+spec_accum_temp <- spec_accum_empty
+
+#iterate through rivers
+for(selectedriver in param_rivers){
+  
+  tempdata <- field_data_mat %>%
+    filter(river == selectedriver) %>%  
+    select(-c(river:sample_type))
+  
+  tempdata <- if(nrow(tempdata)>1){
+    
+    tempdata <- specaccum(tempdata)
+    tempdata <- data.frame(
+      sample_type = "all",
+      river = selectedriver,
+      event_code = "all",
+      n_sites = tempdata$sites,
+      n_spp = tempdata$richness,
+      sd = tempdata$sd) 
+    
+    spec_accum_temp <- rbind(spec_accum_temp, tempdata)}
+}
+spec_accum_byriver <-  
+  if(nrow(spec_accum_temp)>0){rbind(spec_accum_byriver, spec_accum_temp)}
+
+
+###accumulation by event
+
+spec_accum_byevent <- spec_accum_empty
+spec_accum_temp <- spec_accum_empty
+
+for(selectedevent in param_eventcode){
+  tempdata <- field_data_mat %>%
+    filter(event_code == selectedevent) %>%  
+    select(-c(river:sample_type))
+  
+  tempdata <- if(nrow(tempdata)>1){
+    
+    tempdata <- specaccum(tempdata)
+    
+    tempdata <- data.frame(
+      sample_type = "all",
+      river = event_lookup$river[which(event_lookup$event_code == selectedevent)],
+      event_code = selectedevent,
+      n_sites = tempdata$sites,
+      n_spp = tempdata$richness,
+      sd = tempdata$sd) 
+    
+    spec_accum_temp <- rbind(spec_accum_temp, tempdata)}
+}
+spec_accum_byevent <-  
+  if(nrow(spec_accum_temp)>0){rbind(spec_accum_byevent, spec_accum_temp)}
+
+###accumulation by event and sample type
+
+spec_accum_bysampletype <- spec_accum_empty
+spec_accum_temp <- spec_accum_empty
+
+#iterate through events
+for(selectedevent in param_eventcode){
+  #iterate through samples
+  for(sampletype in param_sampletype){
+    
+    tempdata <- field_data_mat %>%
+      filter(sample_type == sampletype & 
+               event_code == selectedevent) %>%  
+      select(-c(river:sample_type))
+    
+    tempdata <- if(nrow(tempdata)>1){
+      
+      tempdata <- specaccum(tempdata)
+      
+      tempdata <- data.frame(
+        sample_type = sampletype,
+        river = event_lookup$river[which(event_lookup$event_code == selectedevent)],
+        event_code = selectedevent,
+        n_sites = tempdata$sites,
+        n_spp = tempdata$richness,
+        sd = tempdata$sd) 
+      
+      spec_accum_temp <- rbind(spec_accum_temp, tempdata)}
+  }
+  spec_accum_bysampletype <-  
+    if(nrow(spec_accum_temp)>0){rbind(spec_accum_bysampletype, spec_accum_temp)}
+}
