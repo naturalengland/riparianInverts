@@ -20,6 +20,10 @@ library(forcats)
 biol_records <- read_csv("../data/Riparian Event Data Jan2019 - biological records.csv")
 
 events_code <- read_csv("../data/event_code_lookup_orig.csv") %>% select(-1)
+
+##import species lookup data
+pantheon_data <- readxl::read_xlsx("../data/Species and Event data pivot table March with summary.xlsx", sheet = 2)
+spp_matched_corrected <- read.csv("../data/speciesmatch_further_correctionsApr2019.csv") 
 ```
 
 
@@ -36,31 +40,8 @@ There are `r n_spp` unique species in this dataset.  It contains `r nrow(biol_re
 plot(table(as.numeric(biol_records$Year)), ylab = "number of records", xlab = "year")
 ```
 
-##examine new data
-
-compare it to the old ers_data2
-```{r}
-# cbind(names(biol_records), names(ers_data2))
-# 
-# #col 12 differs: [12,] "Event Name"              "NE Full Sample Name"    
-# olddata <- ers_data2 #[-12]
-# newdata <- biol_records #[-12]
-# names(olddata) <- make.names(names(newdata))
-# names(newdata) <- make.names(names(newdata))
-# cbind(names(newdata), names(olddata))
-# 
-# 
-# library(compareDF)
-# 
-# compareDF::compare_df(newdata, olddata, group_col = "Event.Name")
-```
-
-```{r}
-
-```
-
-
 ### start import
+
 #Full sSample data
 
 #### Get a handle on numeric data
@@ -116,9 +97,6 @@ n_distinct(biol_records$abund_char)
 length(biol_records$abund_char[which(is.na(biol_records$abund_char)==FALSE)])
 ```
 552 observations; 17 unique abundance values
-
-- same as ers_data2
-
 
 ```{r}
 ers_char <- data.frame(table(biol_records$abund_char))
@@ -230,18 +208,6 @@ biol_records <- biol_records %>%
 
 
 table(biol_records$Sample_Type_old, biol_records$Sample_Duration)
-```
-
-
-
-## Look at surveys
-
-
-```{r}
-# 
-# names(ers_data2)
-# 
-# table(ers_data2$`NE Full Sample Name`)
 ```
 
 
@@ -447,27 +413,26 @@ field_data_selected %>%
 
 refer to ripInverts-dataImport_3.Rmd
 
-```{r}
-#spp_matched_corrected <- read.csv("../data/speciesmatch_corrected.csv") 
-
-spp_matched_corrected <- read.csv("../data/speciesmatch_further_correctionsApr2019.csv") 
-```
 
 
 ```{r}
-field_data_selected <- read.csv("../data/field_data_selected_Apr2019.csv")
+#field_data_selected <- read.csv("../data/field_data_selected_Apr2019.csv")
+
+field_data_selected$spp_name %>% unique() %>% length()
+table(pantheon_data$species %in% field_data_selected$spp_name)
 
 #correct the names in the original data
 tempnames <- names(field_data_selected)
 
-temp_field_data_selected <- field_data_selected %>% 
+field_data_selected <- field_data_selected %>% 
   mutate(old_name = spp_name) %>% 
   left_join(spp_matched_corrected, by = "old_name") %>% 
   mutate(spp_name = match) %>%
 #  filter(include == "y") %>% 
-  select(old_name, tempnames)
+  select(tempnames)
 
-
+field_data_selected$spp_name %>% unique() %>% length()
+table(pantheon_data$species %in% field_data_selected$spp_name)
 ```
 
 
@@ -487,16 +452,16 @@ field_data_selected %>%
 ```
 
 
-##Check if new-data is alread incorporated
-```{r}
-raw <- read.csv("../data/2018 riparian update corrected.csv")
-newdata <- raw
-dim(newdata)
-table(newdata$Grid.ref)
-biol_records %>% filter(Sample_Grid_Ref %in% unique(newdata$Grid.ref)) %>%  dim()
-```
+<!-- ##Check if new-data is alread incorporated -->
+<!-- ```{r} -->
+<!-- raw <- read.csv("../data/2018 riparian update corrected.csv") -->
+<!-- newdata <- raw -->
+<!-- dim(newdata) -->
+<!-- table(newdata$Grid.ref) -->
+<!-- biol_records %>% filter(Sample_Grid_Ref %in% unique(newdata$Grid.ref)) %>%  dim() -->
+<!-- ``` -->
 
-hard to say 
+<!-- hard to say  -->
 
 ##Select subset of events
 ```{r}
@@ -526,8 +491,8 @@ field_data_extract %>% count(event_code)
 
 #Export data
 ```{r}
-# write_csv(field_data_selected, "../data/field_data_selected_Apr2019.csv")
-# write_csv(field_data_extract, "../data/field_data_extract_Apr2019.csv")
+ # write_csv(field_data_selected, "../data/field_data_selected_Apr2019.csv")
+ # write_csv(field_data_extract, "../data/field_data_extract_Apr2019.csv")
 ```
 
 
