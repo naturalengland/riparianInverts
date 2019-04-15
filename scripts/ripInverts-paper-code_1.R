@@ -99,7 +99,8 @@ obs_all_freq_types <- obs_all_freq %>%
          "riparianshingle_spp" = "riparian shingle W46",
          "drawdownzone_spp" = "drawdown zone W38",
          "wetlandveg_spp" = "wetland vegetation W34") %>% 
-  mutate_at(vars(cons_status:wetlandveg_spp), as.logical)
+  mutate_at(vars(cons_status:wetlandveg_spp), as.logical) %>% 
+  mutate_at(vars(length.min,length.max), as.numeric)
 
 
 #test difference in sampling type proportions between wetland and non wetland species
@@ -131,7 +132,7 @@ adon1 <- vegan::adonis2(selected_data ~ river + event_code + sample_type, data =
 
 ##Species accumulation curves ----
 
-#extract recent events
+#extract recent events----
 event_code_selected <- c("Frome_2017_2", "Frome_2017_1", "Frome_2017_3", "Lugg_2014_1",
                          "Lugg_2014_3", "Lugg_2014_4", "Wye_2014_6", "Wye_2014_7", 
                          "Wye_2014_4", "Wye_2014_3", "Wye_2014_5", "Lugg_2014_2", 
@@ -143,7 +144,7 @@ obs_rct_mat <- obs_all_mat %>%
 
 
 
-###Grand total accumulation
+###Grand total accumulation----
 #species accumulation curve by resampling events
 spec_accum_selected <- specaccum(comm = obs_rct_mat %>% select(-c(river:sample_type)))
 
@@ -153,7 +154,7 @@ param_rivers <- unique(obs_rct_mat$river)
 param_eventcode <- unique(obs_rct_mat$event_code)
 
 
-#create empty data frame as template for accumulation data
+#create empty data frame as template for accumulation data----
 spec_accum_empty <- data_frame(
   sample_type = as.character(), 
   river = as.character(), 
@@ -161,7 +162,7 @@ spec_accum_empty <- data_frame(
   n_sites = as.integer(), n_spp = as.double(), sd = as.double())
 
 
-###accumulation by river
+###accumulation by river----
 spec_accum_byriver <- spec_accum_empty
 spec_accum_temp <- spec_accum_empty
 
@@ -189,7 +190,7 @@ spec_accum_byriver <-
   if(nrow(spec_accum_temp)>0){rbind(spec_accum_byriver, spec_accum_temp)}
 
 
-###accumulation by event
+###accumulation by event----
 
 spec_accum_byevent <- spec_accum_empty
 spec_accum_temp <- spec_accum_empty
@@ -216,7 +217,7 @@ for(selectedevent in param_eventcode){
 spec_accum_byevent <-  
   if(nrow(spec_accum_temp)>0){rbind(spec_accum_byevent, spec_accum_temp)}
 
-###accumulation by event and sample type
+###accumulation by event and sample type----
 
 spec_accum_bysampletype <- spec_accum_empty
 spec_accum_temp <- spec_accum_empty

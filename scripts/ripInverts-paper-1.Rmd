@@ -32,37 +32,54 @@ We examined the completeness of the riparian beetle inventory by creating specie
  
 Accross all sampling events, `r sum(samp_types_spp_sum)` species were found.  Of these, `r samp_types_spp_sum["h"]` species were found by handsearch only, `r samp_types_spp_sum["p"]` by pitfall only and `r samp_types_spp_sum["hp"]` by both handsearch and pitfall methods (see fig x).    
 
-```{r}
-obs_all_freq_types %>% count(wetland_spp)
-obs_all_freq_types %>% count(is_wetland)
-```
-*Note issue with table: i need to recode wetland species*
-
-
 ```{r fig.width=5}
-graphdata <- obs_all_freq_types 
-
-ggplot(graphdata, aes(sample_types)) +
+ggplot(obs_all_freq_types, aes(sample_types)) +
   geom_bar(aes(fill = sample_types)) +
   theme(legend.position = "none") +
   labs(title = "Distribution of species \nby capture type", 
        x = "sample type", y = "n species")
 ```
-Of these, `r obs_all_freq_types %>% filter(wetland_spp == TRUE) %>%  count(wetland_spp) %>% pull(n)` are wetland species, and `r obs_all_freq_types %>% filter(wetland_spp != TRUE) %>%  count(wetland_spp) %>% pull(n)` are not.  Wetland species were caught by pitfall in significantly lower proportions to non-wetland species (Pearson's Chi-squared test, X-squared = `r chitest_wetland_props$statistic`, df =  `r chitest_wetland_props$parameter`, p = `r Hmisc::format.pval(chitest_wetland_props$p.value)`)
+
+Of these, `r obs_all_freq_types %>% filter(wetland_spp == TRUE) %>%  count(wetland_spp) %>% pull(n)` are wetland species, and `r obs_all_freq_types %>% filter(wetland_spp != TRUE) %>%  count(wetland_spp) %>% pull(n)` are not.  Wetland species were caught by pitfall only in significantly lower proportions to non-wetland species, but significantly higher proportion of species was caught by both handfall and pitfall methods (Pearson's Chi-squared test, X-squared = `r chitest_wetland_props$statistic`, df =  `r chitest_wetland_props$parameter`, p = `r Hmisc::format.pval(chitest_wetland_props$p.value)`)
 
 
 
 ```{r}
-ggplot(graphdata, aes(sample_types)) +
-  geom_bar(aes(fill = sample_types, alpha = is_wetland), position = position_stack()) +
-#  theme(legend.position = "none") +
-  scale_alpha_discrete(range = c(0.6, 0.9))+
-  labs(title = "Distribution of species \nby capture type and species trait", 
-       x = "sample type", y = "n species")
+graphdata <-  obs_all_freq_types %>% 
+  filter(wetland_spp %in% c(TRUE, FALSE)) %>%
+  count(wetland_spp, sample_types) %>%
+  group_by(wetland_spp) %>% 
+  mutate(prop = n/sum(n))
 
+ggplot(graphdata, aes(x = sample_types, y = prop)) +
+  geom_bar(aes(fill = sample_types, alpha = wetland_spp), position = position_dodge(), stat = "identity") +
+  scale_alpha_discrete(range = c(0.6, 0.9))+
+  labs(title = "proportion of species \nby capture type and species trait", 
+       x = "sample type", y = "proportion of species (within wetland/non-wetland groups)")
 ```
 
-*note: this graph has issues because I need to re-code what is and isn't wetland species.  Will be fixed, may affect results. *
+
+It was expected that the physical dimensions of a species would be predictive of whether they were more likely to be caught in a pitfall trap or not.  However, no such effect was found when looking at minimum length (maximum length showed an even smaller difference).  *[need to add in statistical test for difference, but it's not going to be significant as you can see from the boxplots]*
+
+```{r}
+ggplot(obs_all_freq_types, aes(y = length.min, x = sample_types)) +
+  geom_boxplot() +
+  scale_alpha_discrete(range = c(0.6, 0.9))+
+  labs(title = "Distribution of species \nby capture type and minimum length", 
+       x = "capture type", y = "minimum length (mm)")
+```
+
+
+```{r}
+ggplot(obs_all_freq_types, aes(x = length.min)) +
+  geom_histogram(aes(fill = sample_types),
+                 #position = position_dodge(), 
+                 stat = "bin",
+                 binwidth = 10) +
+  labs(title = "Distribution of species \nby capture type and minimum length", 
+       y = "number of species", x = "minimum length (mm)")
+```
+
 
 
 
