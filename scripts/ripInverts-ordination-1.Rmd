@@ -1,0 +1,320 @@
+---
+title: "Riparian Inverts: ordination"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(vegan)
+#library(MASS)
+```
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+
+```{r}
+source("../scripts/ripInverts-paper-code_1.R", chdir = T)
+```
+
+##Ordination - all records
+
+```{r}
+#split matrix into species data and environmental data
+spp_dat <- select(obs_all_mat, -c(river:sample_type))
+
+env_dat <- select(obs_all_mat, c(river:sample_type))
+```
+
+
+```{r}
+#calculate distance matrix 
+spp_dist1 <- vegdist(spp_dat)
+
+#ordinate with NMDS using Bray-Curtis dissimilarity
+spp_mds_bray <- metaMDS(spp_dat, trace = FALSE)
+spp_mds_bray
+```
+**commentary below adapted from Oksanen, J. http://cc.oulu.fi/~jarioksa/opetus/metodi/vegantutor.pdf **
+The species data was not tranformed.  Distance was calculated using Bray-Curtis dissimilarity.  Function run isoMDS with several random starts, and stopped either after a certain number of tries, or after finding two similar configurations with minimum stress. In any case, it returned the
+best solution.  Function rotated the solution so that the largest variance of site
+scores will be on the first axis. Function scaled the solution so that one unit corresponds to halving
+of community similarity from the replicate similarity.   Function found species scores as weighted averages of site scores, but expanded them so that species and site scores have equal variances. This expansion can be undone using 'shrink = TRUE' in display commands.
+
+
+```{r}
+#ordinate with NMDS using Jaccard dissimilarity
+spp_mds_jac <- metaMDS(spp_dat, trace = FALSE, distance = "jac")
+spp_mds_jac
+```
+
+```{r}
+#compare jaccard v bray NMDS
+
+procrustes(spp_mds_bray, spp_mds_jac)
+plot(procrustes(spp_mds_bray, spp_mds_jac))
+plot(procrustes(spp_mds_bray, spp_mds_jac), kind = 2)
+```
+
+
+```{r}
+plot(spp_mds_bray)
+plot(spp_mds_jac)
+
+spp_mds_data <- cbind(env_dat, spp_mds_jac$points)
+hist(spp_mds_data$MDS1)
+
+ggplot(filter(spp_mds_data, MDS1 < 0), aes(MDS1, MDS2, color = sample_type)) + geom_point() + theme_bw()
+
+ggplot(filter(spp_mds_data, MDS1 < 0), aes(MDS1, MDS2, color = river)) + geom_point() + theme_bw()
+
+```
+REMOVED OUTLIERS FROM RESULTS: PROBABLY BETTER TO REMOVE FROM DATA
+
+```{r}
+#ordinate with PCA
+spp_pca <- rda(spp_dat, scale = TRUE)
+spp_pca  
+plot(spp_pca, scaling = -3)  
+biplot(spp_pca, scaling = 2)
+```
+
+```{r}
+#ordinate with correspondence analysis
+spp_ca <- cca(spp_dat)
+spp_ca
+
+plot(spp_ca)
+
+```
+
+
+```{r}
+#ordinate with detrended correspondence analysis
+spp_dca <- decorana(spp_dat)
+
+plot(spp_dca, display = "sites", type = "points")
+with(env_dat, ordiellipse(spp_dca, sample_type, col = "blue", kind = "se", conf = 0.95))
+with(env_dat, ordispider(spp_dca, sample_type, col = "blue", label= TRUE))
+with(env_dat, ordihull(spp_dca, sample_type, col="blue", lty=2))
+
+
+plot(spp_dca, display = "sites", type = "points")
+with(env_dat, ordiellipse(spp_dca, river, kind = "se", conf = 0.95))
+with(env_dat, ordispider(spp_dca, river, col = "blue", label= TRUE))
+with(env_dat, ordihull(spp_dca, river, col="blue", lty=2))
+
+plot(spp_dca, display = "sites", type = "points")
+with(env_dat, ordiellipse(spp_dca, location, kind = "se", conf = 0.95))
+with(env_dat, ordispider(spp_dca, location, col = "blue", label= TRUE))
+with(env_dat, ordihull(spp_dca, location, col="blue", lty=2))
+```
+
+```{r}
+spp_dca_data <- cbind(env_dat, spp_dca$rproj)
+
+ggplot(spp_dca_data, aes(DCA4, DCA2, color = sample_type)) + geom_point() + theme_bw()
+
+ggplot(spp_dca_data, aes(DCA4, DCA2, color = river)) + geom_point() + theme_bw()
+
+```
+
+
+##Ordination - recent records
+
+```{r}
+#split matrix into species data and environmental data
+spp_rct_dat <- select(obs_rct_mat, -c(river:sample_type))
+
+env_rct_dat <- select(obs_rct_mat, c(river:sample_type))
+```
+
+
+```{r}
+#calculate distance matrix 
+spp_rct_dist1 <- vegdist(spp_rct_dat)
+
+#ordinate with NMDS using Bray-Curtis dissimilarity
+spp_rct_mds_bray <- metaMDS(spp_rct_dat, trace = FALSE)
+spp_rct_mds_bray
+```
+**commentary below adapted from Oksanen, J. http://cc.oulu.fi/~jarioksa/opetus/metodi/vegantutor.pdf **
+The species data was not tranformed.  Distance was calculated using Bray-Curtis dissimilarity.  Function run isoMDS with several random starts, and stopped either after a certain number of tries, or after finding two similar configurations with minimum stress. In any case, it returned the
+best solution.  Function rotated the solution so that the largest variance of site
+scores will be on the first axis. Function scaled the solution so that one unit corresponds to halving
+of community similarity from the replicate similarity.   Function found species scores as weighted averages of site scores, but expanded them so that species and site scores have equal variances. This expansion can be undone using 'shrink = TRUE' in display commands.
+
+
+```{r}
+#ordinate with NMDS using Jaccard dissimilarity
+spp_rct_mds_jac <- metaMDS(spp_rct_dat, trace = FALSE, distance = "jac")
+spp_rct_mds_jac
+```
+
+```{r}
+#compare jaccard v bray NMDS
+
+procrustes(spp_rct_mds_bray, spp_rct_mds_jac)
+plot(procrustes(spp_rct_mds_bray, spp_rct_mds_jac))
+plot(procrustes(spp_rct_mds_bray, spp_rct_mds_jac), kind = 2)
+```
+
+
+```{r}
+plot(spp_rct_mds_bray)
+plot(spp_rct_mds_jac)
+
+spp_rct_mds_data <- cbind(env_rct_dat, spp_rct_mds_jac$points)
+
+ggplot(spp_rct_mds_data, aes(MDS1, MDS2, color = sample_type)) + geom_point() + theme_bw()
+
+ggplot(spp_rct_mds_data, aes(MDS1, MDS2, color = river)) + geom_point() + theme_bw()
+
+```
+REMOVED OUTLIERS FROM RESULTS: PROBABLY BETTER TO REMOVE FROM DATA
+
+```{r}
+#ordinate with PCA
+spp_rct_pca <- rda(spp_rct_dat, scale = TRUE)
+spp_rct_pca  
+plot(spp_rct_pca)  
+biplot(spp_rct_pca, scaling = 2)
+```
+
+```{r}
+#ordinate with correspondence analysis
+spp_rct_ca <- cca(spp_rct_dat)
+spp_rct_ca
+
+plot(spp_rct_ca)
+
+```
+
+
+```{r}
+#ordinate with detrended correspondence analysis
+spp_rct_dca <- decorana(spp_rct_dat)
+
+plot(spp_rct_dca, display = "sites", type = "points")
+with(env_rct_dat, ordiellipse(spp_rct_dca, sample_type, col = "blue", kind = "se", conf = 0.95))
+with(env_rct_dat, ordispider(spp_rct_dca, sample_type, col = "blue", label= TRUE))
+with(env_rct_dat, ordihull(spp_rct_dca, sample_type, col="blue", lty=2))
+
+
+plot(spp_rct_dca, display = "sites", type = "points")
+with(env_rct_dat, ordiellipse(spp_rct_dca, river, kind = "se", conf = 0.95))
+with(env_rct_dat, ordispider(spp_rct_dca, river, col = "blue", label= TRUE))
+with(env_rct_dat, ordihull(spp_rct_dca, river, col="blue", lty=2))
+
+plot(spp_rct_dca, display = "sites", type = "points")
+with(env_rct_dat, ordiellipse(spp_rct_dca, location, kind = "se", conf = 0.95))
+with(env_rct_dat, ordispider(spp_rct_dca, location, col = "blue", label= TRUE))
+with(env_rct_dat, ordihull(spp_rct_dca, location, col="blue", lty=2))
+```
+
+##ggplot
+
+```{r}
+#ordinate with detrended correspondence analysis
+  #plottign in ggplot
+spp_rct_dca <- decorana(spp_rct_dat)
+
+spp_rct_dca_sites <- cbind(env_rct_dat, scores(spp_rct_dca, display = "sites", origin = TRUE))
+
+spp_rct_dca_species <- scores(spp_rct_dca, display = "species", origin = TRUE) %>%
+  data.frame() %>% 
+  rownames_to_column("species")
+
+#hulls
+spp_rct_dca_sites %>% 
+  filter(river == "Wye")
+
+grp.a <- data.scores[data.scores$grp == "A", ][chull(data.scores[data.scores$grp == 
+    "A", c("NMDS1", "NMDS2")]), ]  # hull values for grp A
+grp.b <- data.scores[data.scores$grp == "B", ][chull(data.scores[data.scores$grp == 
+    "B", c("NMDS1", "NMDS2")]), ]  # hull values for grp B
+
+hull.data <- rbind(grp.a, grp.b)  #combine grp.a and grp.b
+hull.data
+```
+
+
+```{r}
+ggplot(spp_rct_dca_sites, aes(DCA1, DCA2, color = sample_type)) + 
+  geom_point() + 
+  scale_color_brewer(type = "qual", palette = "Dark2") +
+  coord_equal()+
+  theme_bw()+ 
+  labs(title = "Detrended correspondence analysis", subtitle = "by sample type")
+
+ggplot(spp_rct_dca_sites, aes(DCA1, DCA2, color = river)) +
+  geom_point() + 
+  scale_color_brewer(type = "qual", palette = "Dark2") +
+  coord_equal()+
+  theme_bw()+ 
+  labs(title = "Detrended correspondence analysis", subtitle = "by river")
+
+ggplot(spp_rct_dca_sites, aes(DCA1, DCA2, colour = event_code)) +
+  geom_point() + 
+  facet_wrap(~river) +
+  coord_equal()+
+  theme_bw()+
+  theme(legend.position = "none") +
+  labs(title = "Detrended correspondence analysis", subtitle = "by river and event")
+```
+
+```{r}
+ggplot() + 
+  geom_point(data=spp_rct_dca_species,aes(x=DCA1,y=DCA2),alpha=0.5, size = 0.5, colour = "red") +  
+  # add the species labels
+  geom_point(data=spp_rct_dca_sites,aes(x=DCA1,y=DCA2,colour=sample_type), shape = 1) + # add the site markers
+  #geom_text(data=spp_rct_dca_sites,aes(x=DCA1,y=DCA2, label=replicate),size=6,vjust=0) +  
+  # add the site labels
+  #scale_colour_manual(values=c("A" = "red", "B" = "blue")) +
+  #coord_equal() +
+  theme_bw()
+```
+
+```{r}
+source("../scripts/gg_ordiplot.R")
+source("../scripts/ord_labels.R")
+```
+
+```{r}
+my.plot <- gg_ordiplot(spp_rct_dca, env_rct_dat$river, kind = "sd", 
+            label = TRUE, spider = FALSE, hull = TRUE, ellipse = FALSE,
+            plot = FALSE, pt.size = 2) 
+
+my.plot$plot +
+  theme_bw() +
+  coord_equal() +
+  scale_color_brewer(type = "qual", palette = "Dark2") +
+  geom_text(fontface = "bold") +
+  labs(color="River", x="DCA 1", y="DCA 2", 
+       title = "Detrended correspondence analysis", subtitle = "by river") +
+  theme(legend.position = "none")
+```
+
+```{r}
+my.plot <- gg_ordiplot(spp_rct_dca, env_rct_dat$sample_type, kind = "sd", 
+            label = TRUE, spider = FALSE, hull = TRUE, ellipse = FALSE,
+            plot = FALSE, pt.size = 2) 
+
+my.plot$plot +
+  theme_bw() +
+  coord_equal() +
+  scale_color_brewer(type = "qual", palette = "Dark2") +
+  geom_text(fontface = "bold") +
+  labs(color="River", x="DCA 1", y="DCA 2", 
+       title = "Detrended correspondence analysis", subtitle = "by sample_type") +
+  theme(legend.position = "none")
+```
+
+###3 d 
+```{r}
+library(vegan3d)
+vegan3d::ordirgl(object = spp_rct_dca, display = "sites", type = "p")
+```
+
+

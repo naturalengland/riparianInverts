@@ -52,6 +52,19 @@ obs_all_mat <- obs_all %>%
   data.frame() %>%
   arrange(river) 
 
+
+#This matrix calculates the frequency each species occurs in each event. Because it's by 'event' each species may occur more than once.
+obs_all_mat_evt <- obs_all %>% 
+  #calculate frequencies
+  group_by(river, event_code, location, sample_type, spp_name) %>% 
+  summarise(n = length(spp_name)) %>% 
+  #abbreviate species names
+  mutate(spp_name = vegan::make.cepnames(spp_name)) %>% 
+  #spread to a matrix
+  spread(key = spp_name, value = n, fill = 0) %>%
+  data.frame() %>%
+  arrange(river) 
+
 #split species matrix into data and environment matrices----
 selected_data <- obs_all_mat %>%  
   select(-c(river:sample_type))
@@ -100,7 +113,8 @@ obs_all_freq_types <- obs_all_freq %>%
          "drawdownzone_spp" = "drawdown zone W38",
          "wetlandveg_spp" = "wetland vegetation W34") %>% 
   mutate_at(vars(cons_status:wetlandveg_spp), as.logical) %>% 
-  mutate_at(vars(length.min,length.max), as.numeric)
+  mutate_at(vars(length.min,length.max), as.character)  %>% 
+  mutate_at(vars(length.min,length.max), as.double)
 
 
 #test difference in sampling type proportions between wetland and non wetland species
@@ -142,16 +156,66 @@ event_code_selected <- c("Frome_2017_2", "Frome_2017_1", "Frome_2017_3", "Lugg_2
 obs_rct_mat <- obs_all_mat %>% 
   filter(event_code %in% event_code_selected) %>% droplevels() 
 
-
+obs_rct_mat_evt <- obs_all_mat_evt %>% filter(event_code %in% event_code_selected) %>% droplevels()
 
 ###Grand total accumulation----
-#species accumulation curve by resampling events
+#species accumulation curve by resampling replicates
 spec_accum_selected <- specaccum(comm = obs_rct_mat %>% select(-c(river:sample_type)))
 
+spec_accum_event <- specaccum(comm = obs_rct_mat_evt %>% select(-c(river:sample_type)))
 
 param_sampletype <- c("hand_search", "pitfall")
 param_rivers <- unique(obs_rct_mat$river)
 param_eventcode <- unique(obs_rct_mat$event_code)
+
+
+
+###accumulation by function ----
+#create empty data frame as template for accumulation data
+specaccumby <- function(specaccum_object, 
+                        param_eventcode = param_eventcode, 
+                        param_rivers = param_rivers, 
+                        param_sampletype = param_sampletype){
+
+spec_accum_by <- data_frame(
+  sample_type = as.character(), 
+  river = as.character(), 
+  event_code = as.character(),
+  n_sites = as.integer(), n_spp = as.double(), sd = as.double())
+
+spec_accum_temp <- spec_accum_empty
+
+
+#iterate through rivers
+for(selectedriver in param_rivers){
+  
+  tempdata <- obs_rct_mat %>%
+    filter(river == selectedriver) %>%  
+    select(-c(river:sample_type))
+  
+  tempdata <- if(nrow(tempdata)>1){
+    
+    tempdata <- specaccum(tempdata)
+    tempdata <- data.frame(
+      sample_type = "all",
+      river = selectedriver,
+      event_code = "all",
+      n_sites = tempdata$sites,
+      n_spp = tempdata$richness,
+      sd = tempdata$sd) 
+    
+    spec_accum_temp <- rbind(spec_accum_temp, tempdata)}
+}
+spec_accum_by <-  
+  if(nrow(spec_accum_temp)>0){rbind(spec_accum_by, spec_accum_temp)}
+
+}
+
+
+
+
+
+
 
 
 #create empty data frame as template for accumulation data----
@@ -162,7 +226,7 @@ spec_accum_empty <- data_frame(
   n_sites = as.integer(), n_spp = as.double(), sd = as.double())
 
 
-###accumulation by river----
+###accumulation by river (replicate level)----
 spec_accum_byriver <- spec_accum_empty
 spec_accum_temp <- spec_accum_empty
 
@@ -189,6 +253,32 @@ for(selectedriver in param_rivers){
 spec_accum_byriver <-  
   if(nrow(spec_accum_temp)>0){rbind(spec_accum_byriver, spec_accum_temp)}
 
+###accumulation by river (event level)----
+spec_accum_byriver_evt <- spec_accum_empty
+spec_accum_temp <- spec_accum_empty
+
+#iterate through rivers
+for(selectedriver in param_rivers){
+  
+  tempdata <- obs_rct_mat_evt %>%
+    filter(river == selectedriver) %>%  
+    select(-c(river:sample_type))
+  
+  tempdata <- if(nrow(tempdata)>1){
+    
+    tempdata <- specaccum(tempdata)
+    tempdata <- data.frame(
+      sample_type = "all",
+      river = selectedriver,
+      event_code = "all",
+      n_sites = tempdata$sites,
+      n_spp = tempdata$richness,
+      sd = tempdata$sd) 
+    
+    spec_accum_temp <- rbind(spec_accum_temp, tempdata)}
+}
+spec_accum_byriver_evt <-  
+  if(nrow(spec_accum_temp)>0){rbind(spec_accum_byriver_evt, spec_accum_temp)}
 
 ###accumulation by event----
 
