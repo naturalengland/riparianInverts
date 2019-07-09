@@ -369,6 +369,7 @@ field_data <- biol_records %>%
          event_code = event_code,
          date = Date,
          year = Year, 
+         gridref = Sample_Grid_Ref,
          sample_type = Sample_Type,
          location = Location_Name,
          repl_dateloc = repl_dateloc,
