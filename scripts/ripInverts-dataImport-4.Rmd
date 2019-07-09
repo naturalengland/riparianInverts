@@ -396,6 +396,66 @@ field_data %>%
 ```
 
 ```{r}
+#fix grid references
+
+#remove whitespace
+field_data <- field_data %>% 
+  mutate(gridref = str_remove_all(gridref, " ")) %>%  #remove whitespace
+  mutate(gridref = toupper(gridref)) #make letters uppercase
+
+# calculate grid ref precision
+field_data$coord_precision <- ifelse(grepl("^[a-zA-Z]{2}[0-9]{4}$",
+                                              field_data$gridref),'1000','NA')
+
+field_data$coord_precision[grepl("^[a-zA-Z]{2}[0-9]{2}[a-zA-Z]{1}$",
+                                    field_data$gridref)] <- '2000'
+
+field_data$coord_precision[grepl("^[a-zA-Z]{2}[0-9]{2}$",
+                                    field_data$gridref)] <- '10000'
+
+field_data$coord_precision[grepl("^[a-zA-Z]{2}$",
+                                    field_data$gridref)] <- '100000'
+
+field_data$coord_precision[grepl("^[a-zA-Z]{2}[0-9]{6}$",
+                                    field_data$gridref)] <- '100'
+
+field_data$coord_precision[grepl("^[a-zA-Z]{2}[0-9]{8}$",
+                                    field_data$gridref)] <- '10'
+
+field_data$coord_precision[grepl("^[a-zA-Z]{2}[0-9]{10}$",
+                                    field_data$gridref)] <- '1'
+
+field_data$coord_precision <- as.numeric(field_data$coord_precision)
+
+count(field_data, coord_precision)
+
+#field_data %>% filter(coord_precision == "NA") %>% count(gridref)
+
+```
+
+```{r}
+#convert grid refs to eastings and northings
+
+field_data$easting<-NA
+field_data$northing<-NA
+
+if (nrow(field_data) > 0) {
+  for (i in 1:nrow(field_data)) { #1850:1870) {   
+    field_data$easting[i] <- ifelse(is.na(field_data[i, "gridref"]), NA,
+                 rnrfa::osg_parse(field_data[i, "gridref"])[[1]])
+    field_data$northing[i] <- ifelse(is.na(field_data[i, "gridref"]), NA,
+                 rnrfa::osg_parse(field_data[i, "gridref"])[[2]])
+  }
+}
+
+
+field_data %>% select(easting, northing) %>% sample_n(20)
+
+```
+
+
+
+```{r}
 #select field data
 field_data_selected <- filter(field_data, sample_type %in% c("excavation", "hand_search", "pitfall")) %>% droplevels()
 
@@ -472,6 +532,10 @@ field_data_selected %>% select(year, event_code) %>% unique() %>%
 
 
 
+
+
+###extract selected events
+
 ```{r}
 event_code_selected <- c("Frome_2017_2", "Frome_2017_1", "Frome_2017_3", "Lugg_2014_1",
                          "Lugg_2014_3", "Lugg_2014_4", "Wye_2014_6", "Wye_2014_7", 
@@ -492,8 +556,8 @@ field_data_extract %>% count(event_code)
 
 #Export data
 ```{r}
- # write_csv(field_data_selected, "../data/field_data_selected_Apr2019.csv")
- # write_csv(field_data_extract, "../data/field_data_extract_Apr2019.csv")
+  # write_csv(field_data_selected, "../data/field_data_selected_Apr2019.csv")
+  # write_csv(field_data_extract, "../data/field_data_extract_Apr2019.csv")
 ```
 
 
