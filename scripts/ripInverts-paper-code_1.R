@@ -15,6 +15,12 @@ spp_matched_corrected <- read.csv("../data/speciesmatch_further_correctionsApr20
 
 #create event lookup 
 event_lookup <- obs_all %>% select(river, event_code) %>% unique()
+#add a consistent event-year column because record years may vary
+event_lookup <- event_lookup %>% 
+  mutate(evt_year = str_extract(string = event_lookup$event_code,pattern = "[0-9]{4}"))
+event_lookup$evt_year[which(event_lookup$event_code %in% c("Dane_East", "Dane_West"))] <- "2003" #manual fix
+#write it back into the main observations table
+obs_all <- obs_all %>% full_join(event_lookup, by = c("river", "event_code")) %>% select(spp_name:year, evt_year, everything())
 
 #create species score lookup
 spp_lookup <- pantheon_data %>% select(-event) %>% unique() 
@@ -64,6 +70,20 @@ obs_all_mat_evt <- obs_all %>%
   spread(key = spp_name, value = n, fill = 0) %>%
   data.frame() %>%
   arrange(river) 
+
+
+#the previous version makes no sense as it retains sample type as a factor, below proper frequency by event
+obs_all_mat_evt2 <- obs_all %>% 
+  #calculate frequencies
+  group_by(river, event_code, spp_name) %>% 
+  summarise(n = length(spp_name)) %>% 
+  #abbreviate species names
+  mutate(spp_name = vegan::make.cepnames(spp_name)) %>% 
+  #spread to a matrix
+  spread(key = spp_name, value = n, fill = 0) %>%
+  data.frame() %>%
+  arrange(river) 
+
 
 #split species matrix into data and environment matrices----
 selected_data <- obs_all_mat %>%  
@@ -140,6 +160,7 @@ genus_types <- obs_all_freq_types %>%
   mutate(handsearch_pitfall = hp) %>% 
   select(genus, handsearch, pitfall, handsearch_pitfall, n_spp) %>% 
   arrange(-n_spp)
+
 ##Dissimilarity
 #calculate jaccard dissimilarity
 adon1 <- vegan::adonis2(selected_data ~ river + event_code + sample_type, data = selected_env, permutations = 120, method = "jaccard", by = "terms")
@@ -157,6 +178,8 @@ obs_rct_mat <- obs_all_mat %>%
   filter(event_code %in% event_code_selected) %>% droplevels() 
 
 obs_rct_mat_evt <- obs_all_mat_evt %>% filter(event_code %in% event_code_selected) %>% droplevels()
+
+obs_rct_mat_evt2 <- obs_all_mat_evt2 %>% filter(event_code %in% event_code_selected) %>% droplevels()
 
 ###Grand total accumulation----
 #species accumulation curve by resampling replicates
@@ -211,11 +234,7 @@ spec_accum_by <-
 
 }
 
-
-
-
-
-
+###Manual accumulations (i.e. not using above function)
 
 
 #create empty data frame as template for accumulation data----
@@ -226,9 +245,9 @@ spec_accum_empty <- data_frame(
   n_sites = as.integer(), n_spp = as.double(), sd = as.double())
 
 
-###accumulation by river (replicate level)----
-spec_accum_byriver <- spec_accum_empty
-spec_accum_temp <- spec_accum_empty
+###accumulation by river (replicate level)---
+spec_accum_byriver <- spec_accum_empty 
+spec_accum_temp <- spec_accum_empty 
 
 #iterate through rivers
 for(selectedriver in param_rivers){
@@ -260,9 +279,9 @@ spec_accum_temp <- spec_accum_empty
 #iterate through rivers
 for(selectedriver in param_rivers){
   
-  tempdata <- obs_rct_mat_evt %>%
+  tempdata <- obs_rct_mat_evt2 %>%
     filter(river == selectedriver) %>%  
-    select(-c(river:sample_type))
+    select(-c(river:event_code))
   
   tempdata <- if(nrow(tempdata)>1){
     
@@ -279,6 +298,34 @@ for(selectedriver in param_rivers){
 }
 spec_accum_byriver_evt <-  
   if(nrow(spec_accum_temp)>0){rbind(spec_accum_byriver_evt, spec_accum_temp)}
+
+###accumulation by river (event level - random accumulation)----
+spec_accum_byriver_evt_random <- spec_accum_empty
+spec_accum_temp <- spec_accum_empty
+
+#iterate through rivers
+for(selectedriver in param_rivers){
+  
+  tempdata <- obs_rct_mat_evt2 %>%
+    filter(river == selectedriver) %>%  
+    select(-c(river:event_code))
+  
+  tempdata <- if(nrow(tempdata)>1){
+    
+    tempdata <- specaccum(tempdata, method = "random")
+    tempdata <- data.frame(
+      sample_type = "all",
+      river = selectedriver,
+      event_code = "all",
+      n_sites = tempdata$sites,
+      n_spp = tempdata$richness,
+      sd = tempdata$sd) 
+    
+    spec_accum_temp <- rbind(spec_accum_temp, tempdata)}
+}
+spec_accum_byriver_evt_random <-  
+  if(nrow(spec_accum_temp)>0){rbind(spec_accum_byriver_evt, spec_accum_temp)}
+
 
 ###accumulation by event----
 
