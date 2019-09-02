@@ -10,9 +10,50 @@ output:
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 ```
 
+#Import and prepare data
+
+The following script imports data, cleans it and prepares a number of datasets.  It also carries out a few analyses: 
 ```{r}
 source("../scripts/ripInverts-paper-code_1.R", chdir = T)
 ```
+These are described in more detail below.  
+
+##Data sources
+
+`field_data_selected_Aug2019.csv` contains all individual invertebrate records.  
+```{r}
+head(obs_all)
+skimr::skim_to_wide(obs_all) %>% select(type:sd)
+```
+
+```{r}
+obs_all %>% select(event, event_code) %>% unique() %>% arrange(event)
+```
+
+
+
+`Species and Event data pivot table March with summary.xlsx` sheet 2 `Riparian Pantheon List` contains information about species characteristics
+```{r}
+head(pantheon_data)
+skimr::skim_to_wide(pantheon_data)
+```
+
+`speciesmatch_further_correctionsAug2019.csv` is a lookup table of species names: 
+
+```{r}
+head(spp_matched_corrected)
+skimr::skim_to_wide(spp_matched_corrected)
+```
+
+`Riparian Beetle Assemblages July2019 ck added.xlsx` sheet 3 `Effort` is JW calculation of effort scores for each event
+
+```{r}
+head(effort_data)
+skimr::skim_to_wide(effort_data)
+```
+
+
+
 
 ```{r}
 library(tidyverse)
@@ -58,8 +99,8 @@ authors generated
 
 obs_all %>% filter(is.na(event))
 
-unique(obs_all$event)[which(is.na(unique(obs_all$event))==FALSE)]
-length(unique(obs_all$event)[which(is.na(unique(obs_all$event))==FALSE)])
+events_unique <- sort(unique(obs_all$event)[which(is.na(unique(obs_all$event))==FALSE)]); events_unique 
+length(events_unique)
 ```
 
 
@@ -125,39 +166,65 @@ graphdata <- obs_all %>%
 ggplot(graphdata, aes(x = evt_year, y = richness, group = as.factor(evt_year))) +
   geom_boxplot(varwidth = T, colour = "darkgrey") +
   geom_point(position = position_jitter(width = 0.08, height = 0.3), size = 0.9)+
-  scale_x_continuous(breaks = seq(1985,2020, by = 5)) +
+  scale_x_continuous(breaks = seq(1985,2020, by = 1), 
+                     labels = c("1985", "", "", "", "", 
+                                "1990", "", "", "", "", 
+                                "1995", "", "", "", "", 
+                                "2000", "", "", "", "", 
+                                "2005", "", "", "", "", 
+                                "2010", "", "", "", "", 
+                                "2015", "", "", "", "", "2020")) +
   scale_y_continuous(breaks = seq(0, 250, by = 25))+
   labs(title = "Species richness in surveys over time",
        x = "Year", y = "Number of species") +
   theme_bw() +
-  theme_doc 
+  theme_doc +
+  theme(panel.grid.minor.x = element_blank())
 
+#or cropped by leaving out the 1987 records
+
+ggplot(graphdata, aes(x = evt_year, y = richness, group = as.factor(evt_year))) +
+  geom_boxplot(varwidth = T, colour = "darkgrey") +
+  geom_point(position = position_jitter(width = 0.08, height = 0.3), size = 0.9)+
+  scale_x_continuous(breaks = seq(1997,2020, by = 1), limits = c(1997, 2018), 
+                     labels = c("", "", "", "2000", "", "", "", "", 
+                                "2005", "", "", "", "", "2010", "", "", "", "", 
+                                "2015", "", "", "", "", "2020")) +
+  scale_y_continuous(breaks = seq(0, 250, by = 25))+
+  labs(title = "Species richness in surveys over time", 
+       x = "Year", y = "Number of species") +
+  theme_bw() +
+  theme_doc +
+  theme(panel.grid.minor.x = element_blank())
 ```
 
 ### Effort
 
 ```{r}
-effort <- obs_all_mat %>% 
-  select(event_code, sample_type) %>% 
-  group_by(event_code) %>% 
-  count(sample_type) %>% 
-  spread(key = sample_type, value = n, fill = 0) %>% 
-  mutate(effort_score = as.integer(hand_search + pitfall)) %>% 
-  filter(event_code != "unknown"); effort
-
-effort %>% arrange(-effort_score)
+#effort summarised by JW
+effort <- effort_data %>% select(event_code, hand_search = handsearch, pitfall, effort_score = effort); effort
 
 plot_effort <- ggplot(effort, aes(x = effort_score)) +
   geom_histogram(binwidth = 0.5) +
   scale_x_continuous(breaks = 0:max(effort$effort_score)) +
   scale_y_continuous(breaks = seq(0,30, by = 5), expand = c(0,0)) +
   labs(x = "Sampling effort", y = "Number of surveys", title = "A") +
-  theme_bw()+
-  theme_doc
-
+  theme_bw()+  theme_doc
 plot_effort
 ```
 
+
+```{r}
+#effort derived from observations data
+effort_ck <- obs_all_mat %>% 
+  select(event_code, sample_type) %>% 
+  group_by(event_code) %>% 
+  count(sample_type) %>% 
+  spread(key = sample_type, value = n, fill = 0) %>% 
+  mutate(effort_score = as.integer(hand_search + pitfall)) %>% 
+  filter(event_code != "unknown"); effort
+```
+These effort scores are inconsistent with JW's scores.  It is likely that CK has defined 'replicates' in `obs_all_mat` is not an accurate reflection of the way JW grouped sampling instances (e.g. one session of hand searching).  It is not going to be possible to do this accurately without re-grouping all the records from scratch.  
 
 ```{r}
 wetland_effort <- 
@@ -192,6 +259,12 @@ plot_grid(plot_effort, plot_wetland_effort)
 ```
 
 
+##sample type: does it matter
+```{r}
+adon1
+```
+
+
 ## pitfall v handsearch
 
 ```{r }
@@ -218,7 +291,7 @@ plot1 <- ggplot(graphdata, aes(x = sample_types, y = n)) +
        x = "", 
        y = "number of species",
        alpha = "species type")
-
+plot1
 
 plot2 <- ggplot(graphdata, aes(x = wetland_spp, y = prop)) +
   geom_bar(aes(fill = sample_types), position = position_stack(), 
@@ -233,6 +306,7 @@ plot2 <- ggplot(graphdata, aes(x = wetland_spp, y = prop)) +
        x = "species type", 
        y = "proportion of species",
        fill = "sample type")
+plot2
 
 title <- ggdraw() + draw_label("Is pitfall trapping alone sufficient?", fontface='bold')
 caption <- ggdraw() + draw_text("There is no relationship between the type of species captured (whether wetland or not wetland species) and the method of capture.  Fig x.A shows the total number of each type of species by capture method and fig x.B shows the proportion of species captured with each capture method, split by wetland and non-wetland species")
@@ -278,16 +352,17 @@ sample_type_count %>% select(hand_search, pitfall) %>% colSums(na.rm = T)
 
 ```{r}
 graphdata <-  obs_all_freq_types %>% 
-  filter(wetland_spp %in% c(TRUE, FALSE)) %>%
-  count(wetland_spp, sample_types) %>%
-  group_by(wetland_spp) %>% 
+  filter(is_wetland %in% c("y", "n")) %>% #query whether this is a good idea as removing data.  
+#  filter(wetland_spp %in% c(TRUE, FALSE)) %>% #previous version using possibly wrong wetland collumn
+  count(is_wetland, sample_types) %>%
+  group_by(is_wetland) %>% 
   mutate(prop = n/sum(n))
 graphdata
 
 plotmargin <- unit(c(8, 4, 4, 4), units = "mm")
 
 
-ggplot(graphdata, aes(x = wetland_spp, y = n)) +
+ggplot(graphdata, aes(x = is_wetland, y = n)) +
   geom_bar(aes(fill = sample_types), position = position_stack(), 
            stat = "identity", colour = "black") +
   scale_fill_grey(start = 0.8, end = 0.3,
@@ -296,7 +371,7 @@ ggplot(graphdata, aes(x = wetland_spp, y = n)) +
   theme_minimal() +
   theme(legend.position = "right", panel.grid.major.x = element_blank(), 
         plot.margin = plotmargin) +
-  scale_x_discrete(labels = c("FALSE" = "not wetland", "TRUE" = "wetland")) +
+  scale_x_discrete(labels = c("n" = "not wetland", "y" = "wetland")) +
   labs(title = "Pitfalls, Handsearch or Both?", 
        x = "species type", 
        y = "number of species captured",
@@ -310,19 +385,19 @@ ggplot(graphdata, aes(x = wetland_spp, y = n)) +
 
 ```{r}
 chidata <- obs_all_freq_types %>% 
-  filter(wetland_spp %in% c(TRUE, FALSE)) %>% 
-  mutate(wetland_spp = as.character(wetland_spp)) %>%
-  mutate(wetland_spp = recode(wetland_spp, 
-                              "FALSE" = "not-wetland", "TRUE" = "wetland")) %>% 
-  group_by(wetland_spp) %>% 
+  filter(is_wetland %in% c("y", "n")) %>% 
+  mutate(is_wetland = as.character(is_wetland)) %>%
+  mutate(is_wetland = recode(is_wetland, 
+                              "n" = "not-wetland", "y" = "wetland")) %>% 
+  group_by(is_wetland) %>% 
   count(sample_types) %>% 
-  spread(key = wetland_spp, value = n) %>%
+  spread(key = is_wetland, value = n) %>%
   mutate(sample_types = recode_factor(sample_types, 
                                       h = "handsearch", hp = "both", p = "pitfall")) %>% 
   column_to_rownames("sample_types") 
 
 chidata  
-
+#note that the species numbers here exclude any that are not classified as either wetland or not-wetland.  Perhaps ought to classify all NAs as not wetland.  
 
 chisqresult <- chisq.test(chidata)
 
@@ -388,8 +463,6 @@ ggplot(graphdata, aes(y = n_spp, x = genus, fill = sample_types)) +
 
 ### species accumulation
 
-
-
 ```{r}
 graphdata <- spec_accum_byriver_evt 
 legenddata <- graphdata %>% group_by(river) %>% summarise(max_sites = max(n_sites)) 
@@ -423,7 +496,7 @@ print(caption)
 spec_accum_byriver_evt %>% filter(sd == 0)
 ```
 
-
+THIS SEEMS TO BE BROKEN.  I don't know where and how I created `eventdataList`
 
 ```{r fig.height=5.5, fig.width=4}
 
@@ -478,8 +551,8 @@ print(caption)
 
 
 ```{r}
-write.csv(as.data.frame(eventdata_iNext$AsyEst), "../data/asympt_output.csv")
-write.csv(as.data.frame(graphdata), "../data/inext_output.csv")
+# write.csv(as.data.frame(eventdata_iNext$AsyEst), "../data/asympt_output.csv")
+# write.csv(as.data.frame(graphdata), "../data/inext_output.csv")
 ```
 
 

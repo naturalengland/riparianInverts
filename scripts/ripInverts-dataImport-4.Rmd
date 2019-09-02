@@ -19,11 +19,11 @@ library(forcats)
 #importing all as text to begin with
 biol_records <- read_csv("../data/Riparian Event Data Jan2019 - biological records.csv")
 
-events_code <- read_csv("../data/event_code_lookup_orig.csv") %>% select(-1)
+events_code <- read_csv("../data/events_code_lookup_aug_2019.csv")
 
 ##import species lookup data
 pantheon_data <- readxl::read_xlsx("../data/Species and Event data pivot table March with summary.xlsx", sheet = 2)
-spp_matched_corrected <- read.csv("../data/speciesmatch_further_correctionsApr2019.csv") 
+spp_matched_corrected <- read.csv("../data/speciesmatch_further_correctionsAug2019.csv") 
 ```
 
 
@@ -131,11 +131,11 @@ biol_records <- biol_records %>%
          Sample_Type = recode_factor(tolower(biol_records$Sample_Type),
              `20 minute dig` = "excavation",
              `20 minute timed search` = "hand_search",
-             `30 minute timed sample` = "unknown",
+             `30 minute timed sample` = "hand_search",
              aquatic = "aquatic",
-             `casual record` = "ad-hoc",
+             `casual record` = "hand_search",
              excavation = "excavation",
-             `field observation` = "ad-hoc",
+             `field observation` = "hand_search",
              `hand collection` = "hand_search",
              `hand search` = "hand_search",
              `hand search (25min)` = "hand_search",
@@ -163,6 +163,10 @@ table(tolower(biol_records$Sample_Type))
 
 ```{r}
 table(tolower(biol_records$Sample_Type_old))
+```
+```{r}
+biol_records %>% select(Sample_Type, Sample_Type_old) %>% group_by(Sample_Type) %>% count(Sample_Type_old) %>% 
+  print() %>% clipr::write_clip()
 ```
 
 
@@ -211,7 +215,7 @@ table(biol_records$Sample_Type_old, biol_records$Sample_Duration)
 ```
 
 
-#Sort out events
+### Sort out events
 
 Note, I've renamed some of the columns for clarity: col A = 'Event',  Col C = number of pitfall replicates (P), col D = number of timed  search/excavation replicates(T), Col G = number of pitfalls per replicate.  
 
@@ -227,33 +231,43 @@ table(biol_records$event)
 events_code
 ```
 
+###Create and import event code lookup table: 
 
+The following code does not need to be run again as the current version of the events lookup table `events_code` is loaded at the beginning of this script.  The code is retained for the record.  
 ```{r}
-biol_events <- biol_records %>% select(event) %>% unique() %>% arrange(event) %>% 
-  mutate(biol = "biol")
+# biol_events <- biol_records %>% select(event) %>% unique() %>% arrange(event) %>% 
+#   mutate(biol = "biol")
+# 
+# #%>% filter(!event %in% events_code$event)
+# 
+# events_code_lookup_apr_2019 <- full_join(events_code, biol_events) %>% 
+#   select(event, ers, sel, biol, event_code) %>% arrange(event)
+# 
+# #write_csv(events_code_lookup_apr_2019, "../data/events_code_lookup_apr_2019.csv")
+# 
+# #make changes in excel
+# 
+# events_code <- read_csv("../data/events_code_lookup_apr_2019.csv")
 
-#%>% filter(!event %in% events_code$event)
-
-events_code_lookup_apr_2019 <- full_join(events_code, biol_events) %>% 
-  select(event, ers, sel, biol, event_code) %>% arrange(event)
-
-#write_csv(events_code_lookup_apr_2019, "../data/events_code_lookup_apr_2019.csv")
-
-#make changes in excel
-
-events_code <- read_csv("../data/events_code_lookup_apr_2019.csv")
+# #make more changes in excel: renamed events and event codes to correct errors and for consistence.  now on v.3
+# 
+# events_code <- read_csv("../data/events_code_lookup_aug_2019.csv")
 
 ```
 
 
 ```{r}
 #bind codes back into biol_records
-biol_records <- left_join(
-  biol_records, 
-  select(events_code, event, event_code), 
-  by = "event") %>% 
-  mutate(event = as.factor(event)) %>% 
-  mutate(event_code = as.factor(event_code))
+biol_records <- biol_records %>% 
+  left_join(
+    select(events_code, event, event_code_v3, event_name_v3),
+    by = "event") %>%
+  mutate(event = as.factor(event)) %>%
+  mutate(event_code = as.factor(event_code_v3)) %>%
+  select(-event_code_v3) %>%
+  mutate(event = as.factor(event_name_v3)) %>%
+  select(-event_name_v3)
+
 ```
 
 ```{r}
@@ -313,6 +327,7 @@ biol_records <- biol_records %>%
 
 biol_records %>% filter(is.na(Year)) %>% select(Year, year_orig, Date)
 ```
+
 
 
 
@@ -454,6 +469,11 @@ field_data %>% select(easting, northing) %>% sample_n(20)
 ```
 
 
+```{r}
+field_data %>% filter(event_code == "EdenRead_2000") %>% count(sample_type)
+field_data %>% group_by(event_code) %>% count(sample_type) %>% filter(sample_type == "ad-hoc") %>% print() %>% clipr::write_clip()
+```
+
 
 ```{r}
 #select field data
@@ -537,11 +557,12 @@ field_data_selected %>% select(year, event_code) %>% unique() %>%
 ###extract selected events
 
 ```{r}
-event_code_selected <- c("Frome_2017_2", "Frome_2017_1", "Frome_2017_3", "Lugg_2014_1",
-                         "Lugg_2014_3", "Lugg_2014_4", "Wye_2014_6", "Wye_2014_7", 
-                         "Wye_2014_4", "Wye_2014_3", "Wye_2014_5", "Lugg_2014_2", 
-                         "Wye_2014_1", "Dove_2013", "Till_2013", "Beamish_2013", 
-                         "Wooler_2013")
+event_code_selected <- c("Frome_2017_2", "Frome_2017_1", 
+                         "Frome_2017_3", "Lugg_2014_1", "Lugg_2014_3", 
+                         "Lugg_2014_4", "Wye_2014_6", "Wye_2014_7", 
+                         "Wye_2014_4", "Wye_2014_3", "Wye_2014_5", 
+                         "Lugg_2014_2", "Wye_2014_1", "Dove_2013", 
+                         "Till_2013", "Beamish_2013", "Wooler_2013")
 
 field_data_extract <- field_data_selected %>% 
   filter(event_code %in% event_code_selected) %>% droplevels() 
@@ -558,6 +579,8 @@ field_data_extract %>% count(event_code)
 ```{r}
   # write_csv(field_data_selected, "../data/field_data_selected_Apr2019.csv")
   # write_csv(field_data_extract, "../data/field_data_extract_Apr2019.csv")
+  write_csv(field_data_selected, "../data/field_data_selected_Aug2019.csv")
+  write_csv(field_data_extract, "../data/field_data_extract_Aug2019.csv")
 ```
 
 

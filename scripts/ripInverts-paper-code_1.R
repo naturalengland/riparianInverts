@@ -4,12 +4,11 @@ library(vegan)
 
 #Import data----
 ##import wetland coleoptera data 
-obs_all <- read_csv("../data/field_data_selected_Apr2019.csv") #all observations
+obs_all <- read_csv("../data/field_data_selected_Aug2019.csv") #all observations
 ##import species lookup data
 pantheon_data <- readxl::read_xlsx("../data/Species and Event data pivot table March with summary.xlsx", sheet = 2)
 spp_matched_corrected <- read.csv("../data/speciesmatch_further_correctionsApr2019.csv") 
-
-
+effort_data <- readxl::read_xlsx("../data/Riparian Beetle Assemblages July2019 ck added.xlsx", sheet = 3)
 
 #Prepare data----
 
@@ -139,12 +138,22 @@ obs_all_freq_types <- obs_all_freq %>%
 
 #test difference in sampling type proportions between wetland and non wetland species
 chitest_wetland_props <- obs_all_freq_types %>% 
-  group_by(wetland_spp) %>% 
+  group_by(is_wetland) %>% 
   count(sample_types) %>% 
-  filter(wetland_spp %in% c(TRUE, FALSE)) %>% 
-  spread(key = wetland_spp, value = n) %>% 
+  filter(is_wetland %in% c("y", "n")) %>% 
+  spread(key = is_wetland, value = n) %>% 
   select(-sample_types) %>% 
   chisq.test()
+
+#old version uses the wrong wetland column
+# chitest_wetland_props <- obs_all_freq_types %>% 
+#   group_by(wetland_spp) %>% 
+#   count(sample_types) %>% 
+#   filter(wetland_spp %in% c(TRUE, FALSE)) %>% 
+#   spread(key = wetland_spp, value = n) %>% 
+#   select(-sample_types) %>% 
+#   chisq.test()
+
 
 
 #extract genus data----
@@ -161,18 +170,31 @@ genus_types <- obs_all_freq_types %>%
   select(genus, handsearch, pitfall, handsearch_pitfall, n_spp) %>% 
   arrange(-n_spp)
 
-##Dissimilarity
+#prepare effort scores ----
+effort_data <- effort_data %>% 
+  select(event_code = Event_code_v3, 
+         event = Event_name_v3,
+         effort = `EFFORT = C+D`,
+         pitfall = `number of 2 week pitfall durations (P)`,
+         handsearch = `number of timed  searches/excavations (T)`,
+         author = Author,
+         grid_ref = `Grid Reference`,
+         n_records = `total number of records`) 
+  
+
+##Dissimilarity----
 #calculate jaccard dissimilarity
 adon1 <- vegan::adonis2(selected_data ~ river + event_code + sample_type, data = selected_env, permutations = 120, method = "jaccard", by = "terms")
 
 ##Species accumulation curves ----
 
 #extract recent events----
-event_code_selected <- c("Frome_2017_2", "Frome_2017_1", "Frome_2017_3", "Lugg_2014_1",
-                         "Lugg_2014_3", "Lugg_2014_4", "Wye_2014_6", "Wye_2014_7", 
-                         "Wye_2014_4", "Wye_2014_3", "Wye_2014_5", "Lugg_2014_2", 
-                         "Wye_2014_1", "Dove_2013", "Till_2013", "Beamish_2013", 
-                         "Wooler_2013")
+event_code_selected <- c("Frome_2017_a", "Frome_2017_b", "Frome_2017_c", 
+                         "Lugg_2014_a", "Lugg_2014_b", "Lugg_2014_c",
+                         "Lugg_2014_d", "Wye_2014_a", "Wye_2014_b",
+                         "Wye_2014_c", "Wye_2014_d", "Wye_2014_e", 
+                         "Wye_2014_f", "Dove_2013", "Till_2013",
+                         "Beamish_2013", "Wooler_2013")
 
 obs_rct_mat <- obs_all_mat %>% 
   filter(event_code %in% event_code_selected) %>% droplevels() 
