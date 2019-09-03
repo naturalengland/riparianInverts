@@ -10,6 +10,8 @@ pantheon_data <- readxl::read_xlsx("../data/Species and Event data pivot table M
 spp_matched_corrected <- read.csv("../data/speciesmatch_further_correctionsApr2019.csv") 
 effort_data <- readxl::read_xlsx("../data/Riparian Beetle Assemblages July2019 ck added.xlsx", sheet = 3)
 
+jw_spp_event_data <- readxl::read_xlsx("../data/Riparian Beetle Assemblages July2019 ck added.xlsx", sheet = 2, skip = 1)
+
 #Prepare data----
 
 #create event lookup 
@@ -33,6 +35,7 @@ extra_lookup <- spp_matched_corrected %>%
   unique() %>% 
   select(species, everything())%>% 
   arrange(species) 
+spp_lookup_joined <- left_join(spp_lookup, extra_lookup, by = "species")
 
 #convert excavations to handsearch
 obs_all <- obs_all %>% 
@@ -117,8 +120,7 @@ samp_types_spp_sum <- table(samptypes$sample_types)
 obs_all_freq_types <- obs_all_freq %>% 
   spread(key = sample_type, value = freq, fill = 0) %>% 
   full_join(samptypes) %>% 
-  left_join(spp_lookup, by = c("spp_name" = "species"))  %>% 
-  left_join(extra_lookup, by = c("spp_name" = "species")) %>% 
+  left_join(spp_lookup_joined, by = c("spp_name" = "species"))  %>% 
   rename("cons_status" = "Conservation status", 
          "wetland_spp" = "Wetland species", 
          "runningwater_spp" = "running water W23",  

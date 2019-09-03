@@ -404,13 +404,38 @@ chisqresult <- chisq.test(chidata)
 chisqresult
 
 chisqresult$observed
+sum(chisqresult$observed)
+totals <- chisqresult$observed %>% data.frame() %>%  colSums(); totals
+
+chisqresult$observed[,1] / totals[1]
+chisqresult$observed[,2] / totals[2]
 ```
 
 ```{r}
 data.frame(h = c(65, 95), hpp = c(160, 205))
 chisq.test(data.frame(h = c(65, 95), hpp = c(160, 205)))
 ```
+### compare JW to CK wetland
 
+```{r}
+wetland_effort
+jw_spp_event_data <- jw_spp_event_data %>%   mutate(event_code = Event_code_v3) %>% 
+  filter(is.na(`New Name`) == FALSE)
+jw_spp_event_data
+
+left_join(wetland_effort, jw_spp_event_data) %>% 
+  ungroup() %>% 
+  mutate(event_code, 
+         n_wet_ck = n, 
+         n_wet_jw = `Total Number of Wetland Species`, 
+         diff = n_wet_ck - n_wet_jw) %>% 
+  select(event_code, n_wet_ck, n_wet_jw, diff) %>% 
+  print() %>% write_csv("../data/wetland_compare.csv")
+```
+
+
+
+###spp lenght
 
 ```{r}
 ggplot(obs_all_freq_types, aes(x = length.min)) +
