@@ -525,49 +525,49 @@ THIS SEEMS TO BE BROKEN.  I don't know where and how I created `eventdataList`
 
 ```{r fig.height=5.5, fig.width=4}
 
-eventdata_iNext <- iNEXT(eventdataList, datatype = "incidence_raw", q = 0, endpoint = 40, knots = 40)
-
-asympdata <- eventdata_iNext$AsyEst %>% filter(Diversity == "Species richness")
-
-graphdata <- bind_rows(eventdata_iNext$iNextEst, .id = "Site") %>% 
-  mutate(method2 = recode_factor(method, observed = "interpolated")) %>% 
-  full_join(asympdata)
-
-graphdata
-
-effort_95 <- graphdata %>% filter(SC >= 0.95) %>% group_by(Site) %>% top_n(n = 1,wt = -qD)
-effort_95
-
-caption <- 
-  "Extrapolation of species accumulation using R function iNEXT (Hsieh et al., 2019).  
-This extrapolates a curve of expected species richness for each additional survey 
-beyond the maximum number of actual surveys, guided by an estimated asymptote (Chao 
-et al., 2014).  Hill number q = 0 was used as a measure of diversity."
-
-plot_asympt <- ggplot(graphdata, aes(x = t)) +
-  #plot extrapolated and interpolated data
-  geom_line(aes(y = qD, linetype = method2), size = 1) +
-  geom_ribbon(aes(ymin=qD.LCL, ymax=qD.UCL), alpha=0.2) +
-  #plot guides for 95% of richness
-  geom_segment(data = effort_95, aes(x = 0, xend = t, y = qD, yend = qD), 
-               alpha = 0.6, size = 0.1, linetype = 18)+
-  geom_segment(data = effort_95, aes(x = t, xend = t, y = 0, yend = qD), 
-               alpha = 0.6, size = 0.1, linetype = 18)+  
-  #formatting
-  scale_color_grey() +
-  scale_fill_grey() +
-  scale_linetype_manual(values = c(1,3)) +
-  facet_wrap(~Site,ncol = 1) +
-  labs(title = "Extrapolated species richness", 
-       y = "number of species", x = "number of surveys") +
-  theme_bw() +
-  theme(legend.position = "bottom", legend.title = element_blank()) +
-  coord_cartesian(xlim = c(1, 40)) +
-  scale_x_continuous(expand = c(0,0)) + scale_y_continuous(expand = c(0,0))+
-  theme_doc +
-  NULL; plot_asympt
-
-print(caption)
+# eventdata_iNext <- iNEXT(eventdataList, datatype = "incidence_raw", q = 0, endpoint = 40, knots = 40)
+# 
+# asympdata <- eventdata_iNext$AsyEst %>% filter(Diversity == "Species richness")
+# 
+# graphdata <- bind_rows(eventdata_iNext$iNextEst, .id = "Site") %>% 
+#   mutate(method2 = recode_factor(method, observed = "interpolated")) %>% 
+#   full_join(asympdata)
+# 
+# graphdata
+# 
+# effort_95 <- graphdata %>% filter(SC >= 0.95) %>% group_by(Site) %>% top_n(n = 1,wt = -qD)
+# effort_95
+# 
+# caption <- 
+#   "Extrapolation of species accumulation using R function iNEXT (Hsieh et al., 2019).  
+# This extrapolates a curve of expected species richness for each additional survey 
+# beyond the maximum number of actual surveys, guided by an estimated asymptote (Chao 
+# et al., 2014).  Hill number q = 0 was used as a measure of diversity."
+# 
+# plot_asympt <- ggplot(graphdata, aes(x = t)) +
+#   #plot extrapolated and interpolated data
+#   geom_line(aes(y = qD, linetype = method2), size = 1) +
+#   geom_ribbon(aes(ymin=qD.LCL, ymax=qD.UCL), alpha=0.2) +
+#   #plot guides for 95% of richness
+#   geom_segment(data = effort_95, aes(x = 0, xend = t, y = qD, yend = qD), 
+#                alpha = 0.6, size = 0.1, linetype = 18)+
+#   geom_segment(data = effort_95, aes(x = t, xend = t, y = 0, yend = qD), 
+#                alpha = 0.6, size = 0.1, linetype = 18)+  
+#   #formatting
+#   scale_color_grey() +
+#   scale_fill_grey() +
+#   scale_linetype_manual(values = c(1,3)) +
+#   facet_wrap(~Site,ncol = 1) +
+#   labs(title = "Extrapolated species richness", 
+#        y = "number of species", x = "number of surveys") +
+#   theme_bw() +
+#   theme(legend.position = "bottom", legend.title = element_blank()) +
+#   coord_cartesian(xlim = c(1, 40)) +
+#   scale_x_continuous(expand = c(0,0)) + scale_y_continuous(expand = c(0,0))+
+#   theme_doc +
+#   NULL; plot_asympt
+# 
+# print(caption)
 
 
 ```
@@ -595,6 +595,114 @@ library(cowplot)
 plot_grid(plot_accum, plot_asympt)
 
 ```
+
+## Look at genus again
+
+
+```{r}
+genusdata <- obs_all_freq_types %>% 
+  separate(col = spp_name, into = c("genus", NA), remove = F) %>% 
+  group_by(genus) %>% 
+  mutate(pitfall = -pitfall) %>% 
+  arrange(spp_name) %>% 
+  gather(key = sample_type, value = n_samples, hand_search, pitfall)
+```
+
+```{r fig.height=3, fig.width=6}
+selected_genera <- c("Bledius")#, "Bembidion")
+graphdata <- filter(genusdata, genus %in% selected_genera)
+minlabel <- round(min(graphdata$n_samples)/5)*5
+maxlabel <- round(max(graphdata$n_samples)/5)*5
+breaks <- seq(minlabel, maxlabel, 5)
+
+ggplot(graphdata, aes(x = spp_name, y = n_samples, alpha = sample_type))+
+  geom_col(width = 0.6) +
+  scale_alpha_manual(values = c("pitfall" = 0.55, "hand_search" = 0.85)) +
+  scale_y_continuous(breaks = breaks, labels = abs(breaks), minor_breaks = NULL) +
+  annotate(geom = "text", label = c("<- pitfall  handsearch ->"), family = "mono",
+           x = length(unique(graphdata$spp_name))+0.5, y = 1, size = 3) +
+  geom_hline(yintercept = 0, alpha = 0.5) +
+  theme_minimal() +  theme(legend.position = "none", axis.title.y = element_blank()) +  coord_flip()
+```
+
+
+
+```{r}
+selected_genera <- c("Bembidion")
+graphdata <- filter(genusdata, genus %in% selected_genera)
+minlabel <- round(min(graphdata$n_samples)/50)*50
+maxlabel <- round(max(graphdata$n_samples)/50)*50
+breaks <- seq(minlabel, maxlabel, 50)
+
+ggplot(graphdata, aes(x = spp_name, y = n_samples, alpha = sample_type))+
+  geom_col(width = 0.7) +
+  scale_alpha_manual(values = c("pitfall" = 0.55, "hand_search" = 0.85)) +
+  scale_y_continuous(breaks = breaks, labels = abs(breaks), minor_breaks = NULL) +
+  annotate(geom = "text", label = c("<- pitfall  handsearch ->"), family = "mono",
+           x = length(unique(graphdata$spp_name))+0.5, y = 10, size = 3) +
+  geom_hline(yintercept = 0, alpha = 0.5) +
+  theme_minimal() +  theme(legend.position = "none", axis.title.y = element_blank()) +  coord_flip()
+```
+
+
+```{r}
+selected_genera <- c("Bembidion", "Bledius", "Hydrosmecta")
+graphdata <- filter(genusdata, genus %in% selected_genera)
+minlabel <- round(min(graphdata$n_samples)/50)*50
+maxlabel <- round(max(graphdata$n_samples)/50)*50
+breaks <- seq(minlabel, maxlabel, 50)
+
+ggplot(graphdata, aes(x = spp_name, y = n_samples, alpha = sample_type, fill = genus))+
+  geom_col(width = 0.7) +
+  scale_alpha_manual(values = c("pitfall" = 0.55, "hand_search" = 0.85)) +
+  scale_y_continuous(breaks = breaks, labels = abs(breaks), minor_breaks = NULL) +
+  annotate(geom = "text", label = c("<- pitfall  handsearch ->"), family = "mono",
+           x = length(unique(graphdata$spp_name))+0.5, y = 10, size = 3) +
+  geom_hline(yintercept = 0, alpha = 0.5) +
+#  facet_wrap(~genus, scales = "free_x")+
+  theme_minimal() +  theme(legend.position = "none", axis.title.y = element_blank()) +  coord_flip() +
+  NULL
+```
+
+
+```{r}
+selected_genera <- c("Bembidion", "Bledius", "Hydrosmecta", "Stenus")
+graphdata <- filter(genusdata, genus %in% selected_genera)
+graphdata$genus <- as.factor(graphdata$genus)
+graphdata %>% arrange(n_samples)
+minlabel <- round(min(graphdata$n_samples)/50)*50
+maxlabel <- round(max(graphdata$n_samples)/50)*50
+breaks <- seq(minlabel, maxlabel, 50)
+
+ggplot(graphdata, aes(x = spp_name, y = n_samples, group = spp_name))+#, alpha = sample_type, fill = genus))+
+  geom_col(position = position_dodge(width = 3, preserve = "single"), width = 3,
+           aes(alpha = sample_type, fill = genus)) +
+  scale_alpha_manual(values = c("pitfall" = 0.55, "hand_search" = 0.85)) +
+  scale_y_continuous(breaks = breaks, labels = abs(breaks), minor_breaks = NULL) +
+  scale_x_discrete()+#labels = element_blank()) +
+  annotate(geom = "text", label = c("<- pitfall  handsearch ->"), family = "mono",
+           x = 0.5, y = 10, size = 3) +
+
+  #          x = length(unique(graphdata$spp_name))+0.5, y = 10, size = 3) +
+  geom_hline(yintercept = 0, alpha = 0.5) +
+#  facet_wrap(~genus, scales = "free_x")+
+  theme_minimal() +  theme(#legend.position = "none", 
+                           axis.title.y = element_blank()) +  
+  coord_flip() +
+  NULL
+
+```
+
+
+### Species list
+
+```{r}
+species_list <- unique(obs_all$spp_name)
+
+```
+
+
+
 
 
 

@@ -7,7 +7,7 @@ library(vegan)
 obs_all <- read_csv("../data/field_data_selected_Aug2019.csv") #all observations
 ##import species lookup data
 pantheon_data <- readxl::read_xlsx("../data/Species and Event data pivot table March with summary.xlsx", sheet = 2)
-spp_matched_corrected <- read.csv("../data/speciesmatch_further_correctionsApr2019.csv") 
+spp_matched_corrected <- read.csv("../data/speciesmatch_further_correctionsAug2019.csv") 
 effort_data <- readxl::read_xlsx("../data/Riparian Beetle Assemblages July2019 ck added.xlsx", sheet = 3)
 
 jw_spp_event_data <- readxl::read_xlsx("../data/Riparian Beetle Assemblages July2019 ck added.xlsx", sheet = 2, skip = 1)
@@ -33,9 +33,12 @@ extra_lookup <- spp_matched_corrected %>%
   mutate(is_wetland = wetland) %>% 
   select(-c(old_name, match, wetland)) %>% 
   unique() %>% 
+  filter(!duplicated(species)) %>% 
   select(species, everything())%>% 
   arrange(species) 
-spp_lookup_joined <- left_join(spp_lookup, extra_lookup, by = "species")
+spp_lookup_joined <- left_join(spp_lookup, extra_lookup, by = "species") 
+#write to csv
+write_csv(spp_lookup_joined, "../data/spp_lookup_joined.csv")
 
 #convert excavations to handsearch
 obs_all <- obs_all %>% 
