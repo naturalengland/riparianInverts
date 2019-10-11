@@ -4,18 +4,31 @@ library(vegan)
 
 #Import data----
 ##import wetland coleoptera data 
-obs_all <- read_csv("../data/field_data_selected_Aug2019.csv") #all observations
+obs_orig <- read_csv("../data/field_data_selected_Aug2019.csv") #processed observations
+obs_new <- read_csv("../data/field_data_additional_Oct2019.csv") %>% #new observations
+  transmute(spp_name = taxon, abund_num = as.numeric(quantity), abund_char = NA,
+            river = river, event =  event, event_code = event_code,
+            date = Date, year = year, gridref = grid_ref, sample_type = sample_type,
+            location = location_name, repl_dateloc = NA, repl_date = NA, replicate = NA,
+            sadler_bell = "Y", search_pitfall = NA,  search_excavation = NA,
+            sample_duration = NA, coord_precision = NA, easting = NA, northing = NA)
+
+obs_all <- bind_rows(obs_orig, obs_new)
+
 ##import species lookup data
-pantheon_data <- readxl::read_xlsx("../data/Species and Event data pivot table March with summary.xlsx", sheet = 2)
+
+spp_lookup_joined <- read_csv("../data/spp_lookup_with_family.csv")
+
 spp_matched_corrected <- read.csv("../data/speciesmatch_further_correctionsAug2019.csv") 
-effort_data <- readxl::read_xlsx("../data/Riparian Beetle Assemblages July2019 ck added.xlsx", sheet = 3)
+effort_data <- read_csv("../data/effort_JW_Oct2019.csv")
+  #readxl::read_xlsx("../data/Riparian Beetle Assemblages July2019 ck added.xlsx", sheet = 3)
 
 jw_spp_event_data <- readxl::read_xlsx("../data/Riparian Beetle Assemblages July2019 ck added.xlsx", sheet = 2, skip = 1)
 
 #Prepare data----
 
 #create event lookup 
-event_lookup <- obs_all %>% select(river, event_code) %>% unique()
+event_lookup <- obs_all %>% select(river, event_code) %>% unique() 
 #add a consistent event-year column because record years may vary
 event_lookup <- event_lookup %>% 
   mutate(evt_year = str_extract(string = event_lookup$event_code,pattern = "[0-9]{4}"))
@@ -23,31 +36,30 @@ event_lookup$evt_year[which(event_lookup$event_code %in% c("Dane_East", "Dane_We
 #write it back into the main observations table
 obs_all <- obs_all %>% full_join(event_lookup, by = c("river", "event_code")) %>% select(spp_name:year, evt_year, everything())
 
-#create species score lookup
-spp_lookup <- pantheon_data %>% select(-event) %>% unique() 
-#spp_lookup[is.na(spp_lookup$`Wetland species`)] <- 0
-spp_lookup$`Wetland species`[spp_lookup$`Wetland species` == "NA"] <- 0
-#add further lookup fields
-extra_lookup <- spp_matched_corrected %>% 
-  mutate(species = match) %>% 
-  mutate(is_wetland = wetland) %>% 
-  select(-c(old_name, match, wetland)) %>% 
-  unique() %>% 
-  filter(!duplicated(species)) %>% 
-  select(species, everything())%>% 
-  arrange(species) 
-spp_lookup_joined <- left_join(spp_lookup, extra_lookup, by = "species") 
-#write to csv
-write_csv(spp_lookup_joined, "../data/spp_lookup_joined.csv")
+#below not needed, as resulting file has been modified, now imported.  
+# #create species score lookup
+# pantheon_data <- readxl::read_xlsx("../data/Species and Event data pivot table March with summary.xlsx", sheet = 2)
+# spp_lookup <- pantheon_data %>% select(-event) %>% unique() 
+# #spp_lookup[is.na(spp_lookup$`Wetland species`)] <- 0
+# spp_lookup$`Wetland species`[spp_lookup$`Wetland species` == "NA"] <- 0
+# #add further lookup fields
+# extra_lookup <- spp_matched_corrected %>% 
+#   mutate(species = match) %>% 
+#   mutate(is_wetland = wetland) %>% 
+#   select(-c(old_name, match, wetland)) %>% 
+#   unique() %>% 
+#   filter(!duplicated(species)) %>% 
+#   select(species, everything())%>% 
+#   arrange(species) 
+# spp_lookup_joined <- left_join(spp_lookup, extra_lookup, by = "species") 
+# #write to csv
+# write_csv(spp_lookup_joined, "../data/spp_lookup_joined.csv")
 
 #convert excavations to handsearch
 obs_all <- obs_all %>% 
   mutate(sample_type = as.factor(sample_type)) %>% 
   mutate(sample_type = recode_factor(sample_type, excavation = "hand_search")) %>% 
   droplevels() 
-# #remove excavations
-# obs_all <- obs_all %>% 
-#   filter(sample_type %in% c("pitfall", "hand_search"))
 
 
 #convert to a frequency matrix----
@@ -111,8 +123,6 @@ obs_all_freq <- obs_all %>%
 samptypes <- obs_all_freq %>% 
   select(-freq) %>% 
   mutate(smptp = str_replace_all(sample_type, c("hand_search" = "h", "pitfall" = "p"))) %>% 
-  # ungroup() %>% 
-  # group_by(spp_name) %>%
   spread(key = sample_type, value = smptp, fill = "") %>% 
   mutate(sample_types = paste0(hand_search, pitfall)) %>% 
   select(spp_name, sample_types)
@@ -141,25 +151,6 @@ obs_all_freq_types <- obs_all_freq %>%
   mutate_at(vars(length.min,length.max), as.double)
 
 
-#test difference in sampling type proportions between wetland and non wetland species
-chitest_wetland_props <- obs_all_freq_types %>% 
-  group_by(is_wetland) %>% 
-  count(sample_types) %>% 
-  filter(is_wetland %in% c("y", "n")) %>% 
-  spread(key = is_wetland, value = n) %>% 
-  select(-sample_types) %>% 
-  chisq.test()
-
-#old version uses the wrong wetland column
-# chitest_wetland_props <- obs_all_freq_types %>% 
-#   group_by(wetland_spp) %>% 
-#   count(sample_types) %>% 
-#   filter(wetland_spp %in% c(TRUE, FALSE)) %>% 
-#   spread(key = wetland_spp, value = n) %>% 
-#   select(-sample_types) %>% 
-#   chisq.test()
-
-
 
 #extract genus data----
 genus_types <- obs_all_freq_types %>% 
@@ -184,7 +175,8 @@ effort_data <- effort_data %>%
          handsearch = `number of timed  searches/excavations (T)`,
          author = Author,
          grid_ref = `Grid Reference`,
-         n_records = `total number of records`) 
+         n_records = `total number of records`) %>% 
+  filter(event != is.na(event))
   
 
 ##Dissimilarity----

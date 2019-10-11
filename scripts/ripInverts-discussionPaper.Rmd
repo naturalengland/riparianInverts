@@ -32,11 +32,6 @@ obs_all %>% select(event, event_code) %>% unique() %>% arrange(event)
 
 
 
-`Species and Event data pivot table March with summary.xlsx` sheet 2 `Riparian Pantheon List` contains information about species characteristics
-```{r}
-head(pantheon_data)
-skimr::skim_to_wide(pantheon_data)
-```
 
 `speciesmatch_further_correctionsAug2019.csv` is a lookup table of species names: 
 
@@ -185,8 +180,9 @@ ggplot(graphdata, aes(x = evt_year, y = richness, group = as.factor(evt_year))) 
 
 ggplot(graphdata, aes(x = evt_year, y = richness, group = as.factor(evt_year))) +
   geom_boxplot(varwidth = T, colour = "darkgrey") +
+  # geom_violin() +
   geom_point(position = position_jitter(width = 0.08, height = 0.3), size = 0.9)+
-  scale_x_continuous(breaks = seq(1997,2020, by = 1), limits = c(1997, 2018), 
+  scale_x_continuous(breaks = seq(1997,2020, by = 1), limits = c(1997, 2020), 
                      labels = c("", "", "", "2000", "", "", "", "", 
                                 "2005", "", "", "", "", "2010", "", "", "", "", 
                                 "2015", "", "", "", "", "2020")) +
@@ -198,6 +194,46 @@ ggplot(graphdata, aes(x = evt_year, y = richness, group = as.factor(evt_year))) 
   theme(panel.grid.minor.x = element_blank())
 ```
 
+```{r}
+#richness by year WETLAND ONLY
+
+#summarise species richness per event
+graphdata <- obs_all %>% 
+  select(spp_name, event_code, evt_year) %>% 
+  left_join(select(effort, event_code, effort_score)) %>% 
+  left_join(select(spp_lookup_joined, species, 'Wetland species'), 
+            by = c("spp_name" = "species")) %>% 
+  rename(wetland_spp = 'Wetland species') %>% 
+  filter(wetland_spp == 1) %>% 
+  unique() %>% 
+  group_by(event_code, evt_year) %>% 
+  summarise(richness = n()) %>% 
+  filter(evt_year != "NA") %>% 
+  mutate(evt_year = as.numeric(evt_year))
+
+
+
+
+ggplot(graphdata, aes(x = evt_year, y = richness, group = as.factor(evt_year))) +
+  # geom_boxplot(varwidth = T, colour = "darkgrey") +
+  # geom_point(position = position_jitter(width = 0.08, height = 0.3), size = 0.9)+
+  geom_point(size = 2, colour = "darkgrey") +
+  scale_x_continuous(breaks = seq(1997,2020, by = 1), limits = c(1997, 2020), 
+                     labels = c("", "", "", "2000", "", "", "", "", 
+                                "2005", "", "", "", "", "2010", "", "", "", "", 
+                                "2015", "", "", "", "", "2020")) +
+  scale_y_continuous(breaks = seq(0, 250, by = 25))+
+  labs(title = "Wetland species richness in surveys over time", 
+       x = "Year", y = "Wetland species richness") +
+  #theme_bw() +
+  theme_doc +
+  # theme(panel.grid.minor.x = element_blank()) +
+  NULL
+
+```
+
+
+
 ### Effort
 
 ```{r}
@@ -207,7 +243,7 @@ effort <- effort_data %>% select(event_code, hand_search = handsearch, pitfall, 
 plot_effort <- ggplot(effort, aes(x = effort_score)) +
   geom_histogram(binwidth = 0.5) +
   scale_x_continuous(breaks = 0:max(effort$effort_score)) +
-  scale_y_continuous(breaks = seq(0,30, by = 5), expand = c(0,0)) +
+  scale_y_continuous(expand = expand_scale(add =c(0,0.5))) +
   labs(x = "Sampling effort", y = "Number of surveys", title = "A") +
   theme_bw()+  theme_doc
 plot_effort
@@ -222,7 +258,7 @@ effort_ck <- obs_all_mat %>%
   count(sample_type) %>% 
   spread(key = sample_type, value = n, fill = 0) %>% 
   mutate(effort_score = as.integer(hand_search + pitfall)) %>% 
-  filter(event_code != "unknown"); effort
+  filter(event_code != "unknown"); effort %>% arrange(-effort_score)
 ```
 These effort scores are inconsistent with JW's scores.  It is likely that CK has defined 'replicates' in `obs_all_mat` is not an accurate reflection of the way JW grouped sampling instances (e.g. one session of hand searching).  It is not going to be possible to do this accurately without re-grouping all the records from scratch.  
 
@@ -230,7 +266,7 @@ These effort scores are inconsistent with JW's scores.  It is likely that CK has
 wetland_effort <- 
   obs_all %>% select(spp_name, event_code) %>% 
   left_join(select(effort, event_code, effort_score)) %>% 
-  left_join(select(spp_lookup, species, 'Wetland species'), 
+  left_join(select(spp_lookup_joined, species, 'Wetland species'), 
             by = c("spp_name" = "species")) %>% 
   rename(wetland_spp = 'Wetland species') %>% 
   unique() %>% 
@@ -253,6 +289,24 @@ plot_wetland_effort <- ggplot(wetland_effort,
   
 plot_wetland_effort
 ```
+
+```{r}
+plot_wetland_effort_regr <- ggplot(wetland_effort, 
+                              aes(x = effort_score, y = n), 
+                              fill = as.factor(effort_score))+
+  geom_boxplot(varwidth = T, colour = "darkgrey", aes(group = effort_score)) +
+  geom_smooth(method = "lm")+
+  geom_point(position = position_jitter(width = 0.08, height = 0.3), size = 0.9)+
+  scale_x_continuous(breaks = 2:13) +
+  labs(x = "Sampling effort", y = "Number of wetland species", title = "B") +
+  theme_bw() + theme_doc; plot_wetland_effort_regr
+
+lm.eff <- lm(effort_score ~ n, wetland_effort)
+broom::tidy(lm.eff)
+summary(lm.eff)
+lm.eff
+```
+
 
 ```{r fig.height=4, fig.width=8}
 plot_grid(plot_effort, plot_wetland_effort)
@@ -384,14 +438,11 @@ ggplot(graphdata, aes(x = is_wetland, y = n)) +
 
 
 ```{r}
-chidata <- obs_all_freq_types %>% 
-  filter(is_wetland %in% c("y", "n")) %>% 
-  mutate(is_wetland = as.character(is_wetland)) %>%
-  mutate(is_wetland = recode(is_wetland, 
-                              "n" = "not-wetland", "y" = "wetland")) %>% 
-  group_by(is_wetland) %>% 
-  count(sample_types) %>% 
-  spread(key = is_wetland, value = n) %>%
+chidata <- obs_all_freq_types %>%
+  group_by(wetland_spp) %>%
+  count(sample_types) %>%
+  filter(wetland_spp %in% c(TRUE, FALSE)) %>%
+  spread(key = wetland_spp, value = n) %>%
   mutate(sample_types = recode_factor(sample_types, 
                                       h = "handsearch", hp = "both", p = "pitfall")) %>% 
   column_to_rownames("sample_types") 
@@ -592,7 +643,7 @@ print(citation("iNEXT"), bibtex=TRUE)
 ```{r}
 library(cowplot)
 
-plot_grid(plot_accum, plot_asympt)
+# plot_grid(plot_accum, plot_asympt)
 
 ```
 
@@ -660,7 +711,8 @@ ggplot(graphdata, aes(x = spp_name, y = n_samples, alpha = sample_type, fill = g
            x = length(unique(graphdata$spp_name))+0.5, y = 10, size = 3) +
   geom_hline(yintercept = 0, alpha = 0.5) +
 #  facet_wrap(~genus, scales = "free_x")+
-  theme_minimal() +  theme(legend.position = "none", axis.title.y = element_blank()) +  coord_flip() +
+  theme_minimal() +  
+  theme(legend.position = "none", axis.title.y = element_blank(), axis.text.y = element_text(size = 7)) +  coord_flip() +
   NULL
 ```
 
@@ -675,7 +727,7 @@ maxlabel <- round(max(graphdata$n_samples)/50)*50
 breaks <- seq(minlabel, maxlabel, 50)
 
 ggplot(graphdata, aes(x = spp_name, y = n_samples, group = spp_name))+#, alpha = sample_type, fill = genus))+
-  geom_col(position = position_dodge(width = 3, preserve = "single"), width = 3,
+  geom_col(position = position_dodge(width = 10, preserve = "single"), width = 1,
            aes(alpha = sample_type, fill = genus)) +
   scale_alpha_manual(values = c("pitfall" = 0.55, "hand_search" = 0.85)) +
   scale_y_continuous(breaks = breaks, labels = abs(breaks), minor_breaks = NULL) +
@@ -687,7 +739,8 @@ ggplot(graphdata, aes(x = spp_name, y = n_samples, group = spp_name))+#, alpha =
   geom_hline(yintercept = 0, alpha = 0.5) +
 #  facet_wrap(~genus, scales = "free_x")+
   theme_minimal() +  theme(#legend.position = "none", 
-                           axis.title.y = element_blank()) +  
+                           axis.title.y = element_blank(),
+                           axis.text.y = element_text(size = 7)) +  
   coord_flip() +
   NULL
 
@@ -702,6 +755,17 @@ species_list <- unique(obs_all$spp_name)
 ```
 
 
+### by Family
+
+```{r}
+spp_lookup_joined %>% group_by(is_wetland) %>% count(Family) %>% spread(key = is_wetland, value = n) %>% arrange(-y)
+```
+
+```{r}
+spp_lookup_joined %>% group_by(`Wetland species`) %>% count(Family) %>% spread(key = `Wetland species`, value = n, fill = 0) %>% 
+  select(Family, wetland = `1`, not_wetland =`0`) %>% mutate(total = not_wetland + wetland) %>% arrange(-total) %>% print() %>%
+  write_csv("../data/family_wetland.csv")
+```
 
 
 
