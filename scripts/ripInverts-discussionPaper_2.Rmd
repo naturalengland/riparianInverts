@@ -462,7 +462,7 @@ left_join(wetland_effort, jw_spp_event_data) %>%
          diff = n_wet_ck - n_wet_jw) %>% 
   select(event_code, n_wet_ck, n_wet_jw, diff) %>%
   arrange(-abs(diff)) %>% 
-  print() %>% write_csv("../data/wetland_compare.csv")
+  print() #%>% write_csv("../data/wetland_compare.csv")
 ```
 
 
@@ -714,8 +714,8 @@ inext_output %>% group_by(Site) %>%
 
 
 ```{r}
-write.csv(as.data.frame(eventdata_iNext$AsyEst), "../data/asympt_output.csv")
-write.csv(as.data.frame(inext_output), "../data/inext_output.csv")
+#write.csv(as.data.frame(eventdata_iNext$AsyEst), "../data/asympt_output.csv")
+#write.csv(as.data.frame(inext_output), "../data/inext_output.csv")
 ```
 
 
@@ -849,8 +849,8 @@ species_list <- unique(obs_all$spp_name)
 spp_lookup_fam %>% 
   filter(species %in% species_list) %>% 
   group_by(`Wetland species`) %>% count(Family) %>% spread(key = `Wetland species`, value = n, fill = 0) %>% 
-  select(Family, wetland = `1`, not_wetland =`0`) %>% mutate(total = not_wetland + wetland) %>% arrange(-total, -wetland) %>% print() %>%
-  write_csv("../data/family_wetland.csv")
+  select(Family, wetland = `1`, not_wetland =`0`) %>% mutate(total = not_wetland + wetland) %>% arrange(-total, -wetland) %>% print() #%>%
+  #write_csv("../data/family_wetland.csv")#
 ```
 
 
