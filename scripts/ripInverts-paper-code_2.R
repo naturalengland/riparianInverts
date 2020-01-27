@@ -106,6 +106,11 @@ obs_all_freq_types <- obs_all_freq %>%
   full_join(samptypes) %>% 
   left_join(spp_lookup_fam, by = c("spp_name" = "species"))  %>% 
   rename("cons_status" = "Conservation status", 
+         "guild_larva" = "Larval feeding guild", 
+         "guild_adult" = "Adult feeding guild",
+         "biotope_broad" = "Broad biotope",
+         "assemblage_specific" = "Specific assemblage type",
+         "habitat_score" = "Habitat score" ,
          "wetland_spp" = "Wetland species", 
          "runningwater_spp" = "running water W23",  
          "peatland_spp" = "peatland W25", 
@@ -117,7 +122,7 @@ obs_all_freq_types <- obs_all_freq %>%
          "riparianshingle_spp" = "riparian shingle W46",
          "drawdownzone_spp" = "drawdown zone W38",
          "wetlandveg_spp" = "wetland vegetation W34") %>% 
-  mutate_at(vars(cons_status:wetlandveg_spp), as.logical) %>% 
+  mutate_at(vars(cons_status, wetland_spp:coeleopteral), as.logical) %>% 
   mutate_at(vars(length.min,length.max), as.character)  %>% 
   mutate_at(vars(length.min,length.max), as.double)
 
