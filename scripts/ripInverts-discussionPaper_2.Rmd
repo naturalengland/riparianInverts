@@ -610,6 +610,41 @@ ggplot(graphdata, aes(y = n_spp, x = Family, fill = sample_types)) +
 
 ```
 
+### by guild
+```{r}
+samptype_guild_ad
+
+guild_ad_levels <-  samptype_guild_ad$guild_adult[order(-samptype_guild_ad$n_spp)]
+
+graphdata <- samptype_guild_ad %>%
+  ungroup() %>% 
+  arrange(-n_spp) %>%
+  mutate(guild_adult = factor(guild_adult, levels = rev(guild_adult))) %>% 
+  select(-n_spp) %>% 
+  gather(key = sample_types, 
+         value = n_spp, handsearch, pitfall, handsearch_pitfall) %>% 
+  droplevels()
+
+ggplot(graphdata, aes(y = n_spp, x = guild_adult, fill = sample_types)) +
+  geom_col(colour = "black", width = 0.7) +
+  coord_flip() +
+  scale_fill_grey(start = 0.8, end = 0.3,
+                  labels = c(handsearch = "handsearch", handsearch_pitfall = "both",
+                             pitfall = "pitfall")) +
+  theme_minimal() +
+  theme(legend.position = c(0.8, 0.5)) +
+  labs(title = "Capture methods by adult feeding guild", 
+       caption = paste0("Method of capture  by adult feeding guild"),
+       y = "Number of species", x = "", fill = "sample type") +
+  theme_doc
+```
+
+
+
+
+
+
+
 
 ## species accumulation
 

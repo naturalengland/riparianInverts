@@ -167,6 +167,18 @@ samptype_order <- obs_all_freq_types %>%
   select(Order, handsearch, pitfall, handsearch_pitfall, n_spp) %>% 
   arrange(-n_spp)
 
+#create adult guild v sample type table ----
+samptype_guild_ad <- obs_all_freq_types %>% 
+  select(-c(hand_search, pitfall)) %>%
+  group_by(guild_adult, sample_types) %>% 
+  summarise(freq = length(guild_adult)) %>% 
+  spread(key = sample_types, value = freq, fill = 0) %>% 
+  mutate(n_spp = h+hp+p) %>% 
+  mutate(handsearch = h) %>% 
+  mutate(pitfall = p) %>% 
+  mutate(handsearch_pitfall = hp) %>% 
+  select(guild_adult, handsearch, pitfall, handsearch_pitfall, n_spp) %>% 
+  arrange(-n_spp)
 
 #prepare effort scores ----
 effort_data <- effort_data %>% 
