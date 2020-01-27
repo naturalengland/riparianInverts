@@ -199,19 +199,16 @@ graphdata <- obs_all %>%
 
 
 ggplot(graphdata, aes(x = evt_year, y = richness, group = as.factor(evt_year))) +
-  # geom_boxplot(varwidth = T, colour = "darkgrey") +
-  # geom_point(position = position_jitter(width = 0.08, height = 0.3), size = 0.9)+
   geom_point(size = 2, colour = "darkgrey") +
+  geom_segment(x = 2013, y = 15, xend = 2013, yend = 5, 
+               arrow = arrow(length = unit(0.25, "cm"), type = "closed"), size = 1) +
   scale_x_continuous(breaks = seq(1997,2020, by = 1), limits = c(1997, 2020), 
                      labels = c("", "", "", "2000", "", "", "", "", 
                                 "2005", "", "", "", "", "2010", "", "", "", "", 
                                 "2015", "", "", "", "", "2020")) +
-  scale_y_continuous(breaks = seq(0, 250, by = 25))+
-  labs(title = "Wetland species richness in surveys over time", 
-       x = "Year", y = "Wetland species richness") +
-  #theme_bw() +
+  scale_y_continuous(breaks = seq(0, 250, by = 25)) +
+  labs(x = "Year", y = "Wetland beetle species richness") +
   theme_doc +
-  # theme(panel.grid.minor.x = element_blank()) +
   NULL
 
 ```
@@ -396,7 +393,7 @@ sum(graphdata$n)
 plotmargin <- unit(c(8, 4, 4, 4), units = "mm")
 
 
-ggplot(graphdata, aes(x = wetland_spp, y = n)) +
+plot3 <- ggplot(graphdata, aes(x = wetland_spp, y = n)) +
   geom_bar(aes(fill = sample_types), position = position_stack(), 
            stat = "identity", colour = "black") +
   scale_fill_grey(start = 0.8, end = 0.3,
@@ -411,10 +408,70 @@ ggplot(graphdata, aes(x = wetland_spp, y = n)) +
        y = "number of species captured",
        fill = "sample type") +
   theme_doc
+plot3
 
+plot3 + coord_flip()
 
 ```
 
+## reviewers have requested a venn diagram of this (can't work out how that's going to look)
+
+```{r}
+graphdata <-  obs_all_freq_types %>% 
+  count(wetland_spp, sample_types) %>%
+  group_by(wetland_spp) %>% 
+  mutate(prop = n/sum(n))
+graphdata
+
+
+
+library(VennDiagram)
+
+venn.wetland <- draw.pairwise.venn(area1 = (104+181), area2 = (31+181), cross.area = 181, category = c("Handsearch", "Pitfall"))
+grid.draw(venn.wetland, venn.plot)
+grid.newpage()
+
+```
+
+
+```{r}
+#how about a square venn
+graphdata <-  obs_all_freq_types %>% 
+  count(wetland_spp, sample_types) %>%
+  group_by(wetland_spp) %>% 
+  mutate(prop = n/sum(n))
+graphdata
+
+sum(graphdata$n)
+
+plotmargin <- unit(c(8, 4, 4, 4), units = "mm")
+
+
+ggplot(graphdata, aes(x = wetland_spp, y = n, fill = sample_types)) +
+  # geom_bar(position = position_stack(), 
+  #          stat = "identity") +
+  geom_col() +
+  geom_text(aes(label = n), position = position_stack(vjust = .5) ) +
+  # scale_fill_grey(start = 0.8, end = 0.3,
+  #                 labels = c(h = "handsearch only", hp = "handsearch & \npitfall", 
+  #                            p = "pitfall only"))+
+  scale_fill_manual(values = c("#D6E0FF", "#727272", "#C2EFB4")) +
+  theme_minimal() +
+  theme(legend.position = "right", panel.grid.major.x = element_blank(), 
+        plot.margin = plotmargin) +
+  scale_x_discrete(labels = c("FALSE" = "not wetland", "TRUE" = "wetland")) +
+  labs(title = "Pitfalls, Handsearch or Both?", 
+       x = "species type", 
+       y = "number of species captured",
+       fill = "sample type") +
+  coord_flip() +
+  theme_doc
+
+ggplot(data = graphdata, aes(x = wetland_spp, y = n, fill = sample_types)) +
+    geom_col() +
+    geom_text(aes(label = n),
+              position = position_stack(vjust = .5))
+```
 
 
 ```{r}
