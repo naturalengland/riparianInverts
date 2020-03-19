@@ -1,8 +1,9 @@
 ---
 title: "ripInverts - discussion paper content"
-output:
+output: 
+  html_notebook: default  
+  github_document: default
   word_document: default
-  html_notebook: default
   pdf_document: default
 ---
 
@@ -206,7 +207,7 @@ ggplot(graphdata, aes(x = evt_year, y = richness, group = as.factor(evt_year))) 
                      labels = c("", "", "", "2000", "", "", "", "", 
                                 "2005", "", "", "", "", "2010", "", "", "", "", 
                                 "2015", "", "", "", "", "2020")) +
-  scale_y_continuous(breaks = seq(0, 250, by = 25)) +
+  scale_y_continuous(breaks = seq(0, 250, by = 25), ) +
   labs(x = "Year", y = "Wetland beetle species richness") +
   theme_doc +
   NULL
@@ -296,7 +297,7 @@ plot_grid(plot_effort, plot_wetland_effort)
 
 ##sample type: does it matter
 ```{r}
-adon1
+adon1 %>% broom::tidy()
 ```
 
 
@@ -472,6 +473,27 @@ ggplot(data = graphdata, aes(x = wetland_spp, y = n, fill = sample_types)) +
     geom_text(aes(label = n),
               position = position_stack(vjust = .5))
 ```
+
+look at proprtions of individual observations as proportion of effort
+```{r}
+obs_all %>% left_join(spp_lookup_fam, by = c("spp_name" = "species")) %>% 
+  group_by(event_code, Family, spp_name) %>% 
+  count(sample_type) %>% filter(event_code == "Alport_1999") #%>% clipr::write_clip()
+
+effort_data %>% filter(event_code == "Alport_1999")
+
+obs_all %>% left_join(spp_lookup_fam, by = c("spp_name" = "species")) %>% 
+  select(spp_name, Family,sample_type, event_code, location) %>% 
+  filter(event_code == "Alport_1999", spp_name == "Zorochros minimus") %>% 
+  arrange(sample_type) #%>% clipr::write_clip()
+
+```
+
+
+
+
+
+
 
 
 ```{r}
@@ -667,8 +689,8 @@ plot_accum <- ggplot(graphdata, aes(x = n_sites, y = n_spp, colour = river))+
   scale_colour_grey(start = 0.4, end = 0.8, 
                         labels = paste0(legenddata$river, " (", 
                                         legenddata$max_sites, ")"))+
-  labs(title = "Observed species accumulation", 
-       x = "number of surveys", y = "number of species") +
+  labs(#title = "Observed species accumulation", 
+       x = "Number of Surveys", y = "Number of Species") +
   theme_bw() +
   theme(legend.position = c(0.7, 0.2), legend.title = element_blank()) +
   theme_doc +
@@ -768,11 +790,11 @@ plot_asympt <- ggplot(inext_output, aes(x = t)) +
   scale_fill_grey() +
   scale_linetype_manual(values = c(1,3)) +
   facet_wrap(~Site,ncol = 1) +
-  labs(title = "Extrapolated species richness",
-       y = "number of species", x = "number of surveys") +
+  labs(#title = "Extrapolated species richness",
+       y = "Number of Species", x = "Number of Surveys") +
   theme_bw() +
   theme(legend.position = "bottom", legend.title = element_blank()) +
-  coord_cartesian(xlim = c(1, 40)) +
+  coord_cartesian(xlim = c(1, 25)) +
   scale_x_continuous(expand = c(0,0)) + scale_y_continuous(expand = c(0,0))+
   theme_doc +
   NULL; plot_asympt
