@@ -1,0 +1,248 @@
+---
+title: "Call notes 19 August 2020 "
+output: html_notebook
+---
+
+
+
+```{r setup, include=FALSE}
+# document rendering options
+knitr::opts_chunk$set(
+	message = FALSE,
+	warning = FALSE,
+	include = TRUE, 
+	echo = FALSE,
+	dpi = 300
+)
+
+# load packages
+library(tidyverse)
+library(cowplot)
+library(iNEXT)
+library(vegan)
+library(VennDiagram)
+library(grid)
+library(gridExtra)
+
+
+# generic graph settings
+theme_doc <-  theme(axis.title = element_text(size = 10), 
+                    text=element_text(size=10), 
+                    plot.title = element_text(size = 11),  
+                    legend.key.width = unit(1.2,"cm")) 
+
+```
+
+
+```{r}
+#Import and prepare data
+#The following script imports data, cleans it and prepares a number of datasets.  It also carries out a few analyses: 
+
+source("../scripts/ripInverts-paper-code_2.R", chdir = T)
+```
+
+
+### data issues
+
+ck to do a data dictionary that explains each table and to check number of sites / events / samples used in each analysis
+
+
+### Effort
+
+```{r}
+effort_all <- 
+  obs_all %>% select(spp_name, event_code) %>% 
+  left_join(select(effort_data, event_code, effort)) %>% 
+  left_join(select(spp_lookup_fam, species, 'Wetland species'), 
+            by = c("spp_name" = "species")) %>% 
+  rename(wetland_spp = 'Wetland species') %>% 
+  unique() %>% 
+  group_by(event_code, effort) %>% 
+  count(wetland_spp) %>% 
+  #filter(wetland_spp == 1) %>% 
+  filter(event_code != "unknown")
+
+effort_all %>% arrange(-n)
+
+plot_effort <- ggplot(effort_all, 
+                              aes(x = as.factor(effort), y = n), 
+                              fill = as.factor(effort))+
+  geom_boxplot(varwidth = T, colour = "darkgrey") +
+  #geom_violin(scale = "width")+
+  geom_point(position = position_jitter(width = 0.08, height = 0.3), size = 0.9)+
+  labs(x = "Sampling effort", y = "Number of species", title = "B") +
+  theme_bw() +
+  theme_doc
+  
+plot_effort
+```
+
+```{r}
+plot_effort_regr <- ggplot(effort_all, 
+                              aes(x = effort, y = n), 
+                              fill = as.factor(effort))+
+  geom_boxplot(varwidth = T, colour = "darkgrey", aes(group = effort)) +
+  geom_smooth(method = "lm")+
+  geom_point(position = position_jitter(width = 0.08, height = 0.3), size = 0.9)+
+  scale_x_continuous(breaks = 2:13) +
+  labs(x = "Sampling effort", y = "Number of species", title = "B") +
+  theme_bw() + theme_doc; plot_effort_regr
+
+lm.eff <- lm(effort ~ n, effort_all)
+broom::tidy(lm.eff)
+summary(lm.eff)
+lm.eff
+
+
+lmer.eff <- lme4::lmer(effort ~ n + (1 | wetland_spp), data = effort_all)
+summary(lmer.eff)
+```
+
+
+
+
+
+
+
+### Permanova
+
+```{r}
+##Dissimilarity----
+#calculate jaccard dissimilarity
+adon1 <- vegan::adonis2(selected_data ~ river + event_code + sample_type, data = selected_env, permutations = 120, method = "jaccard", by = "terms")
+
+#test assumptions
+dist_selected_data <- vegdist(x = selected_data, method = "jaccard")
+
+bd.river <- betadisper(d = dist_selected_data, group = selected_env$river)
+boxplot(bd.river)
+# F-Test
+anova(bd.river)
+permutest(bd.river) 
+# We can/cannot find a statistically different dispersion 
+# -> assumption of homogeneity is [not] met
+
+
+bd.event <- betadisper(d = dist_selected_data, group = selected_env$event_code)
+boxplot(bd.event)
+# F-Test
+anova(bd.event)
+permutest(bd.event) 
+# We can/cannot find a statistically different dispersion 
+# -> assumption of homogeneity is [not] met
+
+
+bd.sample_type <- betadisper(d = dist_selected_data, group = selected_env$sample_type)
+boxplot(bd.sample_type)
+# F-Test
+anova(bd.sample_type)
+permutest(bd.sample_type) 
+# We can/cannot find a statistically different dispersion 
+# -> assumption of homogeneity is [not] met
+```
+
+```{r}
+#re-do beta dispersion with a 'bray' distance matrix
+
+#test assumptions
+dist_selected_data <- vegdist(x = selected_data^0.25, method = "bray") #note: cube root transformed
+
+bd.river <- betadisper(d = dist_selected_data, group = selected_env$river)
+boxplot(bd.river)
+# F-Test
+anova(bd.river)
+permutest(bd.river) 
+# We can/cannot find a statistically different dispersion 
+# -> assumption of homogeneity is [not] met
+
+
+bd.event <- betadisper(d = dist_selected_data, group = selected_env$event_code)
+boxplot(bd.event)
+# F-Test
+anova(bd.event)
+permutest(bd.event) 
+# We can/cannot find a statistically different dispersion 
+# -> assumption of homogeneity is [not] met
+
+
+bd.sample_type <- betadisper(d = dist_selected_data, group = selected_env$sample_type)
+boxplot(bd.sample_type)
+# F-Test
+anova(bd.sample_type)
+permutest(bd.sample_type) 
+# We can/cannot find a statistically different dispersion 
+# -> assumption of homogeneity is [not] met
+```
+
+
+```{r}
+#do we have an equal number of hs and pf
+selected_env %>% count(sample_type)
+
+
+```
+
+## Lets ordinate
+
+```{r}
+mds <- metaMDS(comm = selected_data^2, distance = "euclidian")
+
+ordiplot(ord = mds, display = "species")
+ordihull(ord = mds, groups = selected_env$sample_type, label = T)
+```
+
+#### conclusion of this bit
+
+* report that we've tested beta dispersion and have found non-homog of dispersion (report the results for the three factors)
+
+* report the results of the permanova with above proviso
+
+
+
+### try restricting permutation scheme
+
+```{r}
+##Dissimilarity----
+#calculate jaccard dissimilarity
+adon1 <- vegan::adonis(selected_data ~ event_code + sample_type, data = selected_env, strata = selected_env$river, permutations = 120, method = "jaccard", by = "terms")
+```
+
+ makes no difference
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
