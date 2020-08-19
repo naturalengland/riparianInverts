@@ -40,7 +40,7 @@ theme_doc <-  theme(axis.title = element_text(size = 10),
 #Import and prepare data
 #The following script imports data, cleans it and prepares a number of datasets.  It also carries out a few analyses: 
 
-source("../scripts/ripInverts-paper-code_2.R", chdir = T)
+source("../R/ripInverts-paper-code_2.R", chdir = T)
 ```
 
 

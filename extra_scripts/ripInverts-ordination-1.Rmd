@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 ```
 
 ```{r}
-source("../scripts/ripInverts-paper-code_1.R", chdir = T)
+source("../R/ripInverts-paper-code_1.R", chdir = T)
 ```
 
 ##Ordination - all records
@@ -277,8 +277,8 @@ ggplot() +
 ```
 
 ```{r}
-source("../scripts/gg_ordiplot.R")
-source("../scripts/ord_labels.R")
+source("../extra_scripts/gg_ordiplot.R")
+source("../extra_scripts/ord_labels.R")
 ```
 
 ```{r}
