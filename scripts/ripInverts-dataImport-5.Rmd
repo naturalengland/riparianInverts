@@ -1,0 +1,148 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+more data cleaning.  requires `ripInverts-dataImports-4.Rmd` and `ripInverts-paper-code_1.R`
+
+
+```{r}
+library(tidyverse)   
+
+  ## set working directory as required
+#w_dir <- ""  #path to working directory
+w_dir <- "../" # or uncomment when sourcing in RMarkdown
+
+
+    #processed observations
+obs_orig <- read_csv(paste0(w_dir, "data/field_data_selected_mancld2_Oct2019.csv")) 
+names(obs_orig)
+    #new observations, rename and add cols to match previous
+obs_new <- read_csv(paste0(w_dir, "data/field_data_additional_Oct2019.csv")) %>%
+  transmute(spp_name = taxon, abund_num = as.numeric(quantity), abund_char = NA,
+            river = river, event =  event, event_code = event_code,
+            date = Date, year = year, gridref = grid_ref, sample_type = sample_type,
+            location = location_name, repl_dateloc = NA, repl_date = NA, replicate = NA,
+            sadler_bell = "Y", search_pitfall = NA,  search_excavation = NA,
+            sample_duration = NA, coord_precision = NA, easting = NA, northing = NA)
+
+    #combine observations
+obs_all <- bind_rows(obs_orig, obs_new)
+
+    #cleanup
+#rm(obs_orig, obs_new)
+
+
+## import lookup data
+
+spp_lookup_fam <- read_csv(paste0(w_dir, "data/spp_lookup_with_family.csv"))
+
+spp_matched_corrected <- read.csv(paste0(w_dir, "data/speciesmatch_further_correctionsAug2019.csv")) 
+
+effort_data <- read_csv(paste0(w_dir, "data/effort_JW_Oct2019.csv"))
+
+jw_spp_event_data <- readxl::read_xlsx(paste0(w_dir, "data/Riparian Beetle Assemblages July2019 ck added.xlsx"), sheet = 2, skip = 1)
+```
+
+
+```{r}
+#create new cleaned copy
+
+obs_clean <- obs_all %>% 
+  mutate(aug2019_spp_name = spp_name)
+```
+
+
+
+```{r}
+#create recode list from matching lookup
+recode_list <- as.list(as.character(spp_matched_corrected$match))
+names(recode_list) <- spp_matched_corrected$old_name  
+```
+
+
+```{r}
+#recode observations
+length(unique(obs_clean$spp_name))
+obs_clean <- obs_clean %>% mutate(spp_name = recode(spp_name, !!!recode_list))
+length(unique(obs_clean$spp_name))
+```
+
+
+
+```{r}
+#Manual cleanup
+
+
+obs_clean <- obs_clean %>%
+  mutate(
+    spp_name = recode(
+      spp_name,
+      `Actidium atterimum (match not found)` = "Actidium aterrimum",
+      `Amischa soror` = "Amischa nigrofusca",
+      `Anotylys tetracarinatus` = "Anotylus tetracarinatus",
+      `Bembidion cruciatum` = "Bembidion (Ocydromus) cruciatum",
+      `Bembidion obliquum` = "Bembidion (Notaphus) obliquum",
+      `Bembidon geniculatum (match not found)` = "Bembidion (Bembidionetolitzkya) geniculatum",
+      `Glischrochilus hortensis` = "Glischrochilus (Librodor) hortensis",
+      `Harpalus rufibarbis` = "Ophonus (Metophonus) rufibarbis",
+      `Longitarsus melanocephalusÂ ` = "Longitarsus melanocephalus",
+      `Nebrioporus depressus sl` = "Nebrioporus (Nebrioporus) depressus",
+      `Orechtochilus villosus` = "Orectochilus villosus",
+      `Oulema melanopus sens. lat. (match not found)` = "Oulema melanopus s.l.",
+      `Oulema melanopus sens. str. (match not found)` = "Oulema melanopus s.str.",
+      `Oulema rufocyanea agg.` = "Oulema rufocyanea",
+      `Quedius tristis (unique match could not be found - click on the correct option below)` = "Quedius (Quedius) levicollis",
+      `Rhinoncus pericarpiusÂ ` = "Rhinoncus pericarpius",
+      `Rugilus erichsonii` = "Rugilus erichsoni",
+      `Subcoccinellea 24-punctata (match not found)` = "Subcoccinellea 24-punctata",
+      `Tetartopeus quadratum` = "Lathrobium (Tetartopeus) quadratum",
+      `Tetartopeus terminatum` = "Lathrobium (Tetartopeus) terminatum",
+      `Thinobius longipennis sensu auct. Brit. partim not (Heer, 1841)` = "Thinobius longipennis",
+      `Longitarsus melanocephalus `  = "Longitarsus melanocephalus",
+      `Rhinoncus pericarpius` = "Rhinoncus pericarpius",
+      `Tachyusa concinna` = "Tachyusa coarctata",
+      `Aridius bifasciatus` = "Cartodere (Aridius) bifasciata",
+      `Corticarina fuscula` = "Corticarina minuta",
+      `Exapion ulicis` = "Exapion (Ulapion) ulicis",
+      `Holotrichapion ononis` = "Holotrichapion (Holotrichapion) ononis",
+      `Sitona regensteinensis` = "Andrion regensteinense",
+      `Orchestes fagi` = "Orchestes (Salius) fagi",
+      `Otiorhynchus singularis` = "Otiorhynchus (Dorymerus) singularis",
+      `Phyllobius pyri` = "Phyllobius (Phyllobius) pyri",
+      `Phyllobius roboretanus` = "Phyllobius (Parnemoicus) roboretanus"
+    )
+  ) %>%
+  mutate(spp_name = str_trim(spp_name, side = "right")) %>%
+  mutate(event_code = recode(event_code, unknown = "Wye_2014_d"))
+```
+
+```{r}
+obs_clean %>% select(spp_name) %>% unique()
+```
+
+
+
+
+```{r}
+write_csv(obs_clean, paste0(w_dir, "data/field_data_selected_Oct2019.csv")) 
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,29 +1,26 @@
 
+
 library(tidyverse)
 library(vegan)
 
-#Import data----
-##import wetland coleoptera data 
-obs_orig <- read_csv("../data/field_data_selected_Aug2019.csv") #processed observations
-obs_new <- read_csv("../data/field_data_additional_Oct2019.csv") %>% #new observations
-  transmute(spp_name = taxon, abund_num = as.numeric(quantity), abund_char = NA,
-            river = river, event =  event, event_code = event_code,
-            date = Date, year = year, gridref = grid_ref, sample_type = sample_type,
-            location = location_name, repl_dateloc = NA, repl_date = NA, replicate = NA,
-            sadler_bell = "Y", search_pitfall = NA,  search_excavation = NA,
-            sample_duration = NA, coord_precision = NA, easting = NA, northing = NA)
+  ## set working directory as required
+#w_dir <- ""  #path to working directory
+w_dir <- "../" # or uncomment when sourcing in RMarkdown
 
-obs_all <- bind_rows(obs_orig, obs_new)
+# Import data----
+## import wetland coleoptera data 
 
-##import species lookup data
+obs_all <- read_csv(paste0(w_dir, "data/field_data_selected_Oct2019.csv"))  
 
-spp_lookup_joined <- read_csv("../data/spp_lookup_with_family.csv")
+## import lookup data
 
-spp_matched_corrected <- read.csv("../data/speciesmatch_further_correctionsAug2019.csv") 
-effort_data <- read_csv("../data/effort_JW_Oct2019.csv")
-  #readxl::read_xlsx("../data/Riparian Beetle Assemblages July2019 ck added.xlsx", sheet = 3)
+spp_lookup_fam <- read_csv(paste0(w_dir, "data/spp_lookup_with_family.csv"))
 
-jw_spp_event_data <- readxl::read_xlsx("../data/Riparian Beetle Assemblages July2019 ck added.xlsx", sheet = 2, skip = 1)
+spp_matched_corrected <- read.csv(paste0(w_dir, "data/speciesmatch_further_correctionsAug2019.csv")) 
+
+effort_data <- read_csv(paste0(w_dir, "data/effort_JW_Oct2019.csv"))
+
+jw_spp_event_data <- readxl::read_xlsx(paste0(w_dir, "data/Riparian Beetle Assemblages July2019 ck added.xlsx"), sheet = 2, skip = 1)
 
 #Prepare data----
 
@@ -36,31 +33,18 @@ event_lookup$evt_year[which(event_lookup$event_code %in% c("Dane_East", "Dane_We
 #write it back into the main observations table
 obs_all <- obs_all %>% full_join(event_lookup, by = c("river", "event_code")) %>% select(spp_name:year, evt_year, everything())
 
-#below not needed, as resulting file has been modified, now imported.  
-# #create species score lookup
-# pantheon_data <- readxl::read_xlsx("../data/Species and Event data pivot table March with summary.xlsx", sheet = 2)
-# spp_lookup <- pantheon_data %>% select(-event) %>% unique() 
-# #spp_lookup[is.na(spp_lookup$`Wetland species`)] <- 0
-# spp_lookup$`Wetland species`[spp_lookup$`Wetland species` == "NA"] <- 0
-# #add further lookup fields
-# extra_lookup <- spp_matched_corrected %>% 
-#   mutate(species = match) %>% 
-#   mutate(is_wetland = wetland) %>% 
-#   select(-c(old_name, match, wetland)) %>% 
-#   unique() %>% 
-#   filter(!duplicated(species)) %>% 
-#   select(species, everything())%>% 
-#   arrange(species) 
-# spp_lookup_joined <- left_join(spp_lookup, extra_lookup, by = "species") 
-# #write to csv
-# write_csv(spp_lookup_joined, "../data/spp_lookup_joined.csv")
-
 #convert excavations to handsearch
 obs_all <- obs_all %>% 
   mutate(sample_type = as.factor(sample_type)) %>% 
   mutate(sample_type = recode_factor(sample_type, excavation = "hand_search")) %>% 
   droplevels() 
 
+#remove unwanted species
+spp_include <- spp_lookup_fam %>% 
+  filter(include %in% c("y", "p")) %>% #retain unless marked for exclusion 
+  filter(Order == "Coleoptera") %>% #retain coleoptera only
+  pull(species) 
+obs_all <- obs_all %>% filter(spp_name %in% spp_include) 
 
 #convert to a frequency matrix----
 #This matrix calculates the frequency each species occurs in each replicate. Because it's by 'replicate' each species should only occur once, so in this case the frequency matrix is the same as an occurrence matrix.
@@ -77,19 +61,6 @@ obs_all_mat <- obs_all %>%
 
 
 #This matrix calculates the frequency each species occurs in each event. Because it's by 'event' each species may occur more than once.
-obs_all_mat_evt <- obs_all %>% 
-  #calculate frequencies
-  group_by(river, event_code, location, sample_type, spp_name) %>% 
-  summarise(n = length(spp_name)) %>% 
-  #abbreviate species names
-  mutate(spp_name = vegan::make.cepnames(spp_name)) %>% 
-  #spread to a matrix
-  spread(key = spp_name, value = n, fill = 0) %>%
-  data.frame() %>%
-  arrange(river) 
-
-
-#the previous version makes no sense as it retains sample type as a factor, below proper frequency by event
 obs_all_mat_evt2 <- obs_all %>% 
   #calculate frequencies
   group_by(river, event_code, spp_name) %>% 
@@ -133,8 +104,13 @@ samp_types_spp_sum <- table(samptypes$sample_types)
 obs_all_freq_types <- obs_all_freq %>% 
   spread(key = sample_type, value = freq, fill = 0) %>% 
   full_join(samptypes) %>% 
-  left_join(spp_lookup_joined, by = c("spp_name" = "species"))  %>% 
+  left_join(spp_lookup_fam, by = c("spp_name" = "species"))  %>% 
   rename("cons_status" = "Conservation status", 
+         "guild_larva" = "Larval feeding guild", 
+         "guild_adult" = "Adult feeding guild",
+         "biotope_broad" = "Broad biotope",
+         "assemblage_specific" = "Specific assemblage type",
+         "habitat_score" = "Habitat score" ,
          "wetland_spp" = "Wetland species", 
          "runningwater_spp" = "running water W23",  
          "peatland_spp" = "peatland W25", 
@@ -146,14 +122,12 @@ obs_all_freq_types <- obs_all_freq %>%
          "riparianshingle_spp" = "riparian shingle W46",
          "drawdownzone_spp" = "drawdown zone W38",
          "wetlandveg_spp" = "wetland vegetation W34") %>% 
-  mutate_at(vars(cons_status:wetlandveg_spp), as.logical) %>% 
+  mutate_at(vars(cons_status, wetland_spp:coeleopteral), as.logical) %>% 
   mutate_at(vars(length.min,length.max), as.character)  %>% 
   mutate_at(vars(length.min,length.max), as.double)
 
-
-
-#extract genus data----
-genus_types <- obs_all_freq_types %>% 
+#create genus v sample type table ----
+samptype_genus <- obs_all_freq_types %>% 
   separate(col = spp_name, into = c("genus", NA), remove = T) %>% 
   select(-c(hand_search, pitfall)) %>%
   group_by(genus, sample_types) %>% 
@@ -164,6 +138,46 @@ genus_types <- obs_all_freq_types %>%
   mutate(pitfall = p) %>% 
   mutate(handsearch_pitfall = hp) %>% 
   select(genus, handsearch, pitfall, handsearch_pitfall, n_spp) %>% 
+  arrange(-n_spp)
+
+#create family v sample type table ----
+samptype_fam <- obs_all_freq_types %>% 
+  select(-c(hand_search, pitfall)) %>%
+  group_by(Family, sample_types) %>% 
+  summarise(freq = length(Family)) %>% 
+  spread(key = sample_types, value = freq, fill = 0) %>% 
+  mutate(n_spp = h+hp+p) %>% 
+  mutate(handsearch = h) %>% 
+  mutate(pitfall = p) %>% 
+  mutate(handsearch_pitfall = hp) %>% 
+  select(Family, handsearch, pitfall, handsearch_pitfall, n_spp) %>% 
+  arrange(-n_spp)
+
+
+#create order v sample type table ----
+samptype_order <- obs_all_freq_types %>% 
+  select(-c(hand_search, pitfall)) %>%
+  group_by(Order, sample_types) %>% 
+  summarise(freq = length(Order)) %>% 
+  spread(key = sample_types, value = freq, fill = 0) %>% 
+  mutate(n_spp = h+hp+p) %>% 
+  mutate(handsearch = h) %>% 
+  mutate(pitfall = p) %>% 
+  mutate(handsearch_pitfall = hp) %>% 
+  select(Order, handsearch, pitfall, handsearch_pitfall, n_spp) %>% 
+  arrange(-n_spp)
+
+#create adult guild v sample type table ----
+samptype_guild_ad <- obs_all_freq_types %>% 
+  select(-c(hand_search, pitfall)) %>%
+  group_by(guild_adult, sample_types) %>% 
+  summarise(freq = length(guild_adult)) %>% 
+  spread(key = sample_types, value = freq, fill = 0) %>% 
+  mutate(n_spp = h+hp+p) %>% 
+  mutate(handsearch = h) %>% 
+  mutate(pitfall = p) %>% 
+  mutate(handsearch_pitfall = hp) %>% 
+  select(guild_adult, handsearch, pitfall, handsearch_pitfall, n_spp) %>% 
   arrange(-n_spp)
 
 #prepare effort scores ----
@@ -177,11 +191,13 @@ effort_data <- effort_data %>%
          grid_ref = `Grid Reference`,
          n_records = `total number of records`) %>% 
   filter(event != is.na(event))
-  
+
+
 
 ##Dissimilarity----
 #calculate jaccard dissimilarity
 adon1 <- vegan::adonis2(selected_data ~ river + event_code + sample_type, data = selected_env, permutations = 120, method = "jaccard", by = "terms")
+
 
 ##Species accumulation curves ----
 
@@ -191,70 +207,22 @@ event_code_selected <- c("Frome_2017_a", "Frome_2017_b", "Frome_2017_c",
                          "Lugg_2014_d", "Wye_2014_a", "Wye_2014_b",
                          "Wye_2014_c", "Wye_2014_d", "Wye_2014_e", 
                          "Wye_2014_f", "Dove_2013", "Till_2013",
-                         "Beamish_2013", "Wooler_2013")
+                         "Beamish_2013", "Wooler_2013", "Ribble_2019", "Bollin_2019")
 
 obs_rct_mat <- obs_all_mat %>% 
   filter(event_code %in% event_code_selected) %>% droplevels() 
 
-obs_rct_mat_evt <- obs_all_mat_evt %>% filter(event_code %in% event_code_selected) %>% droplevels()
-
-obs_rct_mat_evt2 <- obs_all_mat_evt2 %>% filter(event_code %in% event_code_selected) %>% droplevels()
+obs_rct_mat_evt <- obs_all_mat_evt2 %>% filter(event_code %in% event_code_selected) %>% droplevels()
 
 ###Grand total accumulation----
 #species accumulation curve by resampling replicates
 spec_accum_selected <- specaccum(comm = obs_rct_mat %>% select(-c(river:sample_type)))
 
-spec_accum_event <- specaccum(comm = obs_rct_mat_evt %>% select(-c(river:sample_type)))
+spec_accum_event <- specaccum(comm = obs_rct_mat_evt %>% select(-c(river, event_code)))
 
 param_sampletype <- c("hand_search", "pitfall")
 param_rivers <- unique(obs_rct_mat$river)
 param_eventcode <- unique(obs_rct_mat$event_code)
-
-
-
-###accumulation by function ----
-#create empty data frame as template for accumulation data
-specaccumby <- function(specaccum_object, 
-                        param_eventcode = param_eventcode, 
-                        param_rivers = param_rivers, 
-                        param_sampletype = param_sampletype){
-
-spec_accum_by <- data_frame(
-  sample_type = as.character(), 
-  river = as.character(), 
-  event_code = as.character(),
-  n_sites = as.integer(), n_spp = as.double(), sd = as.double())
-
-spec_accum_temp <- spec_accum_empty
-
-
-#iterate through rivers
-for(selectedriver in param_rivers){
-  
-  tempdata <- obs_rct_mat %>%
-    filter(river == selectedriver) %>%  
-    select(-c(river:sample_type))
-  
-  tempdata <- if(nrow(tempdata)>1){
-    
-    tempdata <- specaccum(tempdata)
-    tempdata <- data.frame(
-      sample_type = "all",
-      river = selectedriver,
-      event_code = "all",
-      n_sites = tempdata$sites,
-      n_spp = tempdata$richness,
-      sd = tempdata$sd) 
-    
-    spec_accum_temp <- rbind(spec_accum_temp, tempdata)}
-}
-spec_accum_by <-  
-  if(nrow(spec_accum_temp)>0){rbind(spec_accum_by, spec_accum_temp)}
-
-}
-
-###Manual accumulations (i.e. not using above function)
-
 
 #create empty data frame as template for accumulation data----
 spec_accum_empty <- data_frame(
@@ -298,7 +266,7 @@ spec_accum_temp <- spec_accum_empty
 #iterate through rivers
 for(selectedriver in param_rivers){
   
-  tempdata <- obs_rct_mat_evt2 %>%
+  tempdata <- obs_rct_mat_evt %>%
     filter(river == selectedriver) %>%  
     select(-c(river:event_code))
   
@@ -325,7 +293,7 @@ spec_accum_temp <- spec_accum_empty
 #iterate through rivers
 for(selectedriver in param_rivers){
   
-  tempdata <- obs_rct_mat_evt2 %>%
+  tempdata <- obs_rct_mat_evt %>%
     filter(river == selectedriver) %>%  
     select(-c(river:event_code))
   

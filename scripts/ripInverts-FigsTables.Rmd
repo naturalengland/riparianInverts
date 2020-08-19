@@ -1,0 +1,337 @@
+---
+title: "Riparian Beetle Assemblages: Figures and Tables"
+output:
+  github_document: default
+  html_notebook: default
+  word_document: default
+  pdf_document: default
+---
+
+
+```{r setup, include=FALSE}
+# document rendering options
+knitr::opts_chunk$set(
+	message = FALSE,
+	warning = FALSE,
+	include = TRUE, 
+	echo = FALSE
+)
+
+# load packages
+library(tidyverse)
+library(cowplot)
+library(iNEXT)
+library(vegan)
+library(VennDiagram)
+library(grid)
+library(gridExtra)
+
+
+# generic graph settings
+theme_doc <-  theme(axis.title = element_text(size = 10), 
+                    text=element_text(size=10), 
+                    plot.title = element_text(size = 11),  
+                    legend.key.width = unit(1.2,"cm")) 
+
+```
+
+
+```{r}
+#Import and prepare data
+#The following script imports data, cleans it and prepares a number of datasets.  It also carries out a few analyses: 
+
+source("../scripts/ripInverts-paper-code_2.R", chdir = T)
+```
+
+
+### Figure 1
+
+```{r}
+#effort summarised by JW
+effort <- effort_data %>% select(event_code, hand_search = handsearch, pitfall, effort_score = effort)
+
+plot_effort <- ggplot(effort, aes(x = effort_score)) +
+  geom_histogram(binwidth = 0.5) +
+  scale_x_continuous(breaks = 0:max(effort$effort_score)) +
+  scale_y_continuous(expand = expand_scale(add =c(0,0.5))) +
+  labs(x = "Sampling effort", y = "Number of surveys", title = "A") +
+  theme_bw()+  theme_doc
+#plot_effort
+
+wetland_effort <- 
+  obs_all %>% select(spp_name, event_code) %>% 
+  left_join(select(effort_data, event_code, effort)) %>% 
+  left_join(select(spp_lookup_fam, species, 'Wetland species'), 
+            by = c("spp_name" = "species")) %>% 
+  rename(wetland_spp = 'Wetland species') %>% 
+  unique() %>% 
+  group_by(event_code, effort) %>% 
+  count(wetland_spp) %>% 
+  filter(wetland_spp == 1) %>% 
+  filter(event_code != "unknown")
+
+plot_wetland_effort <- ggplot(wetland_effort, 
+                              aes(x = as.factor(effort), y = n), 
+                              fill = as.factor(effort))+
+  geom_boxplot(varwidth = T, colour = "darkgrey") +
+  #geom_violin(scale = "width")+
+  geom_point(position = position_jitter(width = 0.08, height = 0.3), size = 0.9)+
+  labs(x = "Sampling effort", y = "Number of wetland species", title = "B") +
+  theme_bw() +
+  theme_doc
+#plot_wetland_effort
+```
+
+
+```{r fig.height=4, fig.width=8}
+plot_grid(plot_effort, plot_wetland_effort)
+```
+
+
+Figure 1. The number of survey events (A) and average number of wetland beetles (B) according to sampling effort.
+
+
+### Figure 2
+
+```{r}
+#richness by year WETLAND ONLY
+
+#summarise species richness per event
+graphdata <- obs_all %>% 
+  select(spp_name, event_code, evt_year) %>% 
+  left_join(select(effort_data, event_code, effort)) %>% 
+  left_join(select(spp_lookup_fam, species, 'Wetland species'), 
+            by = c("spp_name" = "species")) %>% 
+  rename(wetland_spp = 'Wetland species') %>% 
+  filter(wetland_spp == 1) %>% 
+  unique() %>% 
+  group_by(event_code, evt_year) %>% 
+  summarise(richness = n()) %>% 
+  filter(evt_year != "NA") %>% 
+  mutate(evt_year = as.numeric(evt_year))
+
+
+
+
+ggplot(graphdata, aes(x = evt_year, y = richness, group = as.factor(evt_year))) +
+  geom_point(size = 2, colour = "darkgrey") +
+  geom_segment(x = 2013, y = 15, xend = 2013, yend = -3, 
+               arrow = arrow(length = unit(0.25, "cm"), type = "closed"), size = 1) +
+  scale_x_continuous(breaks = seq(1997,2020, by = 1), limits = c(1997, 2020), 
+                     labels = c("", "", "", "2000", "", "", "", "", 
+                                "2005", "", "", "", "", "2010", "", "", "", "", 
+                                "2015", "", "", "", "", "2020")) +
+  scale_y_continuous(breaks = c(0, 20, 40, 60, 80), limits = c(0, NA)) +
+  labs(x = "Year", y = "Wetland beetle species richness") +
+  theme_doc +
+  NULL
+
+```
+
+Figure 2. Recorded species-richness of wetland beetle species over time. A standard protocol was adopted in 2013, indicated by the black arrow.  
+
+
+### Table 2  
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+adon1 %>% broom::tidy() %>% knitr::kable()
+```
+
+Table 2.   Results of permutation test showing contribution of river, survey and sample_type to the similarity between all pairs of replicates.  
+
+
+### Figure 3   
+
+
+
+```{r}
+wet_h <- obs_all_freq_types %>% 
+  filter(wetland_spp == TRUE, hand_search > 0) %>%
+  pull(spp_name)
+
+wet_p <- obs_all_freq_types %>% 
+  filter(wetland_spp == TRUE, pitfall > 0) %>%
+  pull(spp_name)
+
+notwet_h <- obs_all_freq_types %>% 
+  filter(wetland_spp == FALSE, hand_search > 0) %>%
+  pull(spp_name)
+
+notwet_p <- obs_all_freq_types %>% 
+  filter(wetland_spp == FALSE, pitfall > 0) %>%
+  pull(spp_name)
+```
+
+
+```{r fig.height=4, fig.width=8}
+venn.wetland <- venn.diagram(x = list(Handsearch = wet_h, Pitfall = wet_p), filename = NULL, 
+                             print.mode = c("raw", "percent"),
+                             main = "A", main.pos = c(0.05,0.95), main.cex = 0.9, 
+                             main.fontfamily = "sans", 
+                                sub = "Wetland beetle species", sub.pos = c(0.5, 0.25), sub.cex = 0.9, 
+                                sub.fontfamily = "sans", 
+                             fill = c("darkgrey", "lightgrey"), col = "darkgrey", alpha = c(1, 0.5),
+                             cex = 0.6, fontfamily = "sans",
+                             cat.cex = 0.75, cat.pos = c(315, 115), cat.dist = c(-0.04, -0.02), cat.fontfamily = "sans", 
+                             margin = 0.2)
+
+venn.notwetland <- venn.diagram(x = list(Handsearch = notwet_h, Pitfall = notwet_p), filename = NULL, 
+                                print.mode = c("raw", "percent"), 
+                                main = "B", main.pos = c(0, 0.98), main.cex = 0.9, 
+                                main.fontfamily = "sans",  
+                                sub = "Not-wetland beetle species", sub.pos = c(0.5, 0.21), sub.cex = 0.9, 
+                                sub.fontfamily = "sans", 
+                                fill = c("darkgrey", "lightgrey"), col = "darkgrey", alpha = c(1, 0.5),
+                                cex = 0.6, fontfamily = "sans",
+                                cat.cex = 0.75, cat.pos = c(315, 135), cat.dist = c(-0.05, -0.03), cat.fontfamily = "sans", 
+                                margin = 0.2)
+
+
+grid.arrange(grobTree(venn.wetland), grobTree(venn.notwetland), ncol = 2)
+```
+
+Figure 3.   Number of species captured by each method, separately for (A) wetland beetles and (B) all other beetles.  Overlap shows number of species of which an individual has been caught by each method.  
+
+
+### Figure 4  
+
+```{r fig.height=4, fig.width=8}
+genus_levels <-  samptype_genus$genus[order(-samptype_genus$n_spp)]
+min_n_spp <- 4
+
+graphdata <- samptype_genus %>%
+  ungroup() %>% 
+  filter(n_spp > min_n_spp) %>% 
+  arrange(-n_spp) %>%
+  mutate(genus = factor(genus, levels = rev(genus))) %>% 
+  select(-n_spp) %>% 
+  gather(key = sample_types, 
+         value = n_spp, handsearch, pitfall, handsearch_pitfall) %>% 
+  droplevels()
+
+n_genus <- length(unique(graphdata$genus))
+
+ggplot(graphdata, aes(y = n_spp, x = genus, fill = sample_types)) +
+  geom_col(colour = "black", width = 0.7) +
+  coord_flip() +
+  scale_fill_grey(start = 0.8, end = 0.3,
+                  labels = c(handsearch = "handsearch", handsearch_pitfall = "both",
+                             pitfall = "pitfall")) +
+  theme_minimal() +
+  theme(legend.position = c(0.8, 0.5)) +
+  labs(y = "Number of species", x = "", fill = "sample type") +
+  theme_doc
+```
+
+Figure 4.   Number of species in each genus (excluding genera with fewer than 4 species) by sample type: handsearch only, handsearch and pitfall, pitfall only.  
+
+
+### Figure 5  
+
+```{r fig.height=3, fig.width=5}
+a <- samptype_guild_ad %>% filter(guild_adult %in% c("predator", "herbivore", "saprophagous"))
+b <- samptype_guild_ad %>% filter(!guild_adult %in% c("predator", "herbivore", "saprophagous")) %>% 
+  ungroup() %>% 
+  summarise_at(vars(-guild_adult), sum) %>% 
+  mutate(guild_adult = "other") %>% 
+  select(guild_adult, everything())
+
+graphdata <- 
+  bind_rows(a,b) %>%
+  ungroup() %>% 
+  arrange(-n_spp) %>%  
+  mutate(guild_adult = factor(guild_adult, 
+                              levels = rev(c("predator", "herbivore", "saprophagous", "other")))) %>% 
+  select(-n_spp) %>% 
+  gather(key = sample_types, 
+         value = n_spp, handsearch, pitfall, handsearch_pitfall) %>% 
+  droplevels()
+
+ggplot(graphdata, aes(y = n_spp, x = guild_adult, fill = sample_types)) +
+  geom_col(colour = "black", width = 0.7) +
+  coord_flip() +
+  scale_fill_grey(start = 0.8, end = 0.3,
+                  labels = c(handsearch = "handsearch", handsearch_pitfall = "both",
+                             pitfall = "pitfall")) +
+  theme_minimal() +
+  theme(legend.position = c(0.8, 0.5)) +
+  labs(y = "Number of species", x = "Feeding guild", fill = "Sample type") +
+  theme_doc
+```
+
+Figure 5.   Number of species in each feeding guild of the adult species, by sample type: handsearch only, handsearch and pitfall, pitfall only.  The category ‘other’ includes algivores (6), fungivores (3), species which do not feed (22) and species whose adult feeding guild is not known (82).
+
+### Figure 6  
+
+
+```{r message=FALSE, warning=FALSE}
+graphdata <- spec_accum_byriver_evt 
+legenddata <- graphdata %>% group_by(river) %>% summarise(max_sites = max(n_sites)) 
+
+plot_accum <- ggplot(graphdata, aes(x = n_sites, y = n_spp, colour = river))+
+  geom_line(size = 1) +
+  geom_errorbar(aes(ymin=n_spp-(sd/sqrt(n_sites)), ymax=n_spp+(sd/sqrt(n_sites))),
+                  size=.3,    # Thinner lines
+                  width=.2,
+                  position=position_dodge(.1)) +  
+  scale_colour_grey(start = 0.4, end = 0.8, 
+                        labels = paste0(legenddata$river, " (", 
+                                        legenddata$max_sites, ")"))+
+  labs(title = "A.", 
+       x = "Number of Surveys", y = "Number of Species") +
+  theme_bw() +
+  theme(legend.position = c(0.7, 0.2), legend.title = element_blank()) +
+  theme_doc +
+  NULL
+
+eventdataList <- list(
+  "Frome" = obs_rct_mat_evt %>% filter(river == "Frome") %>% select(-river) %>%
+  column_to_rownames(var = "event_code") %>%  as.matrix() %>% t(),
+  "Lugg" = obs_rct_mat_evt %>% filter(river == "Lugg") %>% select(-river) %>%
+  column_to_rownames(var = "event_code") %>%  as.matrix() %>% t(),
+  "Wye" = obs_rct_mat_evt %>% filter(river == "Wye") %>% select(-river) %>%
+  column_to_rownames(var = "event_code") %>%  as.matrix() %>% t()
+  )
+
+eventdata_iNext <- iNEXT(eventdataList, datatype = "incidence_raw", q = 0, endpoint = 40, knots = 40)
+
+asympdata <- eventdata_iNext$AsyEst %>% filter(Diversity == "Species richness")
+
+inext_output <- bind_rows(eventdata_iNext$iNextEst, .id = "Site") %>%
+  mutate(method2 = recode_factor(method, observed = "interpolated")) %>%
+  full_join(asympdata)
+
+effort_95 <- inext_output %>% filter(SC >= 0.95) %>% group_by(Site) %>% top_n(n = 1,wt = -qD)
+
+plot_asympt <- ggplot(inext_output, aes(x = t)) +
+  #plot extrapolated and interpolated data
+  geom_line(aes(y = qD, linetype = method2), size = 1) +
+  geom_ribbon(aes(ymin=qD.LCL, ymax=qD.UCL), alpha=0.2) +
+  #plot guides for 95% of richness
+  geom_segment(data = effort_95, aes(x = 0, xend = t, y = qD, yend = qD),
+               alpha = 0.6, size = 0.1, linetype = 18)+
+  geom_segment(data = effort_95, aes(x = t, xend = t, y = 0, yend = qD),
+               alpha = 0.6, size = 0.1, linetype = 18)+
+  #formatting
+  scale_color_grey() +
+  scale_fill_grey() +
+  scale_linetype_manual(values = c(1,3)) +
+  facet_wrap(~Site,ncol = 1) +
+  labs(title = "B.", 
+       y = "Number of Species", x = "Number of Surveys") +
+  theme_bw() +
+  theme(legend.position = "bottom", legend.title = element_blank()) +
+  coord_cartesian(xlim = c(1, 25)) +
+  scale_x_continuous(expand = c(0,0)) + scale_y_continuous(expand = c(0,0))+
+  theme_doc +
+  NULL
+
+plot_grid(plot_accum, plot_asympt)
+```
+
+
+Figure 6. A: The average number of species found for a given number of survey events derived by calculating species richness of all permutations of the survey events using the 'exact' method of the specaccum function in R package vegan (Oksanen et al. 2019).  The bars show standard error and reduce to zero at the total number of survey events as this equals the total number of species found. .  B Extrapolation of species accumulation using R function iNEXT (Hsieh et al., 2019) with  95% confidence intervals.  The dot-dashed line shows the number of survey events where the predicted mean species richness is greater than 95% of the asymptote.   
+
+
+
+
