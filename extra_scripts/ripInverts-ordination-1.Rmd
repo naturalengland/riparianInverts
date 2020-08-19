@@ -314,7 +314,8 @@ my.plot$plot +
 ###3 d 
 ```{r}
 library(vegan3d)
-vegan3d::ordirgl(object = spp_rct_dca, display = "sites", type = "p")
+vegan3d::ordirgl(object = spp_rct_dca, display = "sites", type = "t", col = obs_rct_mat$sample_type, text = obs_rct_mat$river)
+
 ```
 
 
