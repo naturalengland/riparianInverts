@@ -1,43 +1,32 @@
-
-
 library(tidyverse)
 library(vegan)
+library(readxl)
 
   ## set working directory as required
-#w_dir <- ""  #path to working directory
-w_dir <- "../" # or uncomment when sourcing in RMarkdown
+w_dir <- ""  #path to working directory
+#w_dir <- "../" # or uncomment when sourcing in RMarkdown
 
 # Import data----
 ## import wetland coleoptera data 
 
-obs_all <- read_csv(paste0(w_dir, "data/field_data_selected_Oct2019.csv"))  
+data_source <- paste0(w_dir, "data/rip_inv_tables.xlsx")
+
+obs_all <- read_xlsx(path = data_source, sheet = "obs_all")  
 
 ## import lookup data
 
-spp_lookup_fam <- read_csv(paste0(w_dir, "data/spp_lookup_with_family.csv"))
+spp_lookup_fam <- read_xlsx(path = data_source, sheet = "spp_lookup_fam")
 
-spp_matched_corrected <- read.csv(paste0(w_dir, "data/speciesmatch_further_correctionsAug2019.csv")) 
+spp_matched_corrected <- read_xlsx(path = data_source, sheet = "spp_matched_corrected")
 
-effort_data <- read_csv(paste0(w_dir, "data/effort_JW_Oct2019.csv"))
+effort_data <- read_xlsx(path = data_source, sheet = "effort_data")
 
-jw_spp_event_data <- readxl::read_xlsx(paste0(w_dir, "data/Riparian Beetle Assemblages July2019 ck added.xlsx"), sheet = 2, skip = 1)
+jw_spp_event_data <- read_xlsx(path = data_source, sheet = "jw_spp_event_data")
 
 #Prepare data----
 
 #create event lookup 
-event_lookup <- obs_all %>% select(river, event_code) %>% unique() 
-#add a consistent event-year column because record years may vary
-event_lookup <- event_lookup %>% 
-  mutate(evt_year = str_extract(string = event_lookup$event_code,pattern = "[0-9]{4}"))
-event_lookup$evt_year[which(event_lookup$event_code %in% c("Dane_East", "Dane_West"))] <- "2003" #manual fix
-#write it back into the main observations table
-obs_all <- obs_all %>% full_join(event_lookup, by = c("river", "event_code")) %>% select(spp_name:year, evt_year, everything())
-
-#convert excavations to handsearch
-obs_all <- obs_all %>% 
-  mutate(sample_type = as.factor(sample_type)) %>% 
-  mutate(sample_type = recode_factor(sample_type, excavation = "hand_search")) %>% 
-  droplevels() 
+event_lookup <- read_xlsx(path = data_source, sheet = "event_lookup")
 
 #remove unwanted species
 spp_include <- spp_lookup_fam %>% 
@@ -197,6 +186,9 @@ effort_data <- effort_data %>%
 ##Dissimilarity----
 #calculate jaccard dissimilarity
 adon1 <- vegan::adonis2(selected_data ~ river + event_code + sample_type, data = selected_env, permutations = 120, method = "jaccard", by = "terms")
+
+
+
 
 
 ##Species accumulation curves ----
