@@ -86,7 +86,7 @@ samptypes <- obs_all_freq %>%
   spread(key = sample_type, value = smptp, fill = "") %>% 
   mutate(sample_types = paste0(hand_search, pitfall)) %>% 
   select(spp_name, sample_types)
-write_csv(samptypes, "../data/samptypes2.csv")
+#write_csv(samptypes, "../data/samptypes2.csv")
 
 samp_types_spp_sum <- table(samptypes$sample_types)
 
@@ -169,25 +169,15 @@ samptype_guild_ad <- obs_all_freq_types %>%
   select(guild_adult, handsearch, pitfall, handsearch_pitfall, n_spp) %>% 
   arrange(-n_spp)
 
-#prepare effort scores ----
-effort_data <- effort_data %>% 
-  select(event_code = Event_code_v3, 
-         event = Event_name_v3,
-         effort = `EFFORT = C+D`,
-         pitfall = `number of 2 week pitfall durations (P)`,
-         handsearch = `number of timed  searches/excavations (T)`,
-         author = Author,
-         grid_ref = `Grid Reference`,
-         n_records = `total number of records`) %>% 
-  filter(event != is.na(event))
-
-
 
 ##Dissimilarity----
+#export for analysis
+saveRDS(selected_data, "data/selected_data.rds")
+saveRDS(selected_env, "data/selected_env.rds")
 #calculate jaccard dissimilarity
 adon1 <- vegan::adonis2(selected_data ~ river + event_code + sample_type, data = selected_env, permutations = 120, method = "jaccard", by = "terms")
 
-
+## do proper permanova
 
 
 

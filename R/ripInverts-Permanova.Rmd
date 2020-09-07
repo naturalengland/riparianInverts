@@ -1,0 +1,137 @@
+---
+title: "Riparian Inverts Permanova"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(vegan)
+
+selected_data <- readRDS("../data/selected_data.rds")
+selected_env <- readRDS("../data/selected_env.rds")
+```
+
+
+```{r}
+### ------------ Distance matrix ----------------------------------------------
+### Compute distance matrix 
+
+#using Bray-Curtis 
+dist_bray <- vegdist(selected_data, method = 'bray')
+summary(dist_bray)
+#jaccard
+dist_jac <- vegdist(selected_data, method = 'jaccard')
+summary(dist_jac)
+# Anderson et al.  (2006) version of Gower
+dist_altGower <- vegdist(decostand(selected_data, "log"), "altGower")
+summary(dist_altGower)
+# Range standardization with "altGower" (that excludes double-zeros)
+dist_altGowerRS <- vegdist(decostand(selected_data, "range"), "altGower")
+summary(dist_altGowerRS)
+```
+
+
+
+```{r}
+### ------------ NMDS ----------------------------------------------------------
+### Run NMDS
+nmds_bray <- metaMDS(dist_bray)  
+plot(nmds_bray, type = 'text')
+nmds_jac <- metaMDS(dist_jac)
+plot(nmds_jac, type = 'text')
+nmds_altGower <- metaMDS(dist_altGower)
+plot(nmds_altGower, type = 'text')
+nmds_altGowerRS <- metaMDS(dist_altGowerRS)
+plot(nmds_altGowerRS, type = 'text')
+```
+
+
+```{r}
+plot(nmds_bray, type = 'text')
+plot(nmds_jac, type = 'text')
+plot(nmds_altGower, type = 'text')
+plot(nmds_altGowerRS, type = 'text')
+```
+
+
+```{r}
+#select best ordination and write to nmds
+nmds <- nmds_altGower
+
+### Plot NMDS
+op <- ordiplot(nmds, type = 'n')#, xlim = c(-0.005,0.0))
+
+# points
+#cols = c('darkred', 'green')
+#points(nmds, cex = 2, pch = 8)#, col = selected_env$river)
+
+# decoration
+#ordispider(nmds, groups = selected_env$river, label = FALSE)
+ordihull(nmds, groups = selected_env$river, lty = 'dotted')
+#legend("bottomleft", pch = 16, col = cols, legend = levels(selected_env$river))
+# upstream and downstream communities are well separated (indicates an effect!)
+# spread may be different (lower for upstream section)
+```
+
+
+
+
+```{r}
+#ck's current version: 
+#vegan::adonis2(selected_data ~ river + event_code + sample_type, data = selected_env, permutations = 120, method = "jaccard", by = "terms")
+
+### ------------ PERMANOVA -----------------------------------------------------
+pmv <- adonis(selected_data ~ river + event_code + sample_type, data = selected_env, 
+              permutations = 999, 
+              method = 'altGower')
+pmv
+# communities differ statsitically significant between upstream/downstream
+# the position explains 30.7% of variance
+
+# plot permuted F-values
+densityplot(permustats(pmv))
+
+## But are the assumptions met?
+# check assumptions visually
+# on previouse plot
+# graphically we would say that upstream has lower spread then downstream
+
+
+### ------------ Distance based dispersion test --------------------------------
+bd <- betadisper(dist_bray, selected_env$position)
+bd
+# also a eigenvalue based method
+
+boxplot(bd)
+# boxplot of Average distance to median shows also that there might be lower dispersion 
+# for upstream sites
+
+# F-Test
+anova(bd)
+
+# permutaion test
+permutest(bd)
+# We cannot find a statistically different dispersion 
+# -> assumption of homogeneity is met
+
+
+
+### ------------ SIMPER --------------------------------------------------------
+sim <- simper(selected_data^0.25, group = selected_env$position)
+sim
+summary(sim)
+# contr :   contribution to dissimilarity between upstream and downstream
+# sd    :   standard deviation of contribution (is the species response consitent?)
+# ratio :   ratio between contr and sd (high ratio = high, consisten contribution)
+# av.   : average abundance per groups
+# cumsum:   cumulative contribution (rule of thumb : species till 70% are investigated)
+
+# many species contribute to the difference between upstream and downstream sections
+# Lype sp. decreases (from 6.29 to 2.49) and has the highest contribution
+# Lasiocephala.basalis increases (from 3.24 to 7.09)
+# Gammarus sp. descreases to zero (from 2.78 to 0) and also shows this consitently (high contribution to sd ratio)
+
+
+```
+
+
